@@ -1,0 +1,35 @@
+.jumbotron {
+	background-image: url("../img/background.jpg");
+}
+
+.expense {
+	color: #F4AA6D;
+}
+
+.transfer {
+	color: #B4BEC6;
+}
+
+.income {
+	color: green;
+}
+
+.red {
+	color: red;
+}
+
+#transaction_box {
+	background-color: #F4AA6D;
+}
+
+#transaction_body {
+	padding: 30px;
+	border-top-color: transparent;
+	border: 1px solid #ddd;
+	background-color: #fff;
+}
+
+.glyphicon {
+margin-left: 15px;
+margin-right: 15px;	
+}
