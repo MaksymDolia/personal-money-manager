@@ -236,7 +236,7 @@
 		<profile>
 			<id>openshift</id>
 			<build>
-				<finalName>${project.artifactId}</finalName>
+				<finalName>pmm</finalName>
 				<plugins>
 					<plugin>
 						<artifactId>maven-war-plugin</artifactId>
