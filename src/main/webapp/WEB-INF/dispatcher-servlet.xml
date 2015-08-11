@@ -8,7 +8,7 @@
 
 
 	<mvc:annotation-driven />
-	<mvc:default-servlet-handler />
+	<mvc:default-servlet-handler/>
 
 	<context:component-scan base-package="me.dolia.pmm.controller" />
 
@@ -28,7 +28,7 @@
 			value="org.springframework.web.servlet.view.tiles3.TilesView" />
 	</bean>
 
-	<mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
+	<mvc:resources mapping="favicon.ico" location="/resources/favicon.ico"/>
 	<mvc:resources mapping="/css/**" location="/resources/css/" />
 	<mvc:resources mapping="/js/**" location="/resources/js/" />
 	<mvc:resources mapping="/img/**" location="/resources/img/" />
