@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><tiles:getAsString name="title" /></title>
-
+ <link href="/favicon.ico" rel="icon" type="image/x-icon">
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href='<spring:url value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />'>

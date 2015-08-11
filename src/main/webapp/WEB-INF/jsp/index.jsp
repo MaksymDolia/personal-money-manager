@@ -15,7 +15,7 @@
 <meta name="author" content="">
 
 <title><tiles:getAsString name="title" /></title>
-
+<link href="/favicon.ico" rel="icon" type="image/x-icon">
 <link rel="stylesheet"
 	href='<spring:url value="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />'>
 <script
