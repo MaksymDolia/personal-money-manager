@@ -68,7 +68,7 @@
 			<!--/.container-fluid -->
 		</nav>
 
-		<c:if test="${not empty message}">
+		<c:if test="${not empty message or not empty param.message}">
 			<div class="row">
 				<div class="alert alert-info alert-dismissible" role="alert">
 					<button type="button" class="close" data-dismiss="alert"
