@@ -218,8 +218,19 @@
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.3.0.v20150612</version>
+				<version>9.2.10.v20150310</version>
+				<configuration>
+					<!-- http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html -->
+					<scanIntervalSeconds>3</scanIntervalSeconds>
+					<!-- By Default, jetty start on port 8080 <httpConnector> <port>9090</port> 
+						</httpConnector> -->
+				</configuration>
 			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.eclipse.jetty</groupId> -->
+<!-- 				<artifactId>jetty-maven-plugin</artifactId> -->
+<!-- 				<version>9.3.0.v20150612</version> -->
+<!-- 			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
