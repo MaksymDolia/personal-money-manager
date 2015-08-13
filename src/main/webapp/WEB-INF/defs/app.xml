@@ -20,7 +20,7 @@
 	<definition name="index" extends="common">
 		<put-attribute name="title" value="Homepage" />
 		<put-attribute name="current" value="Homepage" />
-		<put-attribute name="body" value="/WEB-INF/layouts/homepage/body.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
 	</definition>
 
 	<definition name="login" extends="common">
