@@ -12,7 +12,7 @@
 			<h2>Please sign in</h2>
 			<div class="form-group">
 				<form:label path="email" for="email" class="sr-only">Email address</form:label>
-				<form:input type="email" path="email" id="email"
+				<form:input type="text" path="email" id="email"
 					cssClass="form-control" placeholder="Email address"
 					autofocus="autofocus" />
 				<form:errors path="email" cssClass="text-warning" />
