@@ -65,9 +65,7 @@ public class IndexController {
 	}
 
 	@RequestMapping("/profile")
-	public String profile(Model model, Principal principal) {
-		String email = principal.getName();
-		model.addAttribute("email", email);
+	public String profile() {
 		return "profile";
 	}
 

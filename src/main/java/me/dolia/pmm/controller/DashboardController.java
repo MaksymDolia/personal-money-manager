@@ -40,10 +40,9 @@ public class DashboardController {
 
 	@Autowired
 	private CategoryService categoryService;
-	
+
 	@Autowired
 	private TransactionService transactionService;
-
 
 	@ModelAttribute("account")
 	public Account createAccount() {
@@ -66,7 +65,6 @@ public class DashboardController {
 	@RequestMapping()
 	public String app(Model model, Principal principal) {
 		String email = principal.getName();
-		model.addAttribute("email", email);
 		User user = userService.findOneByEmail(email);
 		List<Account> accounts = accountService.findAllByUser(user);
 		model.addAttribute("accounts", accounts);
@@ -82,5 +80,5 @@ public class DashboardController {
 		model.addAttribute("incomeCategories", incomeCategories);
 		return "dashboard";
 	}
-	
+
 }

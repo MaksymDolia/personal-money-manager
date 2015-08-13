@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="../layouts/taglib.jsp"%>
-<div class="container">
 	<div class="row">
 		<div class="col-md-4">
 			<div class="panel panel-default">
@@ -89,9 +88,6 @@
 	</div>
 
 	<div class="row"></div>
-
-</div>
-
 
 <!-- End container Modal Add Account -->
 <tiles:insertAttribute name="modal-account-add" />

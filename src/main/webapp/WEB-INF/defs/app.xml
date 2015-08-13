@@ -17,6 +17,24 @@
 			value="/WEB-INF/layouts/modal/modal_category_remove.jsp" cascade="true" />
 	</definition>
 
+	<definition name="index" extends="common">
+		<put-attribute name="title" value="Homepage" />
+		<put-attribute name="current" value="Homepage" />
+		<put-attribute name="body" value="/WEB-INF/layouts/homepage/body.jsp" />
+	</definition>
+
+	<definition name="login" extends="common">
+		<put-attribute name="title" value="Login" />
+		<put-attribute name="current" value="login" />
+		<put-attribute name="body" value="/WEB-INF/jsp/login.jsp" />
+	</definition>
+
+	<definition name="signin" extends="common">
+		<put-attribute name="title" value="Signin" />
+		<put-attribute name="current" value="signin" />
+		<put-attribute name="body" value="/WEB-INF/jsp/signin.jsp" />
+	</definition>
+
 	<definition name="dashboard" extends="common">
 		<put-attribute name="title" value="Dashboard" />
 		<put-attribute name="body" value="/WEB-INF/jsp/dashboard.jsp" />

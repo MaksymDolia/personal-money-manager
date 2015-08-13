@@ -6,12 +6,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><tiles:getAsString name="title" /></title>
-<link rel="shortcut icon" type="image/x-icon" href='<spring:url value="/favicon.ico" />'/>
+<link rel="shortcut icon" type="image/x-icon"
+	href='<spring:url value="/favicon.ico" />' />
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href='<spring:url value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />'>
 <!-- CUSTOM CSS -->
-<spring:url value="/css/style.css" var="mainCss"/>
+<spring:url value="/css/style.css" var="mainCss" />
 <link rel="stylesheet" href="${mainCss}">
 <!-- Optional theme -->
 <link rel="stylesheet"
@@ -27,10 +28,9 @@
 <body>
 
 	<tilesx:useAttribute name="current" />
-
-	<!-- Static navbar -->
-	<nav class="navbar navbar-default navbar-static-top">
 	<div class="container">
+		<!-- Static navbar -->
+		<nav class="navbar navbar-default">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
@@ -43,31 +43,41 @@
 				finance</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
-			<ul class="nav navbar-nav">
-				<li class="${current == 'dashboard' ? 'active' : ''}"><a
-					href='<spring:url value="/app" />'>Dashboard</a></li>
-				<li class="${current == 'transactions' ? 'active' : ''}"><a
-					href='<spring:url value="/app/transactions" />'>Transactions</a></li>
-				<li class="${current == 'accounts' ? 'active' : ''}"><a
-					href='<spring:url value="/app/accounts" />'>Accounts</a></li>
-				<li class="${current == 'categories' ? 'active' : ''}"><a
-					href='<spring:url value="/app/categories" />'>Categories</a></li>
-			</ul>
+			<security:authorize access="isAuthenticated()">
+				<ul class="nav navbar-nav">
+					<li class="${current == 'dashboard' ? 'active' : ''}"><a
+						href='<spring:url value="/app" />'>Dashboard</a></li>
+					<li class="${current == 'transactions' ? 'active' : ''}"><a
+						href='<spring:url value="/app/transactions" />'>Transactions</a></li>
+					<li class="${current == 'accounts' ? 'active' : ''}"><a
+						href='<spring:url value="/app/accounts" />'>Accounts</a></li>
+					<li class="${current == 'categories' ? 'active' : ''}"><a
+						href='<spring:url value="/app/categories" />'>Categories</a></li>
+				</ul>
+			</security:authorize>
 			<ul class="nav navbar-nav navbar-right">
 				<security:authorize access="isAuthenticated()">
-					<li><a>${email}</a></li>
+					<li><a><security:authentication
+								property="principal.username" /></a></li>
 					<li class="${current == 'profile' ? 'active' : ''}"><a
 						href='<spring:url value="/profile" />'>My Profile</a></li>
 					<li><a href='<spring:url value="/logout" />'>Logout</a></li>
 				</security:authorize>
+				<security:authorize access="!isAuthenticated()">
+					<li class="${current == 'login' ? 'active' : ''}"><a
+						href='<spring:url value="/login" />'><spring:message
+								code="Login.index.menu" /></a></li>
+					<li class="${current == 'signin' ? 'active' : ''}"><a
+						href='<spring:url value="/signin" />'><spring:message
+								code="Signin.index.menu" /></a></li>
+				</security:authorize>
 			</ul>
 		</div>
-		<!--/.nav-collapse -->
+		<!--/.nav-collapse --> </nav>
+		<tiles:insertAttribute name="body" />
+		<tiles:insertAttribute name="footer" />
 	</div>
-	</nav>
 
-	<tiles:insertAttribute name="body" />
-	<tiles:insertAttribute name="footer" />
 	<!-- CUSTOM JS -->
 	<spring:url value="/js/script.js" var="mainJs" />
 	<script src="${mainJs}"></script>

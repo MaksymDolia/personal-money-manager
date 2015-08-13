@@ -1,6 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="../taglib.jsp"%>
+<c:if test="${not empty message or not empty param.message}">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="alert alert-info alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<c:choose>
+					<c:when test="${param.message eq 'logout_success'}">
+						<spring:message code="Logout.index.message" />
+					</c:when>
+					<c:when test="${message eq 'delete_profile_success'}">
+						<spring:message code="DeleteProfileSuccess.index.message" />
+					</c:when>
+				</c:choose>
+			</div>
+		</div>
+	</div>
+</c:if>
 <div class="row">
 	<div class="col-md-8">
 		<div class="jumbotron">
@@ -17,6 +37,7 @@
 		</div>
 	</div>
 	<div class="col-md-4">
-		<img class="img-responsive" alt="money tree" src='<spring:url value="/img/money_tree.jpg" />'>
+		<img class="img-responsive" alt="money tree"
+			src='<spring:url value="/img/money_tree.jpg" />'>
 	</div>
 </div>

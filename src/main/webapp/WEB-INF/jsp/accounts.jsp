@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="../layouts/taglib.jsp"%>
 <tilesx:useAttribute name="action" ignore="true" />
-<div class="container">
 	<div class="row">
 		<div class="col-md-8">
 			<div class="panel panel-default">
@@ -51,7 +50,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 
 <!-- Remove Confirmation Modal -->
 <tiles:insertAttribute name="modal-account-remove" />

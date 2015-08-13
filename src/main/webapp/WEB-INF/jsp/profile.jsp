@@ -1,15 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="../layouts/taglib.jsp"%>
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<p>
-				You registered as <strong><c:out value="${email}" /></strong>
-			</p>
-		</div>
+<div class="row">
+	<div class="col-md-10">
+		<p>
+			You registered as <strong><security:authentication
+					property="principal.username" /></strong>
+		</p>
 	</div>
-	<div class="row">
+	<div class="col-md-2">
 		<!-- Delete profile button trigger modal -->
 		<a href='<spring:url value="/profile/delete_profile" />' type="button"
 			class="btn btn-danger trigger-remove" data-target="#remove-modal">Delete
