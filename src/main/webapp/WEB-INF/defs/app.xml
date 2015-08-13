@@ -39,6 +39,8 @@
 		<put-attribute name="title" value="Dashboard" />
 		<put-attribute name="body" value="/WEB-INF/jsp/dashboard.jsp" />
 		<put-attribute name="current" value="dashboard" />
+		<put-attribute name="transactions_table"
+			value="/WEB-INF/layouts/transactions_table.jsp" cascade="true"/>
 		<!-- FORMS -->
 		<put-attribute name="form_account_add"
 			value="/WEB-INF/layouts/form/form_account_add.jsp" cascade="true" />
@@ -51,6 +53,8 @@
 			value="/WEB-INF/layouts/include/transactions_script.jsp" />
 		<put-attribute name="title" value="Transactions" />
 		<put-attribute name="body" value="/WEB-INF/jsp/transactions.jsp" />
+		<put-attribute name="transactions_table"
+			value="/WEB-INF/layouts/transactions_table.jsp" cascade="true"/>
 		<put-attribute name="current" value="transactions" />
 		<put-attribute name="form"
 			value="/WEB-INF/layouts/form/form_transaction_add.jsp" cascade="true" />
