@@ -20,10 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Transaction;
-import me.dolia.pmm.entity.User;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
-import me.dolia.pmm.service.UserService;
 
 @Controller
 @RequestMapping("/app/categories")
@@ -31,9 +29,6 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private TransactionService transactionService;
@@ -49,8 +44,7 @@ public class CategoryController {
 	@RequestMapping()
 	public String categories(Model model, Principal principal) {
 		String email = principal.getName();
-		User user = userService.findOneByEmail(email);
-		List<Category> categories = categoryService.findAllByUser(user);
+		List<Category> categories = categoryService.findAllByUserEmail(email);
 		model.addAttribute("categories", categories);
 		return "categories";
 	}
@@ -84,8 +78,7 @@ public class CategoryController {
 	public String editCategory(@PathVariable("id") int id, Model model) {
 		Category category = categoryService.findOne(id);
 		long quantityOfTransactions = transactionService.countTransactionsByCategory(category);
-		User user = category.getUser();
-		List<Category> categories = categoryService.findAllByUser(user);
+		List<Category> categories = categoryService.findAllByUserEmail(category.getUser().getEmail());
 		model.addAttribute("categories", categories);
 		model.addAttribute("category", category);
 		model.addAttribute("quantityOfTransactions", quantityOfTransactions);

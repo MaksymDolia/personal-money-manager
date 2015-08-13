@@ -10,8 +10,8 @@ import me.dolia.pmm.entity.User;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-	List<Category> findAllByUser(User user);
-
 	List<Category> findAllByUserAndOperation(User user, Operation operation);
+
+	List<Category> findAllByUserEmail(String email);
 
 }

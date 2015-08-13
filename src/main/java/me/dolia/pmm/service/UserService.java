@@ -10,6 +10,7 @@ import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
@@ -55,11 +56,6 @@ public class UserService {
 	public User findOneByEmail(String email) {
 		return userRepository.findOneByEmail(email);
 	}
-
-	@PreAuthorize("#user.email == authentication.name or hasRole('ADMIN')")
-	public void delete(@P("user") User user) {
-		userRepository.delete(user);
-	}
 	
 	private void createDefaultAccountsAndCategoriesForNewUser(User user) {
 		
@@ -88,6 +84,12 @@ public class UserService {
 			category.setUser(user);
 			categoryRepository.save(category);
 		}
+	}
+
+	@Transactional
+	@PreAuthorize("#email == authentication.name or hasRole('ADMIN')")
+	public void deleteByEmail(@P("email") String email) {
+		userRepository.deleteByEmail(email);
 	}
 
 }

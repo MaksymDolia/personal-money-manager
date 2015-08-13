@@ -68,7 +68,7 @@ public class DashboardController {
 		User user = userService.findOneByEmail(email);
 		List<Account> accounts = accountService.findAllByUser(user);
 		model.addAttribute("accounts", accounts);
-		List<Category> categories = categoryService.findAllByUser(user);
+		List<Category> categories = categoryService.findAllByUserEmail(email);
 		model.addAttribute("categories", categories);
 		List<Transaction> transactions = transactionService.findAllByUser(user);
 		model.addAttribute("transactions", transactions);

@@ -31,10 +31,6 @@ public class CategoryService {
 		return categoryRepository.findOne(id);
 	}
 
-	public List<Category> findAllByUser(User user) {
-		return categoryRepository.findAllByUser(user);
-	}
-
 	public List<Category> findAllByUserAndOperation(User user, Operation operation) {
 		return categoryRepository.findAllByUserAndOperation(user, operation);
 	}
@@ -78,6 +74,10 @@ public class CategoryService {
 				transactionRepository.save(transaction);
 			}
 		}
+	}
+
+	public List<Category> findAllByUserEmail(String email) {
+		return categoryRepository.findAllByUserEmail(email);
 	}
 
 }
