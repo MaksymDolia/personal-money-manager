@@ -41,8 +41,8 @@ public class AccountService {
 		return accountRepository.findOne(id);
 	}
 
-	public Double getBalance(User user) {
-		return accountRepository.getSumAmountByUser(user);
+	public Double getBalance(String email) {
+		return accountRepository.getSumAmountByUserEmail(email);
 	}
 
 	@PreAuthorize("#account.user.email == authentication.name or hasRole('ADMIN')")

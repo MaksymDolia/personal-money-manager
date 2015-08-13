@@ -20,20 +20,15 @@ import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
-import me.dolia.pmm.entity.User;
 import me.dolia.pmm.service.AccountService;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
-import me.dolia.pmm.service.UserService;
 import me.dolia.pmm.support.AccountEditor;
 import me.dolia.pmm.support.CategoryEditor;
 
 @Controller
 @RequestMapping("/app")
 public class DashboardController {
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private AccountService accountService;
@@ -65,14 +60,13 @@ public class DashboardController {
 	@RequestMapping()
 	public String app(Model model, Principal principal) {
 		String email = principal.getName();
-		User user = userService.findOneByEmail(email);
 		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("accounts", accounts);
 		List<Category> categories = categoryService.findAllByUserEmail(email);
 		model.addAttribute("categories", categories);
 		List<Transaction> transactions = transactionService.findAllByUserEmail(email);
 		model.addAttribute("transactions", transactions);
-		Double balance = accountService.getBalance(user);
+		Double balance = accountService.getBalance(email);
 		model.addAttribute("balance", balance);
 		List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
 		List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);

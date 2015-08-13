@@ -29,12 +29,10 @@ import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
-import me.dolia.pmm.entity.User;
 import me.dolia.pmm.form.ShowTransactionForm;
 import me.dolia.pmm.service.AccountService;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
-import me.dolia.pmm.service.UserService;
 import me.dolia.pmm.support.AccountEditor;
 import me.dolia.pmm.support.CategoryEditor;
 
@@ -47,9 +45,6 @@ public class AccountController {
 
 	@Autowired
 	private AccountService accountService;
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private TransactionService transactionService;
@@ -83,10 +78,9 @@ public class AccountController {
 	@RequestMapping()
 	public String accounts(Model model, Principal principal) {
 		String email = principal.getName();
-		User user = userService.findOneByEmail(email);
 		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("accounts", accounts);
-		double balance = accountService.getBalance(user);
+		double balance = accountService.getBalance(email);
 		model.addAttribute("balance", balance);
 		return "accounts";
 	}
@@ -139,11 +133,10 @@ public class AccountController {
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public String editAccount(@PathVariable int id, Model model) {
 		Account account = accountService.findOne(id);
-		User user = account.getUser();
 		List<Account> accounts = accountService.findAllByUserEmail(account.getUser().getEmail());
 		model.addAttribute("account", account);
 		model.addAttribute("accounts", accounts);
-		double balance = accountService.getBalance(user);
+		double balance = accountService.getBalance(account.getUser().getEmail());
 		model.addAttribute("balance", balance);
 		long quantityOfTransactions = transactionService.countTransactionsByAccount(account);
 		model.addAttribute("quantityOfTransactions", quantityOfTransactions);
