@@ -86,7 +86,7 @@ public class AccountController {
 		User user = userService.findOneByEmail(email);
 		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("accounts", accounts);
-		double balance = accountService.getSumAmountByUser(user);
+		double balance = accountService.getBalance(user);
 		model.addAttribute("balance", balance);
 		return "accounts";
 	}

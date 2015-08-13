@@ -112,8 +112,4 @@ public class AccountService {
 		return accountRepository.findAllByUserEmail(email);
 	}
 
-	public double getSumAmountByUser(User user) {
-		return accountRepository.getSumAmountByUser(user);
-	}
-
 }

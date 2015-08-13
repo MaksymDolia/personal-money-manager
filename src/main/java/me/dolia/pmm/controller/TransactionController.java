@@ -13,7 +13,6 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -85,12 +84,7 @@ public class TransactionController {
 	public String addTransaction(@Valid @ModelAttribute("transaction") Transaction transaction,
 			@RequestHeader(value = "referer", required = false) String referrer, Principal principal,
 			BindingResult result) {
-		List<ObjectError> allErrors = result.getAllErrors();
-		for (ObjectError objectError : allErrors) {
-			System.out.println("Hello: " + objectError.getDefaultMessage());
-		}
 		if (result.hasErrors()) {
-			System.out.println("Milk error");
 			return "transactions_edit";
 		}
 		String email = principal.getName();
