@@ -77,7 +77,7 @@ public class CategoryController {
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public String editCategory(@PathVariable("id") int id, Model model) {
 		Category category = categoryService.findOne(id);
-		long quantityOfTransactions = transactionService.countTransactionsByCategory(category);
+		long quantityOfTransactions = transactionService.countTransactionsByCategoryId(id);
 		List<Category> categories = categoryService.findAllByUserEmail(category.getUser().getEmail());
 		model.addAttribute("categories", categories);
 		model.addAttribute("category", category);

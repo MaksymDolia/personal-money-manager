@@ -41,8 +41,8 @@ public class TransactionService {
 		return transactionRepository.findOne(id);
 	}
 
-	public List<Transaction> findAllByUser(User user) {
-		return transactionRepository.findAllByUser(user, new Sort(Direction.DESC, "date"));
+	public List<Transaction> findAllByUserEmail(String email) {
+		return transactionRepository.findAllByUserEmail(email, new Sort(Direction.DESC, "date"));
 	}
 
 	public List<Transaction> findAllByCategory(Category category) {
@@ -53,15 +53,15 @@ public class TransactionService {
 		return transactionRepository.findAllByAccountOrTransferAccount(account, account);
 	}
 
-	public List<Transaction> findAllByForm(User user, ShowTransactionForm form) {
+	public List<Transaction> findAllByForm(String email, ShowTransactionForm form) {
 		String sortBy = form.getSortBy().toString().toLowerCase();
 		Sort sort = new Sort(Direction.DESC, sortBy);
 
 		if (form.getComment() != null && !form.getComment().isEmpty()) {
-			return transactionRepository.findByUserAndDateBetweenAndCommentLikeIgnoreCase(user, form.getFromDate(),
+			return transactionRepository.findByUserEmailAndDateBetweenAndCommentLikeIgnoreCase(email, form.getFromDate(),
 					form.getToDate(), form.getComment(), sort);
 		}
-		return transactionRepository.findByUserAndDateBetween(user, form.getFromDate(), form.getToDate(), sort);
+		return transactionRepository.findByUserEmailAndDateBetween(email, form.getFromDate(), form.getToDate(), sort);
 	}
 
 	@PreAuthorize("#account.user.email == authentication.name or hasRole('ADMIN')")
@@ -77,8 +77,8 @@ public class TransactionService {
 				form.getToDate(), sort);
 	}
 
-	public long countTransactionsByCategory(Category category) {
-		return transactionRepository.countByCategory(category);
+	public long countTransactionsByCategoryId(int id) {
+		return transactionRepository.countByCategoryId(id);
 	}
 
 	public long countTransactionsByAccount(Account account) {

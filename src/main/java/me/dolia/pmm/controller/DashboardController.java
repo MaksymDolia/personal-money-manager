@@ -66,16 +66,16 @@ public class DashboardController {
 	public String app(Model model, Principal principal) {
 		String email = principal.getName();
 		User user = userService.findOneByEmail(email);
-		List<Account> accounts = accountService.findAllByUser(user);
+		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("accounts", accounts);
 		List<Category> categories = categoryService.findAllByUserEmail(email);
 		model.addAttribute("categories", categories);
-		List<Transaction> transactions = transactionService.findAllByUser(user);
+		List<Transaction> transactions = transactionService.findAllByUserEmail(email);
 		model.addAttribute("transactions", transactions);
 		Double balance = accountService.getBalance(user);
 		model.addAttribute("balance", balance);
-		List<Category> expenseCategories = categoryService.findAllByUserAndOperation(user, Operation.EXPENSE);
-		List<Category> incomeCategories = categoryService.findAllByUserAndOperation(user, Operation.INCOME);
+		List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
+		List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);
 		model.addAttribute("expenseCategories", expenseCategories);
 		model.addAttribute("incomeCategories", incomeCategories);
 		return "dashboard";

@@ -31,8 +31,8 @@ public class CategoryService {
 		return categoryRepository.findOne(id);
 	}
 
-	public List<Category> findAllByUserAndOperation(User user, Operation operation) {
-		return categoryRepository.findAllByUserAndOperation(user, operation);
+	public List<Category> findAllByUserEmailAndOperation(String email, Operation operation) {
+		return categoryRepository.findAllByUserEmailAndOperation(email, operation);
 	}
 
 	public void save(Category category, String email) {

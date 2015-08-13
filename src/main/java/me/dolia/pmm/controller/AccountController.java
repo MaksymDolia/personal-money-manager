@@ -84,9 +84,9 @@ public class AccountController {
 	public String accounts(Model model, Principal principal) {
 		String email = principal.getName();
 		User user = userService.findOneByEmail(email);
-		List<Account> accounts = accountService.findAllByUser(user);
+		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("accounts", accounts);
-		double balance = accountService.getBalance(user);
+		double balance = accountService.getSumAmountByUser(user);
 		model.addAttribute("balance", balance);
 		return "accounts";
 	}
@@ -109,29 +109,27 @@ public class AccountController {
 	public String transactions(@PathVariable("id") int accountId,
 			@ModelAttribute("showTransactionForm") ShowTransactionForm form, Model model, Principal principal) {
 		String email = principal.getName();
-		User user = userService.findOneByEmail(email);
 		Account account = accountService.findOne(accountId);
 		List<Transaction> transactions = transactionService.findAllByAccountAndForm(account, form);
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("showTransactionForm", form);
-		List<Account> accounts = accountService.findAllByUser(user);
+		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("accounts", accounts);
 
-		List<Category> expenseCategories = categoryService.findAllByUserAndOperation(user, Operation.EXPENSE);
-		List<Category> incomeCategories = categoryService.findAllByUserAndOperation(user, Operation.INCOME);
+		List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
+		List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);
 		model.addAttribute("expenseCategories", expenseCategories);
 		model.addAttribute("incomeCategories", incomeCategories);
 		return "transactions";
 	}
 
 	@RequestMapping("/{id}/remove")
-	public String deleteAccount(@PathVariable int id, Model model, RedirectAttributes attr, Locale locale) {
+	public String deleteAccount(@PathVariable int id, RedirectAttributes attr, Locale locale) {
 		Account account = accountService.findOne(id);
 		List<Transaction> transactions = transactionService.findAllByAccount(account);
 		if (!transactions.isEmpty()) {
 			attr.addAttribute("id", id);
-			attr.addFlashAttribute("message",
-					context.getMessage("NotEmpty.AccountController.message", null, locale));
+			attr.addFlashAttribute("message", context.getMessage("NotEmpty.AccountController.message", null, locale));
 			return "redirect:/app/accounts/{id}/edit";
 		}
 		accountService.delete(account);
@@ -142,7 +140,7 @@ public class AccountController {
 	public String editAccount(@PathVariable int id, Model model) {
 		Account account = accountService.findOne(id);
 		User user = account.getUser();
-		List<Account> accounts = accountService.findAllByUser(user);
+		List<Account> accounts = accountService.findAllByUserEmail(account.getUser().getEmail());
 		model.addAttribute("account", account);
 		model.addAttribute("accounts", accounts);
 		double balance = accountService.getBalance(user);

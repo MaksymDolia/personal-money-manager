@@ -73,8 +73,6 @@ public class IndexController {
 	public String deleteProfile(HttpServletRequest request, Principal principal, RedirectAttributes attr)
 			throws ServletException {
 		String email = principal.getName();
-//		User user = userService.findOneByEmail(email);
-//		userService.delete(user);
 		userService.deleteByEmail(email);
 		request.logout();
 		attr.addFlashAttribute("message", "delete_profile_success");

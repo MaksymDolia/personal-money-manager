@@ -26,25 +26,23 @@ import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
-import me.dolia.pmm.entity.User;
 import me.dolia.pmm.form.ShowTransactionForm;
 import me.dolia.pmm.service.AccountService;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
-import me.dolia.pmm.service.UserService;
 import me.dolia.pmm.support.AccountEditor;
 import me.dolia.pmm.support.CategoryEditor;
 
 @Controller
 @RequestMapping("/app/transactions")
 public class TransactionController {
-
-	@Autowired
-	private UserService userService;
+	
 	@Autowired
 	private AccountService accountService;
+	
 	@Autowired
 	private TransactionService transactionService;
+	
 	@Autowired
 	private CategoryService categoryService;
 
@@ -70,15 +68,14 @@ public class TransactionController {
 	public String transactions(@ModelAttribute("showTransactionForm") ShowTransactionForm form, Model model,
 			Principal principal) {
 		String email = principal.getName();
-		User user = userService.findOneByEmail(email);
-		List<Transaction> transactions = transactionService.findAllByForm(user, form);
+		List<Transaction> transactions = transactionService.findAllByForm(email, form);
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("showTransactionForm", form);
-		List<Account> accounts = accountService.findAllByUser(user);
+		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("accounts", accounts);
 
-		List<Category> expenseCategories = categoryService.findAllByUserAndOperation(user, Operation.EXPENSE);
-		List<Category> incomeCategories = categoryService.findAllByUserAndOperation(user, Operation.INCOME);
+		List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
+		List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);
 		model.addAttribute("expenseCategories", expenseCategories);
 		model.addAttribute("incomeCategories", incomeCategories);
 		return "transactions";
@@ -119,14 +116,13 @@ public class TransactionController {
 	public String editTransaction(@PathVariable long id, Model model, Principal principal) {
 		Transaction transaction = transactionService.findOne(id);
 		String email = principal.getName();
-		User user = userService.findOneByEmail(email);
-		List<Transaction> transactions = transactionService.findAllByUser(user);
+		List<Transaction> transactions = transactionService.findAllByUserEmail(email);
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("transaction", transaction);
-		List<Account> accounts = accountService.findAllByUser(user);
+		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("accounts", accounts);
-		List<Category> expenseCategories = categoryService.findAllByUserAndOperation(user, Operation.EXPENSE);
-		List<Category> incomeCategories = categoryService.findAllByUserAndOperation(user, Operation.INCOME);
+		List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
+		List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);
 		model.addAttribute("expenseCategories", expenseCategories);
 		model.addAttribute("incomeCategories", incomeCategories);
 		return "transactions_edit";

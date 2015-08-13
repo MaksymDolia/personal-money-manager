@@ -17,7 +17,7 @@ import me.dolia.pmm.repository.UserRepository;
 
 @Service
 public class AccountService {
-	
+
 	@Autowired
 	private AccountRepository accountRepository;
 
@@ -45,10 +45,6 @@ public class AccountService {
 		return accountRepository.getSumAmountByUser(user);
 	}
 
-	public List<Account> findAllByUser(User user) {
-		return accountRepository.findAllByUser(user);
-	}
-
 	@PreAuthorize("#account.user.email == authentication.name or hasRole('ADMIN')")
 	public void delete(@P("account") Account account) {
 		accountRepository.delete(account);
@@ -62,7 +58,7 @@ public class AccountService {
 		}
 
 	}
-	
+
 	public void editAccount(Account existingAccount, Account account) {
 		existingAccount.setAmount(account.getAmount());
 		existingAccount.setCurrency(account.getCurrency());
@@ -72,7 +68,8 @@ public class AccountService {
 
 	@PreAuthorize("#fromAccount.user.email == authentication.name or #toAccount.user.email == authentication.name or hasRole('ADMIN')")
 	private void transferTransactions(@P("fromAccount") Account fromAccount, @P("toAccount") Account toAccount) {
-		List<Transaction> transactions = transactionRepository.findAllByAccountOrTransferAccount(fromAccount, fromAccount);
+		List<Transaction> transactions = transactionRepository.findAllByAccountOrTransferAccount(fromAccount,
+				fromAccount);
 		if (transactions != null && !transactions.isEmpty()) {
 			for (Transaction transaction : transactions) {
 				Operation operation = transaction.getOperation();
@@ -109,6 +106,14 @@ public class AccountService {
 				accountRepository.save(toAccount);
 			}
 		}
+	}
+
+	public List<Account> findAllByUserEmail(String email) {
+		return accountRepository.findAllByUserEmail(email);
+	}
+
+	public double getSumAmountByUser(User user) {
+		return accountRepository.getSumAmountByUser(user);
 	}
 
 }
