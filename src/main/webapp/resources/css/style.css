@@ -33,3 +33,10 @@
 	margin-left: 15px;
 	margin-right: 15px;
 }
+
+@media only screen and (min-width: 992px) {
+	.jumbotron {
+		background: url('../img/money_tree.jpg') center right no-repeat;
+		background-size: contain;
+	}
+}

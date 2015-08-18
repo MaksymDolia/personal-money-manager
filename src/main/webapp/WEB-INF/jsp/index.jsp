@@ -21,8 +21,9 @@
 		</div>
 	</div>
 </c:if>
-<div class="row">
-	<div class="jumbotron">
+
+<div class="jumbotron">
+	<div class="row">
 		<div class="col-md-8">
 			<h1>Organize your money</h1>
 			<p>This project - is a tool to manage personal money.</p>
@@ -35,11 +36,5 @@
 					role="button">GitHub</a>
 			</p>
 		</div>
-		<div class="col-md-4">
-			<img class="img-responsive" alt="money tree"
-				src='<spring:url value="/img/money_tree.jpg" />'>
-		</div>
 	</div>
-
-
 </div>
