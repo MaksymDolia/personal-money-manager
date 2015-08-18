@@ -1,5 +1,5 @@
 .jumbotron {
-	background-image: url("../img/background.jpg");
+	background-color: white;
 }
 
 .expense {
@@ -30,6 +30,6 @@
 }
 
 .glyphicon {
-margin-left: 15px;
-margin-right: 15px;	
+	margin-left: 15px;
+	margin-right: 15px;
 }

@@ -28,9 +28,10 @@
 <body>
 
 	<tilesx:useAttribute name="current" />
+
+	<!-- Static navbar -->
+	<nav class="navbar navbar-default">
 	<div class="container">
-		<!-- Static navbar -->
-		<nav class="navbar navbar-default">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
@@ -73,7 +74,10 @@
 				</security:authorize>
 			</ul>
 		</div>
-		<!--/.nav-collapse --> </nav>
+	</div>
+	<!--/.nav-collapse --> </nav>
+
+	<div class="container">
 		<tiles:insertAttribute name="body" />
 		<tiles:insertAttribute name="footer" />
 	</div>

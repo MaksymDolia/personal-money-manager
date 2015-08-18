@@ -39,21 +39,23 @@
 		</div>
 	</div>
 	<div class="col-md-8">
-		<tiles:insertAttribute name="form_transaction_add" />
-	</div>
-
-	<!-- 		TRANSACTIONS LIST -->
-
-	<div class="col-md-8 pull-right">
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<tiles:insertAttribute name="transactions_table" />
+		<div class="row">
+			<div class="col-md-12">
+				<tiles:insertAttribute name="form_transaction_add" />
+			</div>
+			<!-- 		TRANSACTIONS LIST -->
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<tiles:insertAttribute name="transactions_table" />
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div class="row"></div>
+
+</div>
 
 <!-- End container Modal Add Account -->
 <tiles:insertAttribute name="modal-account-add" />
