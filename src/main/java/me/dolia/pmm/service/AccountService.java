@@ -1,5 +1,6 @@
 package me.dolia.pmm.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,27 +74,27 @@ public class AccountService {
 		if (transactions != null && !transactions.isEmpty()) {
 			for (Transaction transaction : transactions) {
 				Operation operation = transaction.getOperation();
-				double amount = transaction.getAmount();
+				BigDecimal amount = transaction.getAmount();
 
 				switch (operation) {
 				case EXPENSE:
-					fromAccount.setAmount(fromAccount.getAmount() + amount);
-					toAccount.setAmount(toAccount.getAmount() - amount);
+					fromAccount.setAmount(fromAccount.getAmount().add(amount));
+					toAccount.setAmount(toAccount.getAmount().subtract(amount));
 					transaction.setAccount(toAccount);
 					break;
 				case INCOME:
-					fromAccount.setAmount(fromAccount.getAmount() - amount);
-					toAccount.setAmount(toAccount.getAmount() + amount);
+					fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
+					toAccount.setAmount(toAccount.getAmount().add(amount));
 					transaction.setAccount(toAccount);
 					break;
 				case TRANSFER:
 					if (transaction.getAccount().getId() == fromAccount.getId()) {
-						fromAccount.setAmount(fromAccount.getAmount() + amount);
-						toAccount.setAmount(toAccount.getAmount() - amount);
+						fromAccount.setAmount(fromAccount.getAmount().add(amount));
+						toAccount.setAmount(toAccount.getAmount().subtract(amount));
 						transaction.setAccount(toAccount);
 					} else if (transaction.getTransferAccount().getId() == fromAccount.getId()) {
-						fromAccount.setAmount(fromAccount.getAmount() - amount);
-						toAccount.setAmount(toAccount.getAmount() + amount);
+						fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
+						toAccount.setAmount(toAccount.getAmount().add(amount));
 						transaction.setTransferAccount(fromAccount);
 					}
 					break;

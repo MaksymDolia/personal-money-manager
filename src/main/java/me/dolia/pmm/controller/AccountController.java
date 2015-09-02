@@ -87,9 +87,12 @@ public class AccountController {
 
 	@RequestMapping(value = "/add_account", method = RequestMethod.POST)
 	public String addAccount(Model model, @Valid @ModelAttribute Account account, BindingResult result,
-			Principal principal, @RequestHeader(value = "referer", required = false) String referrer) {
+			Principal principal, @RequestHeader(value = "referer", required = false) String referrer,
+			RedirectAttributes attr) {
 		if (result.hasErrors()) {
-			return accounts(model, principal);
+			attr.addFlashAttribute("account", account);
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.account", result);
+			return "redirect:/app/accounts";
 		}
 		String email = principal.getName();
 		accountService.save(account, email);

@@ -1,5 +1,6 @@
 package me.dolia.pmm.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ public class Transaction {
 	@NotNull
 	private Operation operation;
 	@Digits(fraction = 2, integer = 9)
-	private double amount;
+	private BigDecimal amount;
 	private Currency currency;
 
 	@ManyToOne
@@ -30,7 +31,7 @@ public class Transaction {
 
 	// TRANSFER FIELDS
 	@Digits(fraction = 2, integer = 9)
-	private double transferAmount;
+	private BigDecimal transferAmount;
 	private Currency transferCurrency;
 
 	@ManyToOne
@@ -62,11 +63,11 @@ public class Transaction {
 		this.operation = operation;
 	}
 
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double ammountFrom) {
+	public void setAmount(BigDecimal ammountFrom) {
 		this.amount = ammountFrom;
 	}
 
@@ -78,11 +79,11 @@ public class Transaction {
 		this.currency = currencyFrom;
 	}
 
-	public double getTransferAmount() {
+	public BigDecimal getTransferAmount() {
 		return transferAmount;
 	}
 
-	public void setTransferAmount(double ammountTo) {
+	public void setTransferAmount(BigDecimal ammountTo) {
 		this.transferAmount = ammountTo;
 	}
 

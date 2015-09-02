@@ -1,5 +1,6 @@
 package me.dolia.pmm.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -63,7 +64,7 @@ public class UserService {
 		Account walletAccount = new Account();
 		walletAccount.setName(context.getMessage("Name.default.account", null, Locale.ENGLISH));
 		walletAccount.setUser(user);
-		walletAccount.setAmount(0);
+		walletAccount.setAmount(new BigDecimal(0));
 		walletAccount.setCurrency(Currency.UAH);
 		accountRepository.save(walletAccount);
 		

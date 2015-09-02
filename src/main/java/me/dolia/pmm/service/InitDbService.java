@@ -1,5 +1,6 @@
 package me.dolia.pmm.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,14 +75,14 @@ public class InitDbService {
 			Account walletAccount = new Account();
 			walletAccount.setName(context.getMessage("Name.default.account", null, Locale.ENGLISH));
 			walletAccount.setUser(user);
-			walletAccount.setAmount(0);
+			walletAccount.setAmount(new BigDecimal(0));
 			walletAccount.setCurrency(Currency.UAH);
 			accountRepository.save(walletAccount);
 
 			Account bankAccount = new Account();
 			bankAccount.setName("Bank");
 			bankAccount.setUser(user);
-			bankAccount.setAmount(500);
+			bankAccount.setAmount(new BigDecimal(500));
 			bankAccount.setCurrency(Currency.UAH);
 			accountRepository.save(bankAccount);
 
@@ -106,7 +107,7 @@ public class InitDbService {
 			Transaction transaction1 = new Transaction();
 			transaction1.setDate(new Date());
 			transaction1.setAccount(walletAccount);
-			transaction1.setAmount(50);
+			transaction1.setAmount(new BigDecimal(50));
 			transaction1.setCurrency(Currency.UAH);
 			transaction1.setCategory(categoryRepository.findOne(3));
 			transaction1.setType(Operation.EXPENSE);
@@ -119,7 +120,7 @@ public class InitDbService {
 			calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
 			transaction2.setDate(calendar.getTime());
 			transaction2.setAccount(bankAccount);
-			transaction2.setAmount(45.69);
+			transaction2.setAmount(new BigDecimal(45));
 			transaction2.setCurrency(Currency.UAH);
 			transaction2.setCategory(categoryRepository.findOne(7));
 			transaction2.setType(Operation.INCOME);

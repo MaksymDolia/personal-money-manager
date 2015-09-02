@@ -1,5 +1,6 @@
 package me.dolia.pmm.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,8 @@ public class TransactionService {
 		Sort sort = new Sort(Direction.DESC, sortBy);
 
 		if (form.getComment() != null && !form.getComment().isEmpty()) {
-			return transactionRepository.findByUserEmailAndDateBetweenAndCommentLikeIgnoreCase(email, form.getFromDate(),
-					form.getToDate(), form.getComment(), sort);
+			return transactionRepository.findByUserEmailAndDateBetweenAndCommentLikeIgnoreCase(email,
+					form.getFromDate(), form.getToDate(), form.getComment(), sort);
 		}
 		return transactionRepository.findByUserEmailAndDateBetween(email, form.getFromDate(), form.getToDate(), sort);
 	}
@@ -105,19 +106,19 @@ public class TransactionService {
 
 	private void processTransaction(Transaction transaction) {
 		Account account = accountRepository.findOne(transaction.getAccount().getId());
-		double amount = transaction.getAmount();
+		BigDecimal amount = transaction.getAmount();
 		Operation operation = transaction.getOperation();
 		switch (operation) {
 		case EXPENSE:
-			account.setAmount(account.getAmount() - amount);
+			account.setAmount(account.getAmount().subtract(amount));
 			break;
 		case INCOME:
-			account.setAmount(account.getAmount() + amount);
+			account.setAmount(account.getAmount().add(amount));
 			break;
 		case TRANSFER:
 			Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
-			account.setAmount(account.getAmount() - amount);
-			accountTo.setAmount(accountTo.getAmount() + amount);
+			account.setAmount(account.getAmount().subtract(amount));
+			accountTo.setAmount(accountTo.getAmount().add(amount));
 			accountRepository.save(accountTo);
 			break;
 		default:
@@ -128,19 +129,19 @@ public class TransactionService {
 
 	private void resetTransaction(Transaction transaction) {
 		Account account = accountRepository.findOne(transaction.getAccount().getId());
-		double amount = transaction.getAmount();
+		BigDecimal amount = transaction.getAmount();
 		Operation operation = transaction.getOperation();
 		switch (operation) {
 		case EXPENSE:
-			account.setAmount(account.getAmount() + amount);
+			account.setAmount(account.getAmount().add(amount));
 			break;
 		case INCOME:
-			account.setAmount(account.getAmount() - amount);
+			account.setAmount(account.getAmount().subtract(amount));
 			break;
 		case TRANSFER:
 			Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
-			account.setAmount(account.getAmount() + amount);
-			accountTo.setAmount(accountTo.getAmount() - amount);
+			account.setAmount(account.getAmount().add(amount));
+			accountTo.setAmount(accountTo.getAmount().subtract(amount));
 			accountRepository.save(accountTo);
 			break;
 		default:

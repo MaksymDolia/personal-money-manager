@@ -1,5 +1,7 @@
 package me.dolia.pmm.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,7 +25,7 @@ public class Account {
 	private Currency currency;
 
 	@Digits(fraction = 2, integer = 9)
-	private double amount;
+	private BigDecimal amount;
 
 	@ManyToOne
 	@JoinColumn(name = "User_id", referencedColumnName = "id")
@@ -53,11 +55,11 @@ public class Account {
 		this.currency = currency;
 	}
 
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double ammount) {
+	public void setAmount(BigDecimal ammount) {
 		this.amount = ammount;
 	}
 
