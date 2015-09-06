@@ -29,9 +29,9 @@
 			<div class="col-md-12 text-center">
 				<h1>Oops!</h1>
 				<br />
-				<h1>404 Not Found</h1>
+				<h1>Something went wrong</h1>
 				<br />
-				<p>Sorry, an error has occured, Requested page not found!</p>
+				<p>Sorry, an error has occured.</p>
 
 				<a href='<spring:url value="/" />' class="btn btn-primary btn-lg"><span
 					class="glyphicon glyphicon-home"></span> Take Me Home </a>

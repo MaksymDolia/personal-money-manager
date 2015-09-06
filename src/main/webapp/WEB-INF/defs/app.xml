@@ -40,7 +40,7 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/dashboard.jsp" />
 		<put-attribute name="current" value="dashboard" />
 		<put-attribute name="transactions_table"
-			value="/WEB-INF/layouts/transactions_table.jsp" cascade="true"/>
+			value="/WEB-INF/layouts/transactions_table.jsp" cascade="true" />
 		<!-- FORMS -->
 		<put-attribute name="form_account_add"
 			value="/WEB-INF/layouts/form/form_account_add.jsp" cascade="true" />
@@ -54,7 +54,7 @@
 		<put-attribute name="title" value="Transactions" />
 		<put-attribute name="body" value="/WEB-INF/jsp/transactions.jsp" />
 		<put-attribute name="transactions_table"
-			value="/WEB-INF/layouts/transactions_table.jsp" cascade="true"/>
+			value="/WEB-INF/layouts/transactions_table.jsp" cascade="true" />
 		<put-attribute name="current" value="transactions" />
 		<put-attribute name="form"
 			value="/WEB-INF/layouts/form/form_transaction_add.jsp" cascade="true" />
@@ -103,4 +103,7 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/profile.jsp" />
 		<put-attribute name="current" value="profile" />
 	</definition>
+
+	<definition name="404" template="/WEB-INF/jsp/404.jsp" />
+	<definition name="error" template="/WEB-INF/jsp/error.jsp" />
 </tiles-definitions>

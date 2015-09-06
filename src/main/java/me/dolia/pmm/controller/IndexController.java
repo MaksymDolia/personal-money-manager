@@ -89,4 +89,15 @@ public class IndexController {
 		Boolean available = userService.findOneByEmail(email) == null;
 		return available.toString();
 	}
+	
+	
+	@RequestMapping("/404")
+	public String pageNotFound() {
+		return "404";
+	}
+	
+	@RequestMapping("/error")
+	public String errorPage() {
+		return "error";
+	}
 }
