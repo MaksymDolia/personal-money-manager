@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class CategoryService {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
+	@PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")
 	public Category findOne(Integer id) {
 		return categoryRepository.findOne(id);
 	}
@@ -49,7 +51,7 @@ public class CategoryService {
 	public void save(Category category) {
 		categoryRepository.save(category);
 	}
-	
+
 	public void editCategory(Category existingCategory, Category category) {
 		existingCategory.setName(category.getName());
 		existingCategory.setOperation(category.getOperation());

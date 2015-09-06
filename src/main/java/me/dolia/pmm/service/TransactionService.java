@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,7 @@ public class TransactionService {
 		transactionRepository.delete(transaction);
 	}
 
+	@PostAuthorize ("returnObject.user.email == authentication.name or hasRole('ADMIN')")
 	public Transaction findOne(Long id) {
 		return transactionRepository.findOne(id);
 	}

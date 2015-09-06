@@ -104,9 +104,9 @@ public class AccountController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String transactions(@PathVariable("id") int accountId,
-			@ModelAttribute("showTransactionForm") ShowTransactionForm form, Model model, Principal principal) {
-		String email = principal.getName();
+			@ModelAttribute("showTransactionForm") ShowTransactionForm form, Model model) {
 		Account account = accountService.findOne(accountId);
+		String email = account.getUser().getEmail();
 		List<Transaction> transactions = transactionService.findAllByAccountAndForm(account, form);
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("showTransactionForm", form);
@@ -136,10 +136,11 @@ public class AccountController {
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public String editAccount(@PathVariable int id, Model model) {
 		Account account = accountService.findOne(id);
-		List<Account> accounts = accountService.findAllByUserEmail(account.getUser().getEmail());
+		String email = account.getUser().getEmail();
+		List<Account> accounts = accountService.findAllByUserEmail(email);
 		model.addAttribute("account", account);
 		model.addAttribute("accounts", accounts);
-		double balance = accountService.getBalance(account.getUser().getEmail());
+		double balance = accountService.getBalance(email);
 		model.addAttribute("balance", balance);
 		long quantityOfTransactions = transactionService.countTransactionsByAccount(account);
 		model.addAttribute("quantityOfTransactions", quantityOfTransactions);

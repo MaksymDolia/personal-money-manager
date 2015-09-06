@@ -107,9 +107,9 @@ public class TransactionController {
 	}
 
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
-	public String editTransaction(@PathVariable long id, Model model, Principal principal) {
+	public String editTransaction(@PathVariable long id, Model model) {
 		Transaction transaction = transactionService.findOne(id);
-		String email = principal.getName();
+		String email = transaction.getUser().getEmail();
 		List<Transaction> transactions = transactionService.findAllByUserEmail(email);
 		model.addAttribute("transactions", transactions);
 		model.addAttribute("transaction", transaction);
