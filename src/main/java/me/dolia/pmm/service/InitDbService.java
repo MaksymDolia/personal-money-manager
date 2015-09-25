@@ -3,6 +3,7 @@ package me.dolia.pmm.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
-import me.dolia.pmm.entity.Currency;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Role;
 import me.dolia.pmm.entity.Transaction;
@@ -76,14 +76,14 @@ public class InitDbService {
 			walletAccount.setName(context.getMessage("Name.default.account", null, Locale.ENGLISH));
 			walletAccount.setUser(user);
 			walletAccount.setAmount(new BigDecimal(0));
-			walletAccount.setCurrency(Currency.UAH);
+			walletAccount.setCurrency(Currency.getInstance("UAH"));
 			accountRepository.save(walletAccount);
 
 			Account bankAccount = new Account();
 			bankAccount.setName("Bank");
 			bankAccount.setUser(user);
 			bankAccount.setAmount(new BigDecimal(500));
-			bankAccount.setCurrency(Currency.UAH);
+			bankAccount.setCurrency(Currency.getInstance("UAH"));
 			accountRepository.save(bankAccount);
 
 			// Create categories for expenses
@@ -108,7 +108,7 @@ public class InitDbService {
 			transaction1.setDate(new Date());
 			transaction1.setAccount(walletAccount);
 			transaction1.setAmount(new BigDecimal(50));
-			transaction1.setCurrency(Currency.UAH);
+			transaction1.setCurrency(Currency.getInstance("UAH"));
 			transaction1.setCategory(categoryRepository.findOne(3));
 			transaction1.setType(Operation.EXPENSE);
 			transaction1.setComment("McDonalds");
@@ -121,7 +121,7 @@ public class InitDbService {
 			transaction2.setDate(calendar.getTime());
 			transaction2.setAccount(bankAccount);
 			transaction2.setAmount(new BigDecimal(45));
-			transaction2.setCurrency(Currency.UAH);
+			transaction2.setCurrency(Currency.getInstance("UAH"));
 			transaction2.setCategory(categoryRepository.findOne(7));
 			transaction2.setType(Operation.INCOME);
 			transaction2.setComment("Festo");

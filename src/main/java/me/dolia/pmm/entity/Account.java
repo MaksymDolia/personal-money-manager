@@ -1,6 +1,7 @@
 package me.dolia.pmm.entity;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

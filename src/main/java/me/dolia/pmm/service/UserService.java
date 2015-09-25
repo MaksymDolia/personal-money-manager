@@ -2,6 +2,7 @@ package me.dolia.pmm.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
-import me.dolia.pmm.entity.Currency;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Role;
 import me.dolia.pmm.entity.User;
@@ -65,7 +65,7 @@ public class UserService {
 		walletAccount.setName(context.getMessage("Name.default.account", null, Locale.ENGLISH));
 		walletAccount.setUser(user);
 		walletAccount.setAmount(new BigDecimal(0));
-		walletAccount.setCurrency(Currency.UAH);
+		walletAccount.setCurrency(Currency.getInstance("UAH"));
 		accountRepository.save(walletAccount);
 		
 		//Create categories for expenses
