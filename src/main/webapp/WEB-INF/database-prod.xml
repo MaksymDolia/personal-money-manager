@@ -10,15 +10,15 @@
 	<context:property-placeholder/>
 
 	<bean class="java.net.URI" id="dbUrl">
-		<constructor-arg value="${OPENSHIFT_POSTGRESQL_DB_URL}/${OPENSHIFT_APP_NAME}" />
+		<constructor-arg value="${OPENSHIFT_MYSQL_DB_URL}/${OPENSHIFT_APP_NAME}" />
 	</bean>
-
-	  <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
-        <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + @dbUrl.getPath() }"/>
-        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
-        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
-        </bean>
+	
+	 <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+       <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+       <property name="url" value="jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/${OPENSHIFT_APP_NAME}" />
+       <property name="username" value="${OPENSHIFT_MYSQL_DB_USERNAME}" />
+       <property name="password" value="${OPENSHIFT_MYSQL_DB_PASSWORD}" />
+   </bean>
 
 	<bean id="emf"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
