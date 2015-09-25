@@ -39,7 +39,7 @@ public class TransactionService {
 		transactionRepository.delete(transaction);
 	}
 
-	@PostAuthorize ("returnObject.user.email == authentication.name or hasRole('ADMIN')")
+	@PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")
 	public Transaction findOne(Long id) {
 		return transactionRepository.findOne(id);
 	}
@@ -119,6 +119,9 @@ public class TransactionService {
 			break;
 		case TRANSFER:
 			Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
+			if (accountTo.equals(account)) {
+				break;
+			}
 			account.setAmount(account.getAmount().subtract(amount));
 			accountTo.setAmount(accountTo.getAmount().add(amount));
 			accountRepository.save(accountTo);
@@ -142,6 +145,9 @@ public class TransactionService {
 			break;
 		case TRANSFER:
 			Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
+			if (accountTo.equals(account)) {
+				break;
+			}
 			account.setAmount(account.getAmount().add(amount));
 			accountTo.setAmount(accountTo.getAmount().subtract(amount));
 			accountRepository.save(accountTo);
