@@ -61,7 +61,7 @@ public class CategoryController {
 	}
 
 	@RequestMapping(value = "/{id}/remove")
-	public String removeCategory(@PathVariable("id") int id, Model model, RedirectAttributes attr, Locale locale) {
+	public String removeCategory(@PathVariable("id") int id, RedirectAttributes attr, Locale locale) {
 		Category category = categoryService.findOne(id);
 		List<Transaction> transactions = transactionService.findAllByCategory(category);
 		if (!transactions.isEmpty()) {

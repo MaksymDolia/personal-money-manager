@@ -54,7 +54,7 @@ public class IndexController {
 	}
 
 	@RequestMapping(value = "/signin", method = RequestMethod.POST)
-	public String doSignin(Model model, @Valid @ModelAttribute("user") User user, BindingResult result,
+	public String doSignin(@Valid @ModelAttribute("user") User user, BindingResult result,
 			RedirectAttributes attr) {
 		if (result.hasErrors()) {
 			return "signin";

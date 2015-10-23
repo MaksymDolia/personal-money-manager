@@ -68,7 +68,7 @@ public class AccountController {
 	}
 
 	@InitBinder
-	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
+	protected void initBinder(ServletRequestDataBinder binder) {
 		binder.registerCustomEditor(Account.class, new AccountEditor(accountService));
 		binder.registerCustomEditor(Category.class, new CategoryEditor(categoryService));
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
