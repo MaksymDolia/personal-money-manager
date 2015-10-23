@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="../taglib.jsp"%>
-<spring:url value="/categories/add_category" var="form_category_add_action" />
+<spring:url value="/app/categories/add_category" var="form_category_add_action" />
 <form:form commandName="category" method="POST"
 	cssClass="form-category-add"
 	action="${form_category_add_action}">

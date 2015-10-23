@@ -7,6 +7,7 @@
 .idea/
 *.iml
 *.iws
+classes
 
 # Mac
 .DS_Store
