@@ -5,7 +5,6 @@ import me.dolia.pmm.form.ShowTransactionForm;
 import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.method.P;
@@ -13,19 +12,20 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class TransactionService {
 
-    @Autowired
+    @Inject
     private TransactionRepository transactionRepository;
 
-    @Autowired
+    @Inject
     private AccountRepository accountRepository;
 
-    @Autowired
+    @Inject
     private UserRepository userRepository;
 
     @PreAuthorize("#transaction.user.email == authentication.name or hasRole('ADMIN')")

@@ -1,14 +1,5 @@
 package me.dolia.pmm.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
@@ -16,17 +7,25 @@ import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class AccountService {
 
-    @Autowired
+    @Inject
     private AccountRepository accountRepository;
 
-    @Autowired
+    @Inject
     private UserRepository userRepository;
 
-    @Autowired
+    @Inject
     private TransactionRepository transactionRepository;
 
     public void save(Account account) {

@@ -1,17 +1,16 @@
 package me.dolia.pmm.annotation;
 
+import me.dolia.pmm.repository.UserRepository;
+
+import javax.inject.Inject;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import me.dolia.pmm.repository.UserRepository;
-
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
-	@Autowired
+	@Inject
 	private UserRepository userRepository;
-	
+
 	@Override
 	public void initialize(UniqueEmail constraintAnnotation) {
 	}

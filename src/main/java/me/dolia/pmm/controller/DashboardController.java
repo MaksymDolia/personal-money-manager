@@ -9,7 +9,6 @@ import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
 import me.dolia.pmm.support.AccountEditor;
 import me.dolia.pmm.support.CategoryEditor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.inject.Inject;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,13 +27,13 @@ import java.util.List;
 @RequestMapping("/app")
 public class DashboardController {
 
-    @Autowired
+    @Inject
     private AccountService accountService;
 
-    @Autowired
+    @Inject
     private CategoryService categoryService;
 
-    @Autowired
+    @Inject
     private TransactionService transactionService;
 
     @ModelAttribute("account")

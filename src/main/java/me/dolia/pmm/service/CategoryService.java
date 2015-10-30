@@ -1,13 +1,5 @@
 package me.dolia.pmm.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
@@ -15,17 +7,24 @@ import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.CategoryRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import java.util.List;
 
 @Service
 public class CategoryService {
 
-	@Autowired
+	@Inject
 	private CategoryRepository categoryRepository;
 
-	@Autowired
+	@Inject
 	private UserRepository userRepository;
 
-	@Autowired
+	@Inject
 	private TransactionRepository transactionRepository;
 
 	@PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")

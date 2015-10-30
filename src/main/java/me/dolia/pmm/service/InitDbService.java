@@ -2,34 +2,34 @@ package me.dolia.pmm.service;
 
 import me.dolia.pmm.entity.*;
 import me.dolia.pmm.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
 @Service
 public class InitDbService {
 
-    @Autowired
+    @Inject
     private ApplicationContext context;
 
-    @Autowired
+    @Inject
     private RoleRepository roleRepository;
 
-    @Autowired
+    @Inject
     private UserRepository userRepository;
 
-    @Autowired
+    @Inject
     private AccountRepository accountRepository;
 
-    @Autowired
+    @Inject
     private CategoryRepository categoryRepository;
 
-    @Autowired
+    @Inject
     private TransactionRepository transactionRepository;
 
     @PostConstruct
