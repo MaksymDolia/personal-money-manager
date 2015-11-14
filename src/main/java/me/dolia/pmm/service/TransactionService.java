@@ -10,13 +10,13 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Service
+@Named
 public class TransactionService {
 
     @Inject
@@ -108,26 +108,26 @@ public class TransactionService {
 
         switch (operation) {
 
-        case EXPENSE:
-            account.setAmount(account.getAmount().subtract(amount));
-            break;
-
-        case INCOME:
-            account.setAmount(account.getAmount().add(amount));
-            break;
-
-        case TRANSFER:
-            Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
-            if (accountTo.equals(account)) {
+            case EXPENSE:
+                account.setAmount(account.getAmount().subtract(amount));
                 break;
-            }
-            account.setAmount(account.getAmount().subtract(amount));
-            accountTo.setAmount(accountTo.getAmount().add(amount));
-            accountRepository.save(accountTo);
-            break;
 
-        default:
-            break;
+            case INCOME:
+                account.setAmount(account.getAmount().add(amount));
+                break;
+
+            case TRANSFER:
+                Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
+                if (accountTo.equals(account)) {
+                    break;
+                }
+                account.setAmount(account.getAmount().subtract(amount));
+                accountTo.setAmount(accountTo.getAmount().add(amount));
+                accountRepository.save(accountTo);
+                break;
+
+            default:
+                break;
         }
         accountRepository.save(account);
     }
@@ -138,26 +138,26 @@ public class TransactionService {
         Operation operation = transaction.getOperation();
         switch (operation) {
 
-        case EXPENSE:
-            account.setAmount(account.getAmount().add(amount));
-            break;
-
-        case INCOME:
-            account.setAmount(account.getAmount().subtract(amount));
-            break;
-
-        case TRANSFER:
-            Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
-            if (accountTo.equals(account)) {
+            case EXPENSE:
+                account.setAmount(account.getAmount().add(amount));
                 break;
-            }
-            account.setAmount(account.getAmount().add(amount));
-            accountTo.setAmount(accountTo.getAmount().subtract(amount));
-            accountRepository.save(accountTo);
-            break;
 
-        default:
-            break;
+            case INCOME:
+                account.setAmount(account.getAmount().subtract(amount));
+                break;
+
+            case TRANSFER:
+                Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
+                if (accountTo.equals(account)) {
+                    break;
+                }
+                account.setAmount(account.getAmount().add(amount));
+                accountTo.setAmount(accountTo.getAmount().subtract(amount));
+                accountRepository.save(accountTo);
+                break;
+
+            default:
+                break;
         }
         accountRepository.save(account);
     }

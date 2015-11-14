@@ -10,13 +10,13 @@ import me.dolia.pmm.repository.UserRepository;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Service
+@Named
 public class AccountService {
 
     @Inject
@@ -78,29 +78,29 @@ public class AccountService {
                 BigDecimal amount = transaction.getAmount();
 
                 switch (operation) {
-                case EXPENSE:
-                    fromAccount.setAmount(fromAccount.getAmount().add(amount));
-                    toAccount.setAmount(toAccount.getAmount().subtract(amount));
-                    transaction.setAccount(toAccount);
-                    break;
-                case INCOME:
-                    fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
-                    toAccount.setAmount(toAccount.getAmount().add(amount));
-                    transaction.setAccount(toAccount);
-                    break;
-                case TRANSFER:
-                    if (transaction.getAccount().getId() == fromAccount.getId()) {
+                    case EXPENSE:
                         fromAccount.setAmount(fromAccount.getAmount().add(amount));
                         toAccount.setAmount(toAccount.getAmount().subtract(amount));
                         transaction.setAccount(toAccount);
-                    } else if (transaction.getTransferAccount().getId() == fromAccount.getId()) {
+                        break;
+                    case INCOME:
                         fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
                         toAccount.setAmount(toAccount.getAmount().add(amount));
-                        transaction.setTransferAccount(fromAccount);
-                    }
-                    break;
-                default:
-                    break;
+                        transaction.setAccount(toAccount);
+                        break;
+                    case TRANSFER:
+                        if (transaction.getAccount().getId() == fromAccount.getId()) {
+                            fromAccount.setAmount(fromAccount.getAmount().add(amount));
+                            toAccount.setAmount(toAccount.getAmount().subtract(amount));
+                            transaction.setAccount(toAccount);
+                        } else if (transaction.getTransferAccount().getId() == fromAccount.getId()) {
+                            fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
+                            toAccount.setAmount(toAccount.getAmount().add(amount));
+                            transaction.setTransferAccount(fromAccount);
+                        }
+                        break;
+                    default:
+                        break;
                 }
 
                 transactionRepository.save(transaction);

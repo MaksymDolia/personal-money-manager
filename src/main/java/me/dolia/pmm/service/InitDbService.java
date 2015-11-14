@@ -4,14 +4,14 @@ import me.dolia.pmm.entity.*;
 import me.dolia.pmm.repository.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Service
+@Named
 public class InitDbService {
 
     @Inject
