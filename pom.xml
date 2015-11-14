@@ -114,13 +114,6 @@
 			<artifactId>spring-context</artifactId>
 		</dependency>
 
-		<!-- Various Application Context utilities, including EhCache, JavaMail, 
-			Quartz, and Freemarker integration Define this if you need any of these integrations -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-		</dependency>
-
 		<!-- Transaction Management Abstraction (depends on spring-core, spring-beans, 
 			spring-aop, spring-context) Define this if you use Spring Transactions or 
 			DAO Exception Hierarchy (org.springframework.transaction.*/org.springframework.dao.*) -->
@@ -129,27 +122,12 @@
 			<artifactId>spring-tx</artifactId>
 		</dependency>
 
-		<!-- JDBC Data Access Library (depends on spring-core, spring-beans, spring-context, 
-			spring-tx) Define this if you use Spring's JdbcTemplate API (org.springframework.jdbc.*) -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-		</dependency>
-
 		<!-- Object-to-Relation-Mapping (ORM) integration with Hibernate, JPA, 
 			and iBatis. (depends on spring-core, spring-beans, spring-context, spring-tx) 
 			Define this if you need ORM (org.springframework.orm.*) -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-		</dependency>
-
-		<!-- Object-to-XML Mapping (OXM) abstraction and integration with JAXB, 
-			JiBX, Castor, XStream, and XML Beans. (depends on spring-core, spring-beans, 
-			spring-context) Define this if you need OXM (org.springframework.oxm.*) -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-oxm</artifactId>
 		</dependency>
 
 		<!-- Web application development utilities applicable to both Servlet and 
@@ -167,14 +145,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-		</dependency>
-
-		<!-- Spring MVC for Portlet Environments (depends on spring-core, spring-beans, 
-			spring-context, spring-web) Define this if you use Spring MVC with a Portlet 
-			Container (org.springframework.web.portlet.*) -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc-portlet</artifactId>
 		</dependency>
 
 		<!-- Support for testing Spring applications with tools such as JUnit and 
