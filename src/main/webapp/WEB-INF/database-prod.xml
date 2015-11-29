@@ -7,6 +7,7 @@
 
     <context:property-placeholder/>
 
+    <!-- DataSource -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url"
@@ -15,8 +16,8 @@
         <property name="password" value="${OPENSHIFT_MYSQL_DB_PASSWORD}"/>
     </bean>
 
-    <bean id="emf"
-          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <!-- Entity Manager Factory -->
+    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="packagesToScan" value="me.dolia.pmm.entity"/>
         <property name="dataSource" ref="dataSource"/>
         <property name="jpaProperties">

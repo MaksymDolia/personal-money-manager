@@ -11,6 +11,11 @@ import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * Full fills database with initial data.
+ *
+ * @author Maksym Dolia
+ */
 @Named
 public class InitDbService {
 
@@ -32,6 +37,9 @@ public class InitDbService {
     @Inject
     private TransactionRepository transactionRepository;
 
+    /**
+     * Stores to persistence layer initial data.
+     */
     @PostConstruct
     public void init() {
         if (roleRepository.findByName("ROLE_ADMIN") == null) {

@@ -24,6 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Controller to handle requests about transactions.
+ *
+ * @author Maksym Dolia
+ */
 @Controller
 @RequestMapping("/app/transactions")
 public class TransactionController {

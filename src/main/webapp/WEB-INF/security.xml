@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-		   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+		   http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
 		   http://www.springframework.org/schema/security
 		   http://www.springframework.org/schema/security/spring-security.xsd">
 
-	<global-method-security pre-post-annotations="enabled" />
+    <!-- Enable support for pre-post authentication annotations -->
+    <global-method-security pre-post-annotations="enabled"/>
 
-	<http>
-		<intercept-url pattern="/app**" access="hasRole('USER')" />
-		<intercept-url pattern="/app/**" access="hasRole('USER')" />
-		<intercept-url pattern="/profile**" access="hasRole('USER')" />
-		<form-login login-page="/login" username-parameter="email"
-			default-target-url="/app" authentication-failure-url="/login" />
+    <!-- Main security configuration-->
+    <http>
+        <intercept-url pattern="/app**" access="hasRole('USER')"/>
+        <intercept-url pattern="/app/**" access="hasRole('USER')"/>
+        <intercept-url pattern="/profile**" access="hasRole('USER')"/>
+        <form-login login-page="/login" username-parameter="email"
+                    default-target-url="/app" authentication-failure-url="/login"/>
+        <logout logout-success-url="/?message=logout_success"/>
+        <csrf disabled="true"/>
+    </http>
 
-		<logout logout-success-url="/?message=logout_success" />
-		<csrf disabled="true" />
-	</http>
-
-	<authentication-manager>
-		<authentication-provider>
-
-			<password-encoder hash="bcrypt" />
-			<jdbc-user-service data-source-ref="dataSource"
-				authorities-by-username-query="select app_user.email, Role.name from app_user join app_user_Role on app_user.id = app_user_Role.users_id join Role on app_user_Role.roles_id = Role.id where app_user.email = ?"
-				users-by-username-query="select email, password,1 from app_user where email = ?" />
-		</authentication-provider>
-	</authentication-manager>
+    <!-- Set up authentication manager -->
+    <authentication-manager>
+        <!-- Set up authentication provider -->
+        <authentication-provider>
+            <!-- Set up password encoder to store passwords in encrypted forms -->
+            <password-encoder hash="bcrypt"/>
+            <jdbc-user-service data-source-ref="dataSource"
+                               authorities-by-username-query="SELECT app_user.email, Role.name FROM app_user
+                               JOIN app_user_Role ON app_user.id = app_user_Role.users_id JOIN Role
+                               ON app_user_Role.roles_id = Role.id WHERE app_user.email = ?"
+                               users-by-username-query="SELECT email, password,1 FROM app_user WHERE email = ?"/>
+        </authentication-provider>
+    </authentication-manager>
 
 </beans:beans>

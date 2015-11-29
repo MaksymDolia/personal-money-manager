@@ -23,6 +23,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Controller, handles requests to user's dashboard.
+ *
+ * @author Maksym Dolia
+ */
 @Controller
 @RequestMapping("/app")
 public class DashboardController {
