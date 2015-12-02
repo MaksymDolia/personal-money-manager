@@ -49,6 +49,28 @@ public class Transaction {
     @ManyToOne
     private User user;
 
+    public Transaction() {
+        //for JPA
+    }
+
+    /**
+     * Creates a new instance, copy of given one.
+     *
+     * @param copyTransaction transaction copy from
+     */
+    public Transaction(Transaction copyTransaction) {
+        this.setAccount(copyTransaction.getAccount());
+        this.setAmount(copyTransaction.getAmount());
+        this.setCategory(copyTransaction.getCategory());
+        this.setComment(copyTransaction.getComment());
+        this.setCurrency(copyTransaction.getCurrency());
+        this.setDate(copyTransaction.getDate());
+        this.setOperation(copyTransaction.getOperation());
+        this.setTransferAccount(copyTransaction.getTransferAccount());
+        this.setTransferAmount(copyTransaction.getTransferAmount());
+        this.setTransferCurrency(copyTransaction.getTransferCurrency());
+    }
+
     public long getId() {
         return id;
     }
@@ -85,8 +107,8 @@ public class Transaction {
         return transferAmount;
     }
 
-    public void setTransferAmount(BigDecimal ammountTo) {
-        this.transferAmount = ammountTo;
+    public void setTransferAmount(BigDecimal amountTo) {
+        this.transferAmount = amountTo;
     }
 
     public Currency getTransferCurrency() {
@@ -152,18 +174,4 @@ public class Transaction {
     public void setUser(User user) {
         this.user = user;
     }
-
-    public void copy(Transaction transaction) {
-        this.setAccount(transaction.getAccount());
-        this.setAmount(transaction.getAmount());
-        this.setCategory(transaction.getCategory());
-        this.setComment(transaction.getComment());
-        this.setCurrency(transaction.getCurrency());
-        this.setDate(transaction.getDate());
-        this.setOperation(transaction.getOperation());
-        this.setTransferAccount(transaction.getTransferAccount());
-        this.setTransferAmount(transaction.getTransferAmount());
-        this.setTransferCurrency(transaction.getTransferCurrency());
-    }
-
 }

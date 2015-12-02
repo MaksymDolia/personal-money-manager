@@ -174,7 +174,7 @@ public class TransactionService {
      */
     public void editAndSave(Transaction changedTransaction, Transaction originalTransaction) {
         this.resetTransaction(originalTransaction);
-        originalTransaction.copy(changedTransaction);
+        originalTransaction = new Transaction(changedTransaction);
         save(originalTransaction);
         processTransaction(originalTransaction);
     }
