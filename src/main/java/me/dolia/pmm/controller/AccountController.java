@@ -214,7 +214,7 @@ public class AccountController {
     }
 
     /**
-     * Performs saving account data.
+     * Performs saving edited account data.
      *
      * @param account account's model attributes
      * @param id      account's id

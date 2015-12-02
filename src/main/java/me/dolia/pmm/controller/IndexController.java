@@ -34,8 +34,7 @@ public class IndexController {
 
     @RequestMapping("/index")
     public String index() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
+        if (!anonymousUser()) {
             return "redirect:/app";
         }
         return "index";
@@ -43,16 +42,23 @@ public class IndexController {
 
     @RequestMapping("/login")
     public String login() {
+        if (!anonymousUser()) {
+            return "redirect:/app";
+        }
         return "login";
     }
 
     @RequestMapping(value = "/signin", method = RequestMethod.GET)
     public String signin() {
+        if (!anonymousUser()) {
+            return "redirect:/app";
+        }
         return "signin";
     }
 
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
-    public String doSignin(@Valid @ModelAttribute("user") User user, BindingResult result,
+    public String doSignin(@Valid @ModelAttribute("user") User user,
+                           BindingResult result,
                            RedirectAttributes attr) {
         if (result.hasErrors()) {
             return "signin";
@@ -100,5 +106,10 @@ public class IndexController {
     @RequestMapping("/error")
     public String errorPage() {
         return "error";
+    }
+
+    private boolean anonymousUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return (auth instanceof AnonymousAuthenticationToken);
     }
 }

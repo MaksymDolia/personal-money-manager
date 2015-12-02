@@ -3,7 +3,6 @@ package me.dolia.pmm.entity;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -25,7 +24,7 @@ public class Account {
     private String name;
     private Currency currency;
 
-    @Digits(fraction = 2, integer = 9)
+//    @Digits(fraction = 2, integer = 9)    // issue with binding error result
     private BigDecimal amount;
 
     @ManyToOne

@@ -10,10 +10,10 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 

@@ -14,7 +14,7 @@
     <http>
         <intercept-url pattern="/app**" access="hasRole('USER')"/>
         <intercept-url pattern="/app/**" access="hasRole('USER')"/>
-        <intercept-url pattern="/profile**" access="hasRole('USER')"/>
+        <intercept-url pattern="/profile/**" access="hasRole('USER')"/>
         <form-login login-page="/login" username-parameter="email"
                     default-target-url="/app" authentication-failure-url="/login"/>
         <logout logout-success-url="/?message=logout_success"/>
