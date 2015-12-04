@@ -12,6 +12,11 @@
         <location>/404</location>
     </error-page>
     <error-page>
+        <!-- Forbidden -->
+        <error-code>403</error-code>
+        <location>/login</location>
+    </error-page>
+    <error-page>
         <!-- All other errors -->
         <location>/error</location>
     </error-page>

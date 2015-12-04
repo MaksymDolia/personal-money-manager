@@ -26,6 +26,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -95,7 +96,7 @@ public class AccountControllerTest {
         String currency = "UAH";
 
         mockMvc.perform(post(ROOT_MAPPING + "/add_account")
-                .with(user("admin@admin"))
+                .with(user("admin@admin")).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("name", name)
                 .param("amount", amount)
@@ -113,6 +114,7 @@ public class AccountControllerTest {
 
         mockMvc.perform(post(ROOT_MAPPING + "/add_account")
                 .with(user("admin@admin"))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("name", name)
                 .param("amount", amount)
@@ -213,8 +215,7 @@ public class AccountControllerTest {
     @Test
     public void testDoEditAccountUserNotAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/1/edit"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("http://*/login"));
+                .andExpect(status().isForbidden());
     }
 
     @Ignore
@@ -235,22 +236,26 @@ public class AccountControllerTest {
 
     @Test
     public void testDoEditAccountWithValidDataUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/edit"))
+        mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
+                .with(user("admin@admin"))
+                .with(csrf())
+                .param("name", "Hello")
+        )
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("http://*/login"));
+                .andExpect(redirectedUrl(ROOT_MAPPING));
     }
 
     @Test
     public void testTransferTransactionsUserNotAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/transform"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("http://*/login"));
+                .andExpect(status().isForbidden());
     }
 
     @Test
     public void testTransferTransactionsUserAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/transfer")
                 .with(user("admin@admin"))
+                .with(csrf())
                 .param("fromAccount", "1")
                 .param("toAccount", "2")
         )

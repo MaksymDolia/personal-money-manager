@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -77,14 +78,14 @@ public class TransactionControllerTest {
     @Test
     public void testAddTransactionUserNotAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/add_transaction"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("http://*/login"));
+                .andExpect(status().isForbidden());
     }
 
     @Test
     public void testAddTransactionWithValidDataUserAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
                 .with(user("admin@admin"))
+                .with(csrf())
                 .param("operation", "INCOME")
                 .param("account", "1")
                 .param("amount", "10")
@@ -99,6 +100,7 @@ public class TransactionControllerTest {
     public void testAddTransactionWithNotValidDataUserAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
                 .with(user("admin@admin"))
+                .with(csrf())
                 .param("operation", "")
                 .param("account", "1")
                 .param("amount", "100")
@@ -116,13 +118,15 @@ public class TransactionControllerTest {
     @Test
     public void testRemoveTransactionUserNotAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/1/remove"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("http://*/login"));
+                .andExpect(status().isForbidden());
     }
 
     @Test
     public void testRemoveTransactionUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/remove").with(user("admin@admin")))
+        mockMvc.perform(post(ROOT_MAPPING + "/1/remove")
+                .with(user("admin@admin"))
+                .with(csrf())
+        )
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(ROOT_MAPPING));
     }
@@ -144,14 +148,14 @@ public class TransactionControllerTest {
     @Test
     public void testDoEditTransactionUserNotAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/1/edit"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("http://*/login"));
+                .andExpect(status().isForbidden());
     }
 
     @Test
     public void testDoEditTransactionWithValidDataUserAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
                 .with(user("admin@admin"))
+                .with(csrf())
                 .param("amount", "546")
                 .param("operation", "INCOME")
                 .param("account", "1")
@@ -165,6 +169,7 @@ public class TransactionControllerTest {
     public void testDoEditTransactionWithNotValidDataUserAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
                 .with(user("admin@admin"))
+                .with(csrf())
                 .param("amount", "")
         )
                 .andExpect(model().hasErrors())

@@ -18,6 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
@@ -108,6 +109,7 @@ public class IndexControllerTest {
 
         mockMvc.perform(post("/signin")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .with(csrf())
                 .param("email", email)
                 .param("password", password)
         )
@@ -123,6 +125,7 @@ public class IndexControllerTest {
         String password = "goodPassword";
 
         mockMvc.perform(post("/signin")
+                .with(csrf())
                 .param("email", email)
                 .param("password", password)
         )
