@@ -240,7 +240,7 @@ public class AccountController {
      * @param toId   id of account where transaction will be transferred
      * @param fromId id of account transaction will be transferred from
      * @param attr   redirect attributes
-     * @return
+     * @return view as string, where user will be redirected
      */
     @RequestMapping(value = "/transfer", method = RequestMethod.POST)
     public String transferTransactions(@RequestParam("toAccount") int toId,
