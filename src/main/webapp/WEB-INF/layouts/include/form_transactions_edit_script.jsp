@@ -12,7 +12,7 @@
 		$("#operation-expense").click(showExpenseFormTab());
 		</c:when>
 		<c:when test="${transaction.operation eq 'TRANSFER'}">
-		$("#operation-transfer").click(showTransferFormTab())
+		$("#operation-transfer").click(showTransferFormTab());
 		$("label#operation-expense").removeClass("active");
 		$("label#operation-transfer").addClass("active");
 		$("label#operation-income").removeClass("active");

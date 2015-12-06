@@ -24,7 +24,6 @@
 
 #transaction_body {
 	padding: 30px;
-	border-top-color: transparent;
 	border: 1px solid #ddd;
 	background-color: #fff;
 }

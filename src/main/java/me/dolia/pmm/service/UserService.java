@@ -19,6 +19,11 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Service to deal with users.
+ *
+ * @author Maksym Dolia
+ */
 @Named
 public class UserService {
 
@@ -37,7 +42,11 @@ public class UserService {
     @Inject
     private CategoryRepository categoryRepository;
 
-
+    /**
+     * Stores given user.
+     *
+     * @param user user to be stored
+     */
     public void save(User user) {
         user.setEnabled(true);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -49,10 +58,21 @@ public class UserService {
         createDefaultAccountsAndCategoriesForNewUser(user);
     }
 
+    /**
+     * Returns user by given email.
+     *
+     * @param email user's email
+     * @return user
+     */
     public User findOneByEmail(String email) {
         return userRepository.findOneByEmail(email);
     }
 
+    /**
+     * Creates and assigns to user initial data when new user has been creating.
+     *
+     * @param user user
+     */
     private void createDefaultAccountsAndCategoriesForNewUser(User user) {
 
         //Create account for wallet
@@ -82,6 +102,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Deletes user and all his data by given user's email.
+     *
+     * @param email user's email
+     */
     @Transactional
     @PreAuthorize("#email == authentication.name or hasRole('ADMIN')")
     public void deleteByEmail(@P("email") String email) {

@@ -1,10 +1,15 @@
 package me.dolia.pmm.support;
 
-import java.beans.PropertyEditorSupport;
-
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.service.AccountService;
 
+import java.beans.PropertyEditorSupport;
+
+/**
+ * Property editor for account.
+ *
+ * @author Maksym Dolia
+ */
 public class AccountEditor extends PropertyEditorSupport {
 
 	private final AccountService accountService;

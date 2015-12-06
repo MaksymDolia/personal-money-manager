@@ -24,105 +24,166 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Controller to handle requests about transactions.
+ *
+ * @author Maksym Dolia
+ */
 @Controller
 @RequestMapping("/app/transactions")
 public class TransactionController {
-	
-	@Inject
-	private AccountService accountService;
-	
-	@Inject
-	private TransactionService transactionService;
-	
-	@Inject
-	private CategoryService categoryService;
 
-	@ModelAttribute("transaction")
-	public Transaction createTransaction() {
-		return new Transaction();
-	}
+    @Inject
+    private AccountService accountService;
 
-	@ModelAttribute("showTransactionForm")
-	public ShowTransactionForm createShowTransactionForm() {
-		return new ShowTransactionForm();
-	}
+    @Inject
+    private TransactionService transactionService;
 
-	@InitBinder
-	protected void initBinder(ServletRequestDataBinder binder) {
-		binder.registerCustomEditor(Account.class, new AccountEditor(accountService));
-		binder.registerCustomEditor(Category.class, new CategoryEditor(categoryService));
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-	}
+    @Inject
+    private CategoryService categoryService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String transactions(@ModelAttribute("showTransactionForm") ShowTransactionForm form, Model model,
-			Principal principal) {
-		String email = principal.getName();
-		List<Transaction> transactions = transactionService.findAllByForm(email, form);
-		model.addAttribute("transactions", transactions);
-		model.addAttribute("showTransactionForm", form);
-		List<Account> accounts = accountService.findAllByUserEmail(email);
-		model.addAttribute("accounts", accounts);
+    /**
+     * Binds the model attribute with the corresponding java object.
+     *
+     * @return new instance of {@code Transaction} class
+     */
+    @ModelAttribute("transaction")
+    public Transaction createTransaction() {
+        return new Transaction();
+    }
 
-		List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
-		List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);
-		model.addAttribute("expenseCategories", expenseCategories);
-		model.addAttribute("incomeCategories", incomeCategories);
-		return "transactions";
-	}
+    /**
+     * Binds the model attribute with the corresponding java object.
+     *
+     * @return new instance of {@code ShowTransactionForm} class
+     */
+    @ModelAttribute("showTransactionForm")
+    public ShowTransactionForm createShowTransactionForm() {
+        return new ShowTransactionForm();
+    }
 
-	@RequestMapping(value = "/add_transaction", method = RequestMethod.POST)
-	public String addTransaction(@Valid @ModelAttribute("transaction") Transaction transaction,
-			@RequestHeader(value = "referer", required = false) String referrer, Principal principal,
-			BindingResult result) {
-		if (result.hasErrors()) {
-			return "transactions_edit";
-		}
-		String email = principal.getName();
-		transactionService.save(transaction, email);
-		if (referrer != null) {
-			return "redirect:" + referrer;
-		}
-		return "redirect:/app/transactions";
-	}
+    /**
+     * Please refer to {@code InitBinder} annotation javadoc.
+     *
+     * @param binder Links:
+     *               {@link InitBinder}
+     */
+    @InitBinder
+    protected void initBinder(ServletRequestDataBinder binder) {
+        binder.registerCustomEditor(Account.class, new AccountEditor(accountService));
+        binder.registerCustomEditor(Category.class, new CategoryEditor(categoryService));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }
 
-	@RequestMapping("/{id}/remove")
-	public String removeTransaction(@PathVariable Long id,
-			@RequestHeader(value = "referer", required = false) String referrer) {
-		Transaction transaction = transactionService.findOne(id);
-		transactionService.delete(transaction);
-		if (referrer != null) {
-			return "redirect:" + referrer;
-		}
-		return "redirect:/app/transactions";
-	}
+    /**
+     * Shows the transactions page.
+     *
+     * @param form      data from web form
+     * @param model     model (MVC pattern)
+     * @param principal authenticated user
+     * @return view as string
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public String transactions(@ModelAttribute("showTransactionForm") ShowTransactionForm form, Model model,
+                               Principal principal) {
+        String email = principal.getName();
+        List<Transaction> transactions = transactionService.findAllByForm(email, form);
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("showTransactionForm", form);
+        List<Account> accounts = accountService.findAllByUserEmail(email);
+        model.addAttribute("accounts", accounts);
 
-	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
-	public String editTransaction(@PathVariable long id, Model model) {
-		Transaction transaction = transactionService.findOne(id);
-		String email = transaction.getUser().getEmail();
-		List<Transaction> transactions = transactionService.findAllByUserEmail(email);
-		model.addAttribute("transactions", transactions);
-		model.addAttribute("transaction", transaction);
-		List<Account> accounts = accountService.findAllByUserEmail(email);
-		model.addAttribute("accounts", accounts);
-		List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
-		List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);
-		model.addAttribute("expenseCategories", expenseCategories);
-		model.addAttribute("incomeCategories", incomeCategories);
-		return "transactions_edit";
-	}
+        List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
+        List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);
+        model.addAttribute("expenseCategories", expenseCategories);
+        model.addAttribute("incomeCategories", incomeCategories);
+        return "transactions";
+    }
 
-	@RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
-	public String editTransaction(@PathVariable long id, @Valid @ModelAttribute Transaction transaction,
-			BindingResult result) {
-		if (result.hasErrors()) {
-			return "transactions_edit";
-		}
-		Transaction existingTransaction = transactionService.findOne(id);
-		transactionService.editAndSave(transaction, existingTransaction);
-		return "redirect:/app/transactions";
-	}
+    /**
+     * Saves new transaction.
+     *
+     * @param transaction data from web form
+     * @param referrer    header referrer value
+     * @param principal   authenticated user
+     * @param result      form's binding result
+     * @return view as string, where user will be redirected
+     */
+    @RequestMapping(value = "/add_transaction", method = RequestMethod.POST)
+    public String addTransaction(@Valid @ModelAttribute("transaction") Transaction transaction,
+                                 @RequestHeader(value = "referer", required = false) String referrer,
+                                 Principal principal,
+                                 BindingResult result) {
+        if (result.hasErrors()) {
+            return "transactions_edit";
+        }
+        String email = principal.getName();
+        transactionService.save(transaction, email);
+        if (referrer != null) {
+            return "redirect:" + referrer;
+        }
+        return "redirect:/app/transactions";
+    }
+
+    /**
+     * Deletes transaction.
+     *
+     * @param id       transaction's id
+     * @param referrer header referrer value
+     * @return view as string, where user will be redirected
+     */
+    @RequestMapping("/{id}/remove")
+    public String removeTransaction(@PathVariable Long id,
+                                    @RequestHeader(value = "referer", required = false) String referrer) {
+        Transaction transaction = transactionService.findOne(id);
+        transactionService.delete(transaction);
+        if (referrer != null) {
+            return "redirect:" + referrer;
+        }
+        return "redirect:/app/transactions";
+    }
+
+    /**
+     * Show web page with form to edit existent transaction.
+     *
+     * @param id    id of transaction be updated
+     * @param model model (MVC pattern)
+     * @return view as string
+     */
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public String editTransaction(@PathVariable long id, Model model) {
+        Transaction transaction = transactionService.findOne(id);
+        String email = transaction.getUser().getEmail();
+        List<Transaction> transactions = transactionService.findAllByUserEmail(email);
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("transaction", transaction);
+        List<Account> accounts = accountService.findAllByUserEmail(email);
+        model.addAttribute("accounts", accounts);
+        List<Category> expenseCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.EXPENSE);
+        List<Category> incomeCategories = categoryService.findAllByUserEmailAndOperation(email, Operation.INCOME);
+        model.addAttribute("expenseCategories", expenseCategories);
+        model.addAttribute("incomeCategories", incomeCategories);
+        return "transactions_edit";
+    }
+
+    /**
+     * Update transaction with given data.
+     *
+     * @param id          transaction's id
+     * @param transaction data from web form
+     * @param result      form's binding result
+     * @return view as string, where user will be redirected
+     */
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
+    public String editTransaction(@PathVariable long id, @Valid @ModelAttribute Transaction transaction,
+                                  BindingResult result) {
+        if (result.hasErrors()) {
+            return "transactions_edit";
+        }
+        Transaction existingTransaction = transactionService.findOne(id);
+        transactionService.editAndSave(transaction, existingTransaction);
+        return "redirect:/app/transactions";
+    }
 
 }

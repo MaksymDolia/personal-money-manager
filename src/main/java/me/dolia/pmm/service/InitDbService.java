@@ -11,6 +11,11 @@ import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * Full fills database with initial data.
+ *
+ * @author Maksym Dolia
+ */
 @Named
 public class InitDbService {
 
@@ -32,6 +37,9 @@ public class InitDbService {
     @Inject
     private TransactionRepository transactionRepository;
 
+    /**
+     * Stores to persistence layer initial data.
+     */
     @PostConstruct
     public void init() {
         if (roleRepository.findByName("ROLE_ADMIN") == null) {
@@ -46,9 +54,10 @@ public class InitDbService {
             User user = new User();
             user.setEnabled(true);
             user.setEmail("admin@admin");
+
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             user.setPassword(encoder.encode("admin"));
-            List<Role> roles = new ArrayList<Role>();
+            List<Role> roles = new ArrayList<>();
             roles.add(roleAdmin);
             roles.add(roleUser);
             user.setRoles(roles);

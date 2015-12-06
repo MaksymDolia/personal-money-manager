@@ -278,4 +278,4 @@ $(document).ready(function() {
 	validateAccountAddForm();
 	validateAccountEditForm();
 	validateTransactionForm();
-})
+});
