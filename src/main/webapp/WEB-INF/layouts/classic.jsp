@@ -81,7 +81,11 @@
                             property="principal.username"/></a></li>
                     <li class="${current == 'profile' ? 'active' : ''}"><a
                             href='<spring:url value="/profile" />'>My Profile</a></li>
-                    <li><a href='<spring:url value="/logout" />'>Logout</a></li>
+                    <li>
+                        <form:form class="navbar-form navbar-right" method="POST" action="/logout">
+                            <button type="submit" class="btn btn-link">Logout</button>
+                        </form:form>
+                    </li>
                 </security:authorize>
                 <security:authorize access="!isAuthenticated()">
                     <li class="${current == 'login' ? 'active' : ''}"><a
