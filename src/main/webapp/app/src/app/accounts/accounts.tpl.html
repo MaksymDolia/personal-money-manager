@@ -1,0 +1,72 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">Accounts</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-sm btn-success" data-ng-click="editAccount('new')">
+                            <i class="fa fa-plus"></i> Add account
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="text-right">Balance: <span class="text-success text-right">{{ balance }}</span></h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div data-ng-show="showAccountForm" class="well">
+                            <div account-form/>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <table class="table table-hover">
+                <tbody>
+                <tr data-ng-repeat="account in accounts">
+                    <td>{{ account.name }}</td>
+                    <td>{{ account.balance | currency: account.currency }}</td>
+                    <td>
+                        <a href data-ng-click="editAccount(account.id)"><i class="fa fa-pencil"></i></a>
+                    </td>
+                    <td>
+                        <a href data-toggle="modal"
+                           data-target="#removeAccountModal" data-ng-click="setModalData(account.id, account.name)">
+                            <span class="text-warning"><i class="fa fa-times"></i></span>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Remove Account Modal -->
+<div class="modal fade" id="removeAccountModal" tabindex="-1" role="dialog" aria-labelledby="removeAccountModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="removeAccountModalLabel">Are you sure you want to remove account "{{
+                    modalData.name
+                    }}"?</h4>
+            </div>
+            <div class="modal-body">
+                This operation cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" data-ng-click="deleteAccount(modalData.id)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+

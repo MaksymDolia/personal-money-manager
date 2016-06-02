@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html ng-app="moneyManager" ng-controller="AppCtrl">
+<head>
+    <title ng-bind="pageTitle"></title>
+
+    <!-- social media tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@mxfmd">
+    <meta name="twitter:title" content="Personal Money Manager">
+    <meta name="twitter:description"
+          content="Non-Trivial AngularJS Made Easy: Everything you need to kickstart AngularJS projects: a best-practice directory structure, an intelligent build system, and the best web design libraries around.">
+    <meta name="twitter:creator" content="@mxfmd">
+    <meta name="twitter:image:src"
+          content="https://a248.e.akamai.net/assets.github.com/images/modules/logos_page/Octocat.png?1366128846">
+    <meta property="og:title" content="Personal Money Manager"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="http://bit.ly/ngBoilerplate"/>
+    <meta property="og:image"
+          content="https://a248.e.akamai.net/assets.github.com/images/modules/logos_page/Octocat.png?1366128846"/>
+    <meta property="og:description"
+          content="Non-Trivial AngularJS Made Easy: Everything you need to kickstart AngularJS projects: a best-practice directory structure, an intelligent build system, and the best web design libraries around.">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- font awesome from BootstrapCDN -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
+    <link rel="stylesheet" type="text/css" href="app/<%= file %>"/>
+    <% }); %>
+
+    <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
+    <script type="text/javascript" src="app/<%= file %>"></script>
+    <% }); %>
+
+    <!-- it's stupid to have to load it here, but this is for the +1 button -->
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+        {
+            "parsetags";
+        :
+            "explicit"
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="navbar navbar-default">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
+                    ng-click="menuCollapsed = ! menuCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href data-ui-sref="dashboard">
+                PMM
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" collapse="menuCollapsed">
+            <ul class="nav navbar-nav">
+                <li data-ui-sref-active="active">
+                    <a href data-ui-sref="dashboard">
+                        Dashboard
+                    </a>
+                </li>
+                <li data-ui-sref-active="active">
+                    <a href data-ui-sref="transactions">
+                        Transactions
+                    </a>
+                </li>
+                <li data-ui-sref-active="active">
+                    <a href data-ui-sref="accounts">
+                        Accounts
+                    </a>
+                </li>
+                <li data-ui-sref-active="active">
+                    <a href data-ui-sref="categories">
+                        Categories
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{{ user.email }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li role="separator" class="divider"></li>
+                        <li><a href data-ng-click="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container" ui-view="main"></div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-inner">
+            <div class="col-md-4 col-md-offset-4">
+                <p class="text-center">
+                    &copy; Maksym Dolia | this project on <a
+                        href="https://github.com/MaksymDolia/personal-money-manager">GitHub</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

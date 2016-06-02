@@ -1,0 +1,128 @@
+<div class="panel">
+    <div class="panel-body"
+         data-ng-class="{'bg-danger': transactionForm.operation === 'expense',
+         'bg-info': transactionForm.operation === 'TRANSFER',
+         'bg-success': transactionForm.operation === 'income'}">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a data-ng-click="transactionForm.operation = 'expense'" showtab=""
+                                                      aria-controls="expense" role="tab" data-toggle="tab">Expense</a>
+            </li>
+            <li role="presentation"><a data-ng-click="transactionForm.operation = 'TRANSFER'" showtab=""
+                                       aria-controls="TRANSFER"
+                                       role="tab" data-toggle="tab">Transfer</a>
+            </li>
+            <li role="presentation"><a data-ng-click="transactionForm.operation = 'income'" showtab=""
+                                       aria-controls="income" role="tab"
+                                       data-toggle="tab">Income</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="well">
+            <div class="tab-content">
+                <form class="form-horizontal" data-ng-submit="addTransaction()">
+
+                    <div class="form-group">
+
+                        <!-- Account -->
+                        <label data-ng-hide="tabActive === 'income'" for="accountInput" class="col-sm-2 control-label">From
+                            account</label>
+                        <label data-ng-show="tabActive === 'income'" for="accountInput" class="col-sm-2 control-label">To
+                            account</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="accountInput" data-ng-model="transactionForm.account"
+                                    data-ng-init="transactionForm.account=accounts[0]"
+                                    data-ng-options="account.name for account in accounts track by account.id">
+                            </select>
+                        </div>
+
+                        <!-- Amount and Currency-->
+                        <label class="control-label sr-only" for="amountCurrencyInput">Amount and Currency</label>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input type="number" class="form-control" data-ng-model="transactionForm.amount"
+                                       id="amountCurrencyInput" autofocus>
+                        <span class="input-group-addon">
+                            <select data-ng-model="transactionForm.fromCurrency">
+                                <option value="UAH">UAH</option>
+                            </select>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <!-- Category -->
+                        <label data-ng-hide="transactionForm.operation === 'TRANSFER'" for="categoryInput"
+                               class="col-sm-2 control-label">Category</label>
+                        <div data-ng-hide="transactionForm.operation === 'TRANSFER'" class="col-sm-6">
+                            <select class="form-control" id="categoryInput" data-ng-model="transactionForm.category"
+                                    data-ng-init="transactionForm.category=categories[0]"
+                                    data-ng-options="category.name for category in categories | filter : { operation: transactionForm.operation } track by category.id">
+                            </select>
+                        </div>
+
+                        <!-- To account -->
+                        <label data-ng-show="transactionForm.operation === 'TRANSFER'" for="toAccountInput"
+                               class="col-sm-2 control-label">To account</label>
+                        <div data-ng-show="transactionForm.operation === 'TRANSFER'" class="col-sm-6">
+                            <select class="form-control" id="toAccountInput"
+                                    data-ng-model="transactionForm.toAccount"
+                                    data-ng-options="account.name for account in accounts track by account.id">
+                            </select>
+                        </div>
+
+                        <!-- Date -->
+                        <div data-ng-hide="transactionForm.operation === 'TRANSFER'" class="col-sm-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" data-uib-datepicker-popup="{{format}}"
+                                       data-is-open="datepicker.opened1" data-datepicker-options="dateOptions"
+                                       data-ng-model="transactionForm.date"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" data-ng-click="datepicker.open1()"><i
+                        class="fa fa-calendar"></i>
+                </button>
+              </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <!-- Comment -->
+                        <label class="control-label sr-only" for="commentInput">Comment</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" data-ng-model="transactionForm.comment"
+                                   id="commentInput" placeholder="Comment">
+                        </div>
+
+                        <!-- Date -->
+                        <div data-ng-show="transactionForm.operation === 'transfer'" class="col-sm-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" data-uib-datepicker-popup="{{format}}"
+                                       data-is-open="datepicker.opened2" data-datepicker-options="dateOptions"
+                                       data-ng-model="transactionForm.date"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" data-ng-click="datepicker.open2()"><i
+                        class="fa fa-calendar"></i>
+                </button>
+              </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit button -->
+                    <div class="form-group">
+                        <div class="col-sm-offset-8 col-sm-4">
+                            <input class="btn btn-primary" type="submit" value="Save">
+                            <button data-ng-show="isModal" type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,281 +1,54 @@
-// Functions for handling the transaction form
-function showExpenseFormTab() {
+angular.module('moneyManager.web', [
+    'ngResource'
+])
 
-	$("#transaction_box").css("background-color", "#F4AA6D");
+    .factory('userService', function ($resource, $http) {
 
-	$("label#account").html("From account");
+        var service = {};
 
-	$("#2-expense").removeClass("hidden").addClass("show");
-	$("#2-transfer").removeClass("show").addClass("hidden");
-	$("#2-transfer select#transferAccount").attr("disabled", true);
-	$("#2-expense input#date").attr("disabled", false);
-	$("#2-expense select#category").attr("disabled", false);
-	$("#2-income input#date").attr("disabled", true);
-	$("#2-income select#category").attr("disabled", true);
-	$("#2-income").removeClass("show").addClass("hidden");
-	$("#3 label#date").removeClass("show").addClass("hidden");
-	$("#3 div#date").removeClass("show").addClass("hidden");
-	$("#3 input#date").attr("disabled", true);
-}
+        var User = $resource('/users/:id', {}, {
+            update: {
+                method: 'PUT'
+            }
+        });
 
-function showTransferFormTab() {
-	$("#transaction_box").css("background-color", "#B4BEC6");
+        return service;
+    })
 
-	$("label#account").html("From account");
+    .factory('authService', ['$http', function ($http) {
 
-	$("#2-expense").removeClass("show").addClass("hidden");
-	$("#2-transfer").removeClass("hidden").addClass("show");
-	$("#2-transfer select#transferAccount").attr("disabled", false);
-	$("#2-expense input#date").attr("disabled", true);
-	$("#2-expense select#category").attr("disabled", true);
-	$("#2-income").removeClass("show").addClass("hidden");
-	$("#2-income input#date").attr("disabled", true);
-	$("#2-income select#category").attr("disabled", true);
-	$("#3 label#date").removeClass("hidden").addClass("show");
-	$("#3 div#date").removeClass("hidden").addClass("show");
-	$("#3 input#date").attr("disabled", false);
-}
+        var service = {};
 
-function showIncomeFormTab() {
-	$("#transaction_box").css("background-color", "#33D633");
+        service.login = function (credentials, success, error) {
 
-	$("label#account").html("To account");
+            var data = "username=" + credentials.email + "&password=" + credentials.password;
 
-	$("#2-expense").removeClass("show").addClass("hidden");
-	$("#2-transfer").removeClass("show").addClass("hidden");
-	$("#2-transfer select#transferAccount").attr("disabled", true);
-	$("#2-expense input#date").attr("disabled", true);
-	$("#2-expense select#category").attr("disabled", true);
-	$("#2-income").removeClass("hidden").addClass("show");
-	$("#2-income input#date").attr("disabled", false);
-	$("#2-income select#category").attr("disabled", false);
-	$("#3 label#date").removeClass("show").addClass("hidden");
-	$("#3 div#date").removeClass("show").addClass("hidden");
-	$("#3 input#date").attr("disabled", true);
-}
+            $http.post("/login", data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                .then(function (response) {
+                    success && success();
+                }, function (response) {
+                    error && error();
+                });
+        };
 
-// VALIDATION FORMS
+        return service;
+    }])
 
-// function for validation of registration form
-function validateRegistrationForm() {
-	$(".registration-form").validate(
-			{
-				rules : {
-					email : {
-						required : true,
-						email : true,
-						maxlength : 255,
-						remote : {
-							url : "signin/available_email",
-							type : "get"
-						}
-					},
-					password : {
-						required : true,
-						minlength : 5,
-						maxlength : 255
-					},
-					password_again : {
-						required : true,
-						minlength : 5,
-						maxlength : 255,
-						equalTo : "#password"
-					}
-				},
-				highlight : function(element) {
-					$(element).closest(".form-group")
-							.removeClass("has-success").addClass("has-error");
-				},
-				unhighlight : function(element) {
-					$(element).closest(".form-group").removeClass("has-error")
-							.addClass("has-success");
-				},
-				messages : {
-					email : {
-						remote : "This email already exists"
-					}
-				}
-			});
-};
+    .controller('UserCtrl', ['$scope', 'userService', 'authService', function ($scope, userService, authService) {
 
-// function for validation for form-category-add
-function validateCategoryAddForm() {
-	$(".form-category-add").validate(
-			{
-				rules : {
-					name : {
-						required : true,
-						minlength : 1,
-						maxlength : 255
-					},
-					operation : {
-						required : true,
-					}
-				},
-				highlight : function(element) {
-					$(element).closest(".form-group")
-							.removeClass("has-success").addClass("has-error");
-				},
-				unhighlight : function(element) {
-					$(element).closest(".form-group").removeClass("has-error")
-							.addClass("has-success");
-				}
-			});
-}
+        $scope.credentials = {};
 
-// edit category form validation
-function validateCategoryEditForm() {
-	$(".form-category-edit").validate(
-			{
-				rules : {
-					name : {
-						required : true,
-						minlength : 1,
-						maxlength : 255
-					},
-					operation : {
-						required : true,
-					}
-				},
-				highlight : function(element) {
-					$(element).closest(".form-group")
-							.removeClass("has-success").addClass("has-error");
-				},
-				unhighlight : function(element) {
-					$(element).closest(".form-group").removeClass("has-error")
-							.addClass("has-success");
-				}
-			});
-}
+        $scope.doLogin = function () {
 
-// add account form validation
-function validateAccountAddForm() {
-	$(".form-account-add").validate(
-			{
-				rules : {
-					name : {
-						required : true,
-						minlength : 1,
-						maxlength : 255
-					},
-					amount : {
-						required : true,
-						number : true
-					}
-				},
-				highlight : function(element) {
-					$(element).closest(".form-group")
-							.removeClass("has-success").addClass("has-error");
-				},
-				unhighlight : function(element) {
-					$(element).closest(".form-group").removeClass("has-error")
-							.addClass("has-success");
-				}
-			});
-}
+            authService.login($scope.credentials, function () {
+                $scope.loginError = undefined;
+                window.location.href = '/app';
+            }, function () {
+                $scope.loginError = true;
+            });
 
-// edit account form validation
-function validateAccountEditForm() {
-	$(".form-account-edit").validate(
-			{
-				rules : {
-					name : {
-						required : true,
-						minlength : 1,
-						maxlength : 255
-					},
-					amount : {
-						required : true,
-						number : true
-					}
-				},
-				highlight : function(element) {
-					$(element).closest(".form-group")
-							.removeClass("has-success").addClass("has-error");
-				},
-				unhighlight : function(element) {
-					$(element).closest(".form-group").removeClass("has-error")
-							.addClass("has-success");
-				}
-			});
-}
+        };
 
-// add transaction form validation
-function validateTransactionForm() {
-	$("#form-transaction").validate(
-			{
-				rules : {
-					account : {
-						required : true
-					},
-					currency : {
-						required : true
-					},
-					amount : {
-						required : true,
-						number : true
-					},
-					fromCurrency : {
-						required : true
-					},
-					category : {
-						required : true
-					},
-					date : {
-						required : true,
-						date : true
-					},
-					comment : {
-						maxlength : 255
-					},
-					transferAccount : {
-						required : true
-					},
-					transferCurrency : {
-						required : true
-					}
-				},
-				highlight : function(element) {
-					$(element).closest(".form-group")
-							.removeClass("has-success").addClass("has-error");
-				},
-				unhighlight : function(element) {
-					$(element).closest(".form-group").removeClass("has-error")
-							.addClass("has-success");
-				}
-			});
-}
+    }])
 
-// function-handler for modals for removing elements
-function handleRemoveModal() {
-	$(".trigger-remove").click(function(e) {
-		e.preventDefault();
-		$("#btn-remove").attr("href", $(this).closest(".trigger-remove").attr("href"));
-		$("#remove-modal").modal();
-	})
-}
-
-// function for handling transaction form
-function handleTransactionForm() {
-	$("#operation-expense").click(function() {
-		showExpenseFormTab()
-	});
-	$("#operation-transfer").click(function() {
-		showTransferFormTab()
-	});
-	$("#operation-income").click(function() {
-		showIncomeFormTab()
-	});
-}
-
-$(document).ready(function() {
-	handleRemoveModal();
-	handleTransactionForm();
-
-	validateRegistrationForm();
-	validateCategoryAddForm();
-	validateCategoryEditForm();
-	validateAccountAddForm();
-	validateAccountEditForm();
-	validateTransactionForm();
-});
+;

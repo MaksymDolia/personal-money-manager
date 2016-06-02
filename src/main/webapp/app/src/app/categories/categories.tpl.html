@@ -1,0 +1,96 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">
+            Categories
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+        <button class="btn btn-sm btn-success" data-ng-click="editCategory('new')">Add new category</button>
+
+        <uib-tabset>
+            <uib-tab heading="Expense">
+                <table class="table">
+                    <tbody>
+                    <tr data-ng-repeat="category in categories" data-ng-show="category.operation === 'EXPENSE'">
+                        <td>
+                            <a href="" data-ng-click="editCategory(category.id)">{{ category.name }}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </uib-tab>
+            <uib-tab heading="Income">
+                <table class="table">
+                    <tbody>
+                    <tr data-ng-repeat="category in categories" data-ng-show="category.operation === 'INCOME'">
+                        <td>
+                            <a href="" data-ng-click="editCategory(category.id)">{{ category.name }}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </uib-tab>
+        </uib-tabset>
+
+        <button class="btn btn-sm btn-success" data-ng-click="editCategory('new')">Add new category</button>
+
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default" data-ng-show="showForm">
+            <div class="panel-body">
+                <form name="categoryForm" data-ng-submit="saveCategory()" novalidate
+                      data-ng-class="{'has-error': categoryForm.$invalid && categoryForm.$submitted}">
+                    <h3 data-ng-hide="edit">Create new category:</h3>
+                    <h3 data-ng-show="edit">Edit category {{ category.name }}</h3>
+
+                    <div class="alert alert-danger" data-ng-show="categoryFormError">
+                        <p>{{ categoryFormError }}</p>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group" data-ng-class="{'has-error': categoryForm.name.$invalid && categoryForm.name.$dirty,
+                    'has-success': categoryForm.name.$valid && categoryForm.name.$dirty}">
+                        <label for="categoryNameInput">Name</label>
+                        <input type="text" name="name" class="form-control" id="categoryNameInput" placeholder="Name"
+                               data-ng-model="category.name" minlength="1" maxlength="255" required autofocus>
+
+                        <div data-ng-messages="categoryForm.name.$error" role="alert"
+                             data-ng-show="categoryForm.name.$dirty">
+                            <div data-ng-messages-include="messages.tpl.html"></div>
+                        </div>
+                    </div>
+
+                    <!-- Operation -->
+                    <div class="form-group" data-ng-class="{'has-error': categoryForm.operation.$invalid && categoryForm.operation.$dirty,
+                    'has-success': categoryForm.operation.$valid && categoryForm.operation.$dirty}">
+                        <label class="radio-inline">
+                            <input type="radio" name="operation" id="categoryOperationExpense" value="EXPENSE"
+                                   data-ng-model="category.operation" required>Expense
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="operation" id="categoryOperationIncome" value="INCOME"
+                                   data-ng-model="category.operation" required>Income
+                        </label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <button data-ng-hide="edit" type="submit" class="btn btn-default" data-ng-click="addCategory()"
+                            data-ng-disabled="categoryForm.$invalid">
+                        Add
+                    </button>
+                    <button data-ng-show="edit" type="submit" class="btn btn-success"
+                            data-ng-click="updateCategory(category.id)" data-ng-disabled="categoryForm.$invalid">Save
+                    </button>
+                    <button data-ng-show="edit" class="btn btn-danger" data-ng-click="removeCategory(category.id)">
+                        Remove
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

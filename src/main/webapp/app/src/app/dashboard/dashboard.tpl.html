@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Balance:</h3>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="text-success text-right">{{ balance }}</h3>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-hover">
+                <tbody>
+                <tr data-ng-repeat="account in accounts">
+                    <td><h5>{{ account.name }}</h5></td>
+                    <td><h5>{{ account.balance | currency : account.currency }}</h5></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addAccountModal">
+                    Add account
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <div data-transaction-form data-accounts="accounts" data-categories="categories"></div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr data-ng-repeat="transaction in transactions">
+                            <td>{{ transaction.date | date }}</td>
+                            <td>{{ transaction.account.id }}</td>
+                            <td> arrow</td>
+                            <td>{{ transaction.category }}</td>
+                            <td>{{ transaction.comment }}</td>
+                            <td>{{ transaction.amount | currency: transaction.currency }}</td>
+                            <td><a href></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
