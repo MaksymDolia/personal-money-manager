@@ -3,6 +3,7 @@ package me.dolia.pmm.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,12 +30,14 @@ import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
 
 /**
- * Full fills database with initial data.
+ * Fullfills database with initial data.
  *
  * @author Maksym Dolia
  */
 @Service
 public class InitDbService {
+
+    private static final Currency UAH = Currency.getInstance("UAH");
 
     @Autowired
     private ApplicationContext context;
@@ -72,7 +75,7 @@ public class InitDbService {
             user.setEnabled(true);
             user.setEmail("admin@admin");
 
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
             user.setPassword(encoder.encode("admin"));
             List<Role> roles = new ArrayList<>();
             roles.add(roleAdmin);
@@ -85,30 +88,20 @@ public class InitDbService {
             walletAccount.setName(context.getMessage("Name.default.account", null, Locale.ENGLISH));
             walletAccount.setUser(user);
             walletAccount.setAmount(new BigDecimal(0));
-            walletAccount.setCurrency(Currency.getInstance("UAH"));
+            walletAccount.setCurrency(UAH);
             accountRepository.save(walletAccount);
 
             Account bankAccount = new Account();
             bankAccount.setName("Bank");
             bankAccount.setUser(user);
             bankAccount.setAmount(new BigDecimal(500));
-            bankAccount.setCurrency(Currency.getInstance("UAH"));
+            bankAccount.setCurrency(UAH);
             accountRepository.save(bankAccount);
 
-            // Create categories for expenses
-            for (int i = 1; i < 6; i++) {
+            for (int i = 1; i < 8; i++) {
                 Category category = new Category();
                 category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
-                category.setType(Operation.EXPENSE);
-                category.setUser(user);
-                categoryRepository.save(category);
-            }
-
-            // Create categories for incomes
-            for (int i = 6; i < 8; i++) {
-                Category category = new Category();
-                category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
-                category.setType(Operation.INCOME);
+                category.setType(i > 5 ? Operation.INCOME : Operation.EXPENSE);
                 category.setUser(user);
                 categoryRepository.save(category);
             }
@@ -117,7 +110,7 @@ public class InitDbService {
             transaction1.setDate(new Date());
             transaction1.setAccount(walletAccount);
             transaction1.setAmount(new BigDecimal(50));
-            transaction1.setCurrency(Currency.getInstance("UAH"));
+            transaction1.setCurrency(UAH);
             transaction1.setCategory(categoryRepository.findOne(3));
             transaction1.setType(Operation.EXPENSE);
             transaction1.setComment("McDonalds");
@@ -130,16 +123,12 @@ public class InitDbService {
             transaction2.setDate(calendar.getTime());
             transaction2.setAccount(bankAccount);
             transaction2.setAmount(new BigDecimal(45));
-            transaction2.setCurrency(Currency.getInstance("UAH"));
+            transaction2.setCurrency(UAH);
             transaction2.setCategory(categoryRepository.findOne(7));
             transaction2.setType(Operation.INCOME);
             transaction2.setComment("Festo");
             transaction2.setUser(user);
             transactionRepository.save(transaction2);
-
-            List<Transaction> transactions = new ArrayList<>();
-            transactions.add(transaction1);
-            user.setTransactions(transactions);
         }
     }
 }
