@@ -1,45 +1,50 @@
 package me.dolia.pmm.service;
 
-import me.dolia.pmm.entity.*;
-import me.dolia.pmm.repository.AccountRepository;
-import me.dolia.pmm.repository.CategoryRepository;
-import me.dolia.pmm.repository.RoleRepository;
-import me.dolia.pmm.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+import me.dolia.pmm.entity.Account;
+import me.dolia.pmm.entity.Category;
+import me.dolia.pmm.entity.Operation;
+import me.dolia.pmm.entity.Role;
+import me.dolia.pmm.entity.User;
+import me.dolia.pmm.repository.AccountRepository;
+import me.dolia.pmm.repository.CategoryRepository;
+import me.dolia.pmm.repository.RoleRepository;
+import me.dolia.pmm.repository.UserRepository;
+
 /**
  * Service to deal with users.
  *
  * @author Maksym Dolia
  */
-@Named
+@Service
 public class UserService {
 
-    @Inject
+    @Autowired
     private ApplicationContext context;
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
-    @Inject
+    @Autowired
     private RoleRepository roleRepository;
 
-    @Inject
+    @Autowired
     private AccountRepository accountRepository;
 
-    @Inject
+    @Autowired
     private CategoryRepository categoryRepository;
 
     /**

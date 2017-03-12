@@ -1,15 +1,10 @@
 package me.dolia.pmm.controller;
 
-import me.dolia.pmm.entity.Account;
-import me.dolia.pmm.entity.Operation;
-import me.dolia.pmm.entity.Transaction;
-import me.dolia.pmm.repository.AccountRepository;
-import me.dolia.pmm.repository.TransactionRepository;
-import me.dolia.pmm.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.annotation.Rollback;
@@ -21,16 +16,28 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Currency;
+
+import javax.transaction.Transactional;
+
+import me.dolia.pmm.entity.Account;
+import me.dolia.pmm.entity.Operation;
+import me.dolia.pmm.entity.Transaction;
+import me.dolia.pmm.repository.AccountRepository;
+import me.dolia.pmm.repository.TransactionRepository;
+import me.dolia.pmm.repository.UserRepository;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
  * Test cases for AccountController class.
@@ -51,21 +58,21 @@ public class AccountControllerTest {
 
     private static String ROOT_MAPPING = "/app/accounts";
 
-    @Inject
+    @Autowired
     private WebApplicationContext wac;
 
-    @Inject
+    @Autowired
     private FilterChainProxy filterChainProxy;
 
     private MockMvc mockMvc;
 
-    @Inject
+    @Autowired
     private AccountRepository accountRepository;
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
-    @Inject
+    @Autowired
     private TransactionRepository transactionRepository;
 
     @Before

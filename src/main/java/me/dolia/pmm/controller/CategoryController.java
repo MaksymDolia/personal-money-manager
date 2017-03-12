@@ -1,21 +1,27 @@
 package me.dolia.pmm.controller;
 
-import me.dolia.pmm.entity.Category;
-import me.dolia.pmm.entity.Transaction;
-import me.dolia.pmm.service.CategoryService;
-import me.dolia.pmm.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.inject.Inject;
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
+
+import javax.validation.Valid;
+
+import me.dolia.pmm.entity.Category;
+import me.dolia.pmm.entity.Transaction;
+import me.dolia.pmm.service.CategoryService;
+import me.dolia.pmm.service.TransactionService;
 
 /**
  * Controller, handles requests about categories.
@@ -26,13 +32,13 @@ import java.util.Locale;
 @RequestMapping("/app/categories")
 public class CategoryController {
 
-    @Inject
+    @Autowired
     private CategoryService categoryService;
 
-    @Inject
+    @Autowired
     private TransactionService transactionService;
 
-    @Inject
+    @Autowired
     private ApplicationContext context;
 
     @ModelAttribute("category")

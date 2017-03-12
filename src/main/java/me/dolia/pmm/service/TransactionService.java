@@ -1,37 +1,42 @@
 package me.dolia.pmm.service;
 
-import me.dolia.pmm.entity.*;
-import me.dolia.pmm.form.ShowTransactionForm;
-import me.dolia.pmm.repository.AccountRepository;
-import me.dolia.pmm.repository.TransactionRepository;
-import me.dolia.pmm.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.List;
+
+import me.dolia.pmm.entity.Account;
+import me.dolia.pmm.entity.Category;
+import me.dolia.pmm.entity.Operation;
+import me.dolia.pmm.entity.Transaction;
+import me.dolia.pmm.entity.User;
+import me.dolia.pmm.form.ShowTransactionForm;
+import me.dolia.pmm.repository.AccountRepository;
+import me.dolia.pmm.repository.TransactionRepository;
+import me.dolia.pmm.repository.UserRepository;
 
 /**
  * Service to deal with user's transactions.
  *
  * @author Maksym Dolia
  */
-@Named
+@Service
 public class TransactionService {
 
-    @Inject
+    @Autowired
     private TransactionRepository transactionRepository;
 
-    @Inject
+    @Autowired
     private AccountRepository accountRepository;
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
     /**

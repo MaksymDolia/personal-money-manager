@@ -3,6 +3,7 @@ package me.dolia.pmm.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
@@ -13,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
@@ -35,10 +35,10 @@ public class CategoryControllerTest {
 
     private static final String ROOT_MAPPING = "/app/categories";
 
-    @Inject
+    @Autowired
     private WebApplicationContext wac;
 
-    @Inject
+    @Autowired
     private FilterChainProxy filterChainProxy;
 
     private MockMvc mockMvc;

@@ -1,19 +1,21 @@
 package me.dolia.pmm.annotation;
 
-import me.dolia.pmm.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.inject.Inject;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import me.dolia.pmm.repository.UserRepository;
+
 /**
- * Works along with {@code UniqueEmail} annotation. Checks whether the given string is email and it is unique, or not.
+ * Works along with {@code UniqueEmail} annotation. Checks whether the given string is email and it
+ * is unique, or not.
  *
  * @author Maksym Dolia
  */
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
     @Override

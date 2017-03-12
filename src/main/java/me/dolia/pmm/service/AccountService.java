@@ -1,5 +1,14 @@
 package me.dolia.pmm.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
@@ -7,30 +16,22 @@ import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
-import org.springframework.security.access.method.P;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Service to deal with accounts.
  *
  * @author Maksym Dolia
  */
-@Named
+@Service
 public class AccountService {
 
-    @Inject
+    @Autowired
     private AccountRepository accountRepository;
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
-    @Inject
+    @Autowired
     private TransactionRepository transactionRepository;
 
     /**
@@ -55,8 +56,8 @@ public class AccountService {
     }
 
     /**
-     * Looks and return the account by given id. Also checks if the account belongs to user who's asking or the user
-     * has role 'ADMIN'.
+     * Looks and return the account by given id. Also checks if the account belongs to user who's
+     * asking or the user has role 'ADMIN'.
      *
      * @param id account's id
      * @return account
@@ -77,8 +78,8 @@ public class AccountService {
     }
 
     /**
-     * Deletes account by given id. Also checks if the account belongs to user who's asking or the user
-     * has role 'ADMIN'.
+     * Deletes account by given id. Also checks if the account belongs to user who's asking or the
+     * user has role 'ADMIN'.
      *
      * @param account account to be deleted
      */

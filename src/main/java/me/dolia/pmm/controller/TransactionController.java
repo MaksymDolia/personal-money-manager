@@ -1,5 +1,25 @@
 package me.dolia.pmm.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
@@ -10,19 +30,6 @@ import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
 import me.dolia.pmm.support.AccountEditor;
 import me.dolia.pmm.support.CategoryEditor;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import javax.validation.Valid;
-import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Controller to handle requests about transactions.
@@ -33,13 +40,13 @@ import java.util.List;
 @RequestMapping("/app/transactions")
 public class TransactionController {
 
-    @Inject
+    @Autowired
     private AccountService accountService;
 
-    @Inject
+    @Autowired
     private TransactionService transactionService;
 
-    @Inject
+    @Autowired
     private CategoryService categoryService;
 
     /**
@@ -65,8 +72,7 @@ public class TransactionController {
     /**
      * Please refer to {@code InitBinder} annotation javadoc.
      *
-     * @param binder Links:
-     *               {@link InitBinder}
+     * @param binder Links: {@link InitBinder}
      */
     @InitBinder
     protected void initBinder(ServletRequestDataBinder binder) {
