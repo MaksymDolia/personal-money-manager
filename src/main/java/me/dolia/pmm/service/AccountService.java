@@ -1,14 +1,7 @@
 package me.dolia.pmm.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.List;
-
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
@@ -16,6 +9,11 @@ import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
 
 /**
  * Service to deal with accounts.
@@ -25,147 +23,149 @@ import me.dolia.pmm.repository.UserRepository;
 @Service
 public class AccountService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+  @Autowired
+  private AccountRepository accountRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+  @Autowired
+  private TransactionRepository transactionRepository;
 
-    /**
-     * Saves given account in database.
-     *
-     * @param account account
-     */
-    public void save(Account account) {
-        accountRepository.save(account);
+  /**
+   * Saves given account in database.
+   *
+   * @param account account
+   */
+  public void save(Account account) {
+    accountRepository.save(account);
+  }
+
+  /**
+   * Saves given account in database and bind it to the user with given email.
+   *
+   * @param account account to store
+   * @param email user's email
+   */
+  public void save(Account account, String email) {
+    User user = userRepository.findOneByEmail(email);
+    account.setUser(user);
+    accountRepository.save(account);
+  }
+
+  /**
+   * Looks and return the account by given id. Also checks if the account belongs to user who's
+   * asking or the user has role 'ADMIN'.
+   *
+   * @param id account's id
+   * @return account
+   */
+  @PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")
+  public Account findOne(int id) {
+    return accountRepository.findOne(id);
+  }
+
+  /**
+   * Returns total balance of all user's accounts.
+   *
+   * @param email user's email
+   * @return total balance
+   */
+  public Double getBalance(String email) {
+    return accountRepository.getSumAmountByUserEmail(email);
+  }
+
+  /**
+   * Deletes account by given id. Also checks if the account belongs to user who's asking or the
+   * user has role 'ADMIN'.
+   *
+   * @param account account to be deleted
+   */
+  @PreAuthorize("#account.user.email == authentication.name or hasRole('ADMIN')")
+  public void delete(@P("account") Account account) {
+    accountRepository.delete(account);
+  }
+
+  /**
+   * Transfer transactions from one account to another.
+   *
+   * @param fromId id of account transaction will be moved from
+   * @param toId id of account transaction will be moved to
+   */
+  public void transferTransactions(int fromId, int toId) {
+    Account fromAccount = findOne(fromId);
+    Account toAccount = findOne(toId);
+    if (fromAccount != null || toAccount != null) {
+      transferTransactions(fromAccount, toAccount);
     }
 
-    /**
-     * Saves given account in database and bind it to the user with given email.
-     *
-     * @param account account to store
-     * @param email   user's email
-     */
-    public void save(Account account, String email) {
-        User user = userRepository.findOneByEmail(email);
-        account.setUser(user);
-        accountRepository.save(account);
-    }
+  }
 
-    /**
-     * Looks and return the account by given id. Also checks if the account belongs to user who's
-     * asking or the user has role 'ADMIN'.
-     *
-     * @param id account's id
-     * @return account
-     */
-    @PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")
-    public Account findOne(int id) {
-        return accountRepository.findOne(id);
-    }
+  /**
+   * Updates existing account with new data.
+   *
+   * @param existingAccount existing account
+   * @param accountNewData new account data
+   */
+  public void editAccount(Account existingAccount, Account accountNewData) {
+    existingAccount.setAmount(accountNewData.getAmount());
+    existingAccount.setCurrency(accountNewData.getCurrency());
+    existingAccount.setName(accountNewData.getName());
+    save(existingAccount);
+  }
 
-    /**
-     * Returns total balance of all user's accounts.
-     *
-     * @param email user's email
-     * @return total balance
-     */
-    public Double getBalance(String email) {
-        return accountRepository.getSumAmountByUserEmail(email);
-    }
+  /**
+   * Looks for all transactions by given user's email.
+   *
+   * @param email user's email
+   * @return list of transactions
+   */
+  public List<Account> findAllByUserEmail(String email) {
+    return accountRepository.findAllByUserEmail(email);
+  }
 
-    /**
-     * Deletes account by given id. Also checks if the account belongs to user who's asking or the
-     * user has role 'ADMIN'.
-     *
-     * @param account account to be deleted
-     */
-    @PreAuthorize("#account.user.email == authentication.name or hasRole('ADMIN')")
-    public void delete(@P("account") Account account) {
-        accountRepository.delete(account);
-    }
+  /* Helper method to performs all necessary actions to transfer transactions between accounts */
+  @PreAuthorize("#fromAccount.user.email == authentication.name or #toAccount.user.email == authentication.name or hasRole('ADMIN')")
+  private void transferTransactions(@P("fromAccount") Account fromAccount,
+      @P("toAccount") Account toAccount) {
+    List<Transaction> transactions = transactionRepository
+        .findAllByAccountOrTransferAccount(fromAccount,
+            fromAccount);
+    if (transactions != null && !transactions.isEmpty()) {
+      for (Transaction transaction : transactions) {
+        Operation operation = transaction.getOperation();
+        BigDecimal amount = transaction.getAmount();
 
-    /**
-     * Transfer transactions from one account to another.
-     *
-     * @param fromId id of account transaction will be moved from
-     * @param toId   id of account transaction will be moved to
-     */
-    public void transferTransactions(int fromId, int toId) {
-        Account fromAccount = findOne(fromId);
-        Account toAccount = findOne(toId);
-        if (fromAccount != null || toAccount != null) {
-            transferTransactions(fromAccount, toAccount);
-        }
-
-    }
-
-    /**
-     * Updates existing account with new data.
-     *
-     * @param existingAccount existing account
-     * @param accountNewData  new account data
-     */
-    public void editAccount(Account existingAccount, Account accountNewData) {
-        existingAccount.setAmount(accountNewData.getAmount());
-        existingAccount.setCurrency(accountNewData.getCurrency());
-        existingAccount.setName(accountNewData.getName());
-        save(existingAccount);
-    }
-
-    /**
-     * Looks for all transactions by given user's email.
-     *
-     * @param email user's email
-     * @return list of transactions
-     */
-    public List<Account> findAllByUserEmail(String email) {
-        return accountRepository.findAllByUserEmail(email);
-    }
-
-    /* Helper method to performs all necessary actions to transfer transactions between accounts */
-    @PreAuthorize("#fromAccount.user.email == authentication.name or #toAccount.user.email == authentication.name or hasRole('ADMIN')")
-    private void transferTransactions(@P("fromAccount") Account fromAccount, @P("toAccount") Account toAccount) {
-        List<Transaction> transactions = transactionRepository.findAllByAccountOrTransferAccount(fromAccount,
-                fromAccount);
-        if (transactions != null && !transactions.isEmpty()) {
-            for (Transaction transaction : transactions) {
-                Operation operation = transaction.getOperation();
-                BigDecimal amount = transaction.getAmount();
-
-                switch (operation) {
-                    case EXPENSE:
-                        fromAccount.setAmount(fromAccount.getAmount().add(amount));
-                        toAccount.setAmount(toAccount.getAmount().subtract(amount));
-                        transaction.setAccount(toAccount);
-                        break;
-                    case INCOME:
-                        fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
-                        toAccount.setAmount(toAccount.getAmount().add(amount));
-                        transaction.setAccount(toAccount);
-                        break;
-                    case TRANSFER:
-                        if (transaction.getAccount().getId() == fromAccount.getId()) {
-                            fromAccount.setAmount(fromAccount.getAmount().add(amount));
-                            toAccount.setAmount(toAccount.getAmount().subtract(amount));
-                            transaction.setAccount(toAccount);
-                        } else if (transaction.getTransferAccount().getId() == fromAccount.getId()) {
-                            fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
-                            toAccount.setAmount(toAccount.getAmount().add(amount));
-                            transaction.setTransferAccount(fromAccount);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                transactionRepository.save(transaction);
-                accountRepository.save(fromAccount);
-                accountRepository.save(toAccount);
+        switch (operation) {
+          case EXPENSE:
+            fromAccount.setAmount(fromAccount.getAmount().add(amount));
+            toAccount.setAmount(toAccount.getAmount().subtract(amount));
+            transaction.setAccount(toAccount);
+            break;
+          case INCOME:
+            fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
+            toAccount.setAmount(toAccount.getAmount().add(amount));
+            transaction.setAccount(toAccount);
+            break;
+          case TRANSFER:
+            if (transaction.getAccount().getId() == fromAccount.getId()) {
+              fromAccount.setAmount(fromAccount.getAmount().add(amount));
+              toAccount.setAmount(toAccount.getAmount().subtract(amount));
+              transaction.setAccount(toAccount);
+            } else if (transaction.getTransferAccount().getId() == fromAccount.getId()) {
+              fromAccount.setAmount(fromAccount.getAmount().subtract(amount));
+              toAccount.setAmount(toAccount.getAmount().add(amount));
+              transaction.setTransferAccount(fromAccount);
             }
+            break;
+          default:
+            break;
         }
+
+        transactionRepository.save(transaction);
+        accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
+      }
     }
+  }
 }

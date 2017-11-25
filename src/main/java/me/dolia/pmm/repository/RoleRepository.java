@@ -10,12 +10,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
-    /**
-     * Returns role bi given name.
-     *
-     * @param name role's name
-     * @return role
-     */
-    Role findByName(String name);
+  /**
+   * Returns role bi given name.
+   *
+   * @param name role's name
+   * @return role
+   */
+  Role findByName(String name);
 
 }

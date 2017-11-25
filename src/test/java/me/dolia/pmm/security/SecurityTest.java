@@ -1,5 +1,14 @@
 package me.dolia.pmm.security;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import javax.transaction.Transactional;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,16 +24,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 /**
  * @author Maksym Dolia
  * @since 02.12.2015.
@@ -33,52 +32,49 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-        "classpath:spring/applicationContext.xml",
-        "classpath:spring/dispatcher-servlet.xml"
+    "classpath:spring/applicationContext.xml",
+    "classpath:spring/dispatcher-servlet.xml"
 })
 @Transactional
 public class SecurityTest {
 
-    @Autowired
-    private WebApplicationContext wac;
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+  @Autowired
+  private WebApplicationContext wac;
+  @Autowired
+  private FilterChainProxy filterChainProxy;
+  private MockMvc mockMvc;
 
-    @Autowired
-    private FilterChainProxy filterChainProxy;
+  @Before
+  public void setUp() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(wac).addFilter(filterChainProxy).build();
 
-    private MockMvc mockMvc;
+  }
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+  @Test
+  public void testShouldAllowAccessToAppForUsers() throws Exception {
+    mockMvc.perform(get("/app").with(user("test")))
+        .andExpect(status().isOk())
+        .andExpect(authenticated());
+  }
 
-    @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).addFilter(filterChainProxy).build();
+  @Test
+  public void testShouldAllowAccessToInnersOfAppForUsers() throws Exception {
+    mockMvc.perform(get("/app/accounts").with(user("admin@admin")))
+        .andExpect(status().isOk())
+        .andExpect(authenticated());
+  }
 
-    }
+  @Test
+  public void testValidCSRF() throws Exception {
+    mockMvc.perform(post("/signin").with(csrf()))
+        .andExpect(authenticated());
+  }
 
-    @Test
-    public void testShouldAllowAccessToAppForUsers() throws Exception {
-        mockMvc.perform(get("/app").with(user("test")))
-                .andExpect(status().isOk())
-                .andExpect(authenticated());
-    }
-
-    @Test
-    public void testShouldAllowAccessToInnersOfAppForUsers() throws Exception {
-        mockMvc.perform(get("/app/accounts").with(user("admin@admin")))
-                .andExpect(status().isOk())
-                .andExpect(authenticated());
-    }
-
-    @Test
-    public void testValidCSRF() throws Exception {
-        mockMvc.perform(post("/signin").with(csrf()))
-                .andExpect(authenticated());
-    }
-
-    @Test
-    public void testInvalidCSRF() throws Exception {
-        mockMvc.perform(post("/signin").with(csrf().useInvalidToken()))
-                .andExpect(unauthenticated());
-    }
+  @Test
+  public void testInvalidCSRF() throws Exception {
+    mockMvc.perform(post("/signin").with(csrf().useInvalidToken()))
+        .andExpect(unauthenticated());
+  }
 }

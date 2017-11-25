@@ -6,5 +6,5 @@ package me.dolia.pmm.form;
  * @author Maksym Dolia
  */
 public enum SortTransaction {
-    DATE, ACCOUNT, CATEGORY, AMOUNT
+  DATE, ACCOUNT, CATEGORY, AMOUNT
 }

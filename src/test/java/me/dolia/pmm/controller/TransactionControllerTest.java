@@ -1,5 +1,16 @@
 package me.dolia.pmm.controller;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import javax.transaction.Transactional;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,18 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.transaction.Transactional;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 /**
  * Tests for Transaction Controller.
  *
@@ -36,146 +35,146 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {
-        "classpath:spring/applicationContext.xml",
-        "classpath:spring/dispatcher-servlet.xml"
+    "classpath:spring/applicationContext.xml",
+    "classpath:spring/dispatcher-servlet.xml"
 })
 @Transactional
 public class TransactionControllerTest {
 
-    private static String ROOT_MAPPING = "/app/transactions";
+  private static String ROOT_MAPPING = "/app/transactions";
 
-    @Autowired
-    private WebApplicationContext wac;
+  @Autowired
+  private WebApplicationContext wac;
 
-    @Autowired
-    private FilterChainProxy filterChainProxy;
+  @Autowired
+  private FilterChainProxy filterChainProxy;
 
-    private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-    @Before
-    public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).addFilter(filterChainProxy).build();
-    }
+  @Before
+  public void setUp() throws Exception {
+    mockMvc = MockMvcBuilders.webAppContextSetup(wac).addFilter(filterChainProxy).build();
+  }
 
-    @Test
-    public void testTransactionsUserNotAuthorised() throws Exception {
-        mockMvc.perform(get(ROOT_MAPPING))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("http://*/login"));
-    }
+  @Test
+  public void testTransactionsUserNotAuthorised() throws Exception {
+    mockMvc.perform(get(ROOT_MAPPING))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrlPattern("http://*/login"));
+  }
 
-    @Test
-    public void testTransactionsUserAuthorised() throws Exception {
-        mockMvc.perform(get(ROOT_MAPPING).with(user("admin@admin")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("transactions"))
-                .andExpect(model().attributeExists(
-                        "transactions",
-                        "showTransactionForm",
-                        "accounts",
-                        "expenseCategories",
-                        "incomeCategories"));
-    }
+  @Test
+  public void testTransactionsUserAuthorised() throws Exception {
+    mockMvc.perform(get(ROOT_MAPPING).with(user("admin@admin")))
+        .andExpect(status().isOk())
+        .andExpect(view().name("transactions"))
+        .andExpect(model().attributeExists(
+            "transactions",
+            "showTransactionForm",
+            "accounts",
+            "expenseCategories",
+            "incomeCategories"));
+  }
 
-    @Test
-    public void testAddTransactionUserNotAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/add_transaction"))
-                .andExpect(status().isForbidden());
-    }
+  @Test
+  public void testAddTransactionUserNotAuthorised() throws Exception {
+    mockMvc.perform(post(ROOT_MAPPING + "/add_transaction"))
+        .andExpect(status().isForbidden());
+  }
 
-    @Test
-    public void testAddTransactionWithValidDataUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
-                .with(user("admin@admin"))
-                .with(csrf())
-                .param("operation", "INCOME")
-                .param("account", "1")
-                .param("amount", "10")
-                .param("currency", "UAH")
-        )
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl(ROOT_MAPPING));
-    }
+  @Test
+  public void testAddTransactionWithValidDataUserAuthorised() throws Exception {
+    mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
+        .with(user("admin@admin"))
+        .with(csrf())
+        .param("operation", "INCOME")
+        .param("account", "1")
+        .param("amount", "10")
+        .param("currency", "UAH")
+    )
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(ROOT_MAPPING));
+  }
 
-    @Ignore("Need to check validation rules for Transaction entity.")
-    @Test
-    public void testAddTransactionWithNotValidDataUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
-                .with(user("admin@admin"))
-                .with(csrf())
-                .param("operation", "")
-                .param("account", "1")
-                .param("amount", "100")
-                .param("currency", "UAH")
-                .param("category", "")
-                .param("date", "2015-12-02")
-        )
-                .andExpect(status().isOk())
-                .andExpect(view().name("transactions_edit"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().errorCount(1))
-                .andExpect(model().attributeHasFieldErrors("currency"));
-    }
+  @Ignore("Need to check validation rules for Transaction entity.")
+  @Test
+  public void testAddTransactionWithNotValidDataUserAuthorised() throws Exception {
+    mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
+        .with(user("admin@admin"))
+        .with(csrf())
+        .param("operation", "")
+        .param("account", "1")
+        .param("amount", "100")
+        .param("currency", "UAH")
+        .param("category", "")
+        .param("date", "2015-12-02")
+    )
+        .andExpect(status().isOk())
+        .andExpect(view().name("transactions_edit"))
+        .andExpect(model().hasErrors())
+        .andExpect(model().errorCount(1))
+        .andExpect(model().attributeHasFieldErrors("currency"));
+  }
 
-    @Test
-    public void testRemoveTransactionUserNotAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/remove"))
-                .andExpect(status().isForbidden());
-    }
+  @Test
+  public void testRemoveTransactionUserNotAuthorised() throws Exception {
+    mockMvc.perform(post(ROOT_MAPPING + "/1/remove"))
+        .andExpect(status().isForbidden());
+  }
 
-    @Test
-    public void testRemoveTransactionUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/remove")
-                .with(user("admin@admin"))
-                .with(csrf())
-        )
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl(ROOT_MAPPING));
-    }
+  @Test
+  public void testRemoveTransactionUserAuthorised() throws Exception {
+    mockMvc.perform(post(ROOT_MAPPING + "/1/remove")
+        .with(user("admin@admin"))
+        .with(csrf())
+    )
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(ROOT_MAPPING));
+  }
 
-    @Test
-    public void testShowEditTransactionPageUserNotAuthorised() throws Exception {
-        mockMvc.perform(get(ROOT_MAPPING + "/1/edit"))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("http://*/login"));
-    }
+  @Test
+  public void testShowEditTransactionPageUserNotAuthorised() throws Exception {
+    mockMvc.perform(get(ROOT_MAPPING + "/1/edit"))
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrlPattern("http://*/login"));
+  }
 
-    @Test
-    public void testShowEditTransactionPageUserAuthorised() throws Exception {
-        mockMvc.perform(get(ROOT_MAPPING + "/1/edit").with(user("admin@admin")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("transactions_edit"));
-    }
+  @Test
+  public void testShowEditTransactionPageUserAuthorised() throws Exception {
+    mockMvc.perform(get(ROOT_MAPPING + "/1/edit").with(user("admin@admin")))
+        .andExpect(status().isOk())
+        .andExpect(view().name("transactions_edit"));
+  }
 
-    @Test
-    public void testDoEditTransactionUserNotAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/edit"))
-                .andExpect(status().isForbidden());
-    }
+  @Test
+  public void testDoEditTransactionUserNotAuthorised() throws Exception {
+    mockMvc.perform(post(ROOT_MAPPING + "/1/edit"))
+        .andExpect(status().isForbidden());
+  }
 
-    @Test
-    public void testDoEditTransactionWithValidDataUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
-                .with(user("admin@admin"))
-                .with(csrf())
-                .param("amount", "546")
-                .param("operation", "INCOME")
-                .param("account", "1")
-        )
-                .andExpect(model().hasNoErrors())
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl(ROOT_MAPPING));
-    }
+  @Test
+  public void testDoEditTransactionWithValidDataUserAuthorised() throws Exception {
+    mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
+        .with(user("admin@admin"))
+        .with(csrf())
+        .param("amount", "546")
+        .param("operation", "INCOME")
+        .param("account", "1")
+    )
+        .andExpect(model().hasNoErrors())
+        .andExpect(status().isFound())
+        .andExpect(redirectedUrl(ROOT_MAPPING));
+  }
 
-    @Test
-    public void testDoEditTransactionWithNotValidDataUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
-                .with(user("admin@admin"))
-                .with(csrf())
-                .param("amount", "")
-        )
-                .andExpect(model().hasErrors())
-                .andExpect(status().isOk())
-                .andExpect(view().name("transactions_edit"));
-    }
+  @Test
+  public void testDoEditTransactionWithNotValidDataUserAuthorised() throws Exception {
+    mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
+        .with(user("admin@admin"))
+        .with(csrf())
+        .param("amount", "")
+    )
+        .andExpect(model().hasErrors())
+        .andExpect(status().isOk())
+        .andExpect(view().name("transactions_edit"));
+  }
 }

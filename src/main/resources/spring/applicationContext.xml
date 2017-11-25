@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+<beans xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.springframework.org/schema/beans"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
-    <!-- Scan all app for beans, except controllers -->
-    <context:component-scan base-package="me.dolia.pmm">
-        <context:exclude-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
+  <!-- Scan all app for beans, except controllers -->
+  <context:component-scan base-package="me.dolia.pmm">
+    <context:exclude-filter expression="org.springframework.stereotype.Controller"
+      type="annotation"/>
+  </context:component-scan>
 
-    <!-- Enable annotations for transaction manager -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+  <!-- Enable annotations for transaction manager -->
+  <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <!-- Transaction manager -->
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
+  <!-- Transaction manager -->
+  <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
 
-    <!-- JPA repositories -->
-    <jpa:repositories base-package="me.dolia.pmm.repository"
-                      entity-manager-factory-ref="emf" transaction-manager-ref="transactionManager"/>
+  <!-- JPA repositories -->
+  <jpa:repositories base-package="me.dolia.pmm.repository"
+    entity-manager-factory-ref="emf" transaction-manager-ref="transactionManager"/>
 
-    <!-- Import settings for Spring Security -->
-    <import resource="security.xml"/>
+  <!-- Import settings for Spring Security -->
+  <import resource="security.xml"/>
 
-    <!-- Bind the .properties with messaged for app -->
-    <bean id="messageSource"
-          class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename" value="messages/messages"/>
-    </bean>
+  <!-- Bind the .properties with messaged for app -->
+  <bean class="org.springframework.context.support.ResourceBundleMessageSource"
+    id="messageSource">
+    <property name="basename" value="messages/messages"/>
+  </bean>
 
-    <!-- Set the default locale to EN -->
-    <bean id="localeResolver"
-          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-        <property name="defaultLocale" value="en"/>
-    </bean>
+  <!-- Set the default locale to EN -->
+  <bean class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
+    id="localeResolver">
+    <property name="defaultLocale" value="en"/>
+  </bean>
 
-    <!-- Profiles -->
-    <beans profile="dev">
-        <import resource="database-dev.xml"/>
-    </beans>
-    <beans profile="prod">
-        <import resource="database-prod.xml"/>
-    </beans>
+  <!-- Profiles -->
+  <beans profile="dev">
+    <import resource="database-dev.xml"/>
+  </beans>
+  <beans profile="prod">
+    <import resource="database-prod.xml"/>
+  </beans>
 </beans>

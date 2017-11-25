@@ -1,109 +1,109 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE tiles-definitions PUBLIC
-       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
-       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-	<definition name="common" template="/WEB-INF/layouts/classic.jsp">
-		<put-attribute name="include" value="" />
-		<put-attribute name="footer" value="/WEB-INF/layouts/footer.jsp" />
-		<!-- MODALS -->
-		<put-attribute name="modal-transaction-remove"
-			value="/WEB-INF/layouts/modal/modal_transaction_remove.jsp" cascade="true" />
-		<put-attribute name="modal-account-add"
-			value="/WEB-INF/layouts/modal/modal_account_add.jsp" cascade="true" />
-		<put-attribute name="modal-account-remove"
-			value="/WEB-INF/layouts/modal/modal_account_remove.jsp" cascade="true" />
-		<put-attribute name="modal-category-remove"
-			value="/WEB-INF/layouts/modal/modal_category_remove.jsp" cascade="true" />
-	</definition>
+  <definition name="common" template="/WEB-INF/layouts/classic.jsp">
+    <put-attribute name="include" value=""/>
+    <put-attribute name="footer" value="/WEB-INF/layouts/footer.jsp"/>
+    <!-- MODALS -->
+    <put-attribute cascade="true"
+      name="modal-transaction-remove" value="/WEB-INF/layouts/modal/modal_transaction_remove.jsp"/>
+    <put-attribute cascade="true"
+      name="modal-account-add" value="/WEB-INF/layouts/modal/modal_account_add.jsp"/>
+    <put-attribute cascade="true"
+      name="modal-account-remove" value="/WEB-INF/layouts/modal/modal_account_remove.jsp"/>
+    <put-attribute cascade="true"
+      name="modal-category-remove" value="/WEB-INF/layouts/modal/modal_category_remove.jsp"/>
+  </definition>
 
-	<definition name="index" extends="common">
-		<put-attribute name="title" value="Homepage" />
-		<put-attribute name="current" value="Homepage" />
-		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
-	</definition>
+  <definition extends="common" name="index">
+    <put-attribute name="title" value="Homepage"/>
+    <put-attribute name="current" value="Homepage"/>
+    <put-attribute name="body" value="/WEB-INF/jsp/index.jsp"/>
+  </definition>
 
-	<definition name="login" extends="common">
-		<put-attribute name="title" value="Login" />
-		<put-attribute name="current" value="login" />
-		<put-attribute name="body" value="/WEB-INF/jsp/login.jsp" />
-	</definition>
+  <definition extends="common" name="login">
+    <put-attribute name="title" value="Login"/>
+    <put-attribute name="current" value="login"/>
+    <put-attribute name="body" value="/WEB-INF/jsp/login.jsp"/>
+  </definition>
 
-	<definition name="signin" extends="common">
-		<put-attribute name="title" value="Signin" />
-		<put-attribute name="current" value="signin" />
-		<put-attribute name="body" value="/WEB-INF/jsp/signin.jsp" />
-	</definition>
+  <definition extends="common" name="signin">
+    <put-attribute name="title" value="Signin"/>
+    <put-attribute name="current" value="signin"/>
+    <put-attribute name="body" value="/WEB-INF/jsp/signin.jsp"/>
+  </definition>
 
-	<definition name="dashboard" extends="common">
-		<put-attribute name="title" value="Dashboard" />
-		<put-attribute name="body" value="/WEB-INF/jsp/dashboard.jsp" />
-		<put-attribute name="current" value="dashboard" />
-		<put-attribute name="transactions_table"
-			value="/WEB-INF/layouts/transactions_table.jsp" cascade="true" />
-		<!-- FORMS -->
-		<put-attribute name="form_account_add"
-			value="/WEB-INF/layouts/form/form_account_add.jsp" cascade="true" />
-		<put-attribute name="form_transaction_add"
-			value="/WEB-INF/layouts/form/form_transaction_add.jsp" cascade="true" />
-	</definition>
+  <definition extends="common" name="dashboard">
+    <put-attribute name="title" value="Dashboard"/>
+    <put-attribute name="body" value="/WEB-INF/jsp/dashboard.jsp"/>
+    <put-attribute name="current" value="dashboard"/>
+    <put-attribute cascade="true"
+      name="transactions_table" value="/WEB-INF/layouts/transactions_table.jsp"/>
+    <!-- FORMS -->
+    <put-attribute cascade="true"
+      name="form_account_add" value="/WEB-INF/layouts/form/form_account_add.jsp"/>
+    <put-attribute cascade="true"
+      name="form_transaction_add" value="/WEB-INF/layouts/form/form_transaction_add.jsp"/>
+  </definition>
 
-	<definition name="transactions" extends="common">
-		<put-attribute name="include"
-			value="/WEB-INF/layouts/include/transactions_script.jsp" />
-		<put-attribute name="title" value="Transactions" />
-		<put-attribute name="body" value="/WEB-INF/jsp/transactions.jsp" />
-		<put-attribute name="transactions_table"
-			value="/WEB-INF/layouts/transactions_table.jsp" cascade="true" />
-		<put-attribute name="current" value="transactions" />
-		<put-attribute name="form"
-			value="/WEB-INF/layouts/form/form_transaction_add.jsp" cascade="true" />
-	</definition>
+  <definition extends="common" name="transactions">
+    <put-attribute name="include"
+      value="/WEB-INF/layouts/include/transactions_script.jsp"/>
+    <put-attribute name="title" value="Transactions"/>
+    <put-attribute name="body" value="/WEB-INF/jsp/transactions.jsp"/>
+    <put-attribute cascade="true"
+      name="transactions_table" value="/WEB-INF/layouts/transactions_table.jsp"/>
+    <put-attribute name="current" value="transactions"/>
+    <put-attribute cascade="true"
+      name="form" value="/WEB-INF/layouts/form/form_transaction_add.jsp"/>
+  </definition>
 
-	<definition name="transactions_edit" extends="transactions">
-		<put-attribute name="include"
-			value="/WEB-INF/layouts/include/form_transactions_edit_script.jsp" />
-		<put-attribute name="form"
-			value="/WEB-INF/layouts/form/form_transaction_edit.jsp" cascade="true" />
-	</definition>
+  <definition extends="transactions" name="transactions_edit">
+    <put-attribute name="include"
+      value="/WEB-INF/layouts/include/form_transactions_edit_script.jsp"/>
+    <put-attribute cascade="true"
+      name="form" value="/WEB-INF/layouts/form/form_transaction_edit.jsp"/>
+  </definition>
 
-	<definition name="categories" extends="common">
-		<put-attribute name="title" value="Categories" />
-		<put-attribute name="body" value="/WEB-INF/jsp/categories.jsp" />
-		<put-attribute name="current" value="categories" />
-		<put-attribute name="form"
-			value="/WEB-INF/layouts/form/form_category_add.jsp" cascade="true" />
-	</definition>
+  <definition extends="common" name="categories">
+    <put-attribute name="title" value="Categories"/>
+    <put-attribute name="body" value="/WEB-INF/jsp/categories.jsp"/>
+    <put-attribute name="current" value="categories"/>
+    <put-attribute cascade="true"
+      name="form" value="/WEB-INF/layouts/form/form_category_add.jsp"/>
+  </definition>
 
-	<definition name="categories_edit" extends="categories">
-		<put-attribute name="form"
-			value="/WEB-INF/layouts/form/form_category_edit.jsp" cascade="true" />
-	</definition>
+  <definition extends="categories" name="categories_edit">
+    <put-attribute cascade="true"
+      name="form" value="/WEB-INF/layouts/form/form_category_edit.jsp"/>
+  </definition>
 
-	<definition name="account" extends="transactions">
-		<put-attribute name="title" value="Account" />
-		<put-attribute name="current" value="accounts" />
-	</definition>
+  <definition extends="transactions" name="account">
+    <put-attribute name="title" value="Account"/>
+    <put-attribute name="current" value="accounts"/>
+  </definition>
 
-	<definition name="accounts" extends="common">
-		<put-attribute name="title" value="Accounts" />
-		<put-attribute name="body" value="/WEB-INF/jsp/accounts.jsp" />
-		<put-attribute name="current" value="accounts" />
-		<put-attribute name="form"
-			value="/WEB-INF/layouts/form/form_account_add.jsp" cascade="true" />
-	</definition>
+  <definition extends="common" name="accounts">
+    <put-attribute name="title" value="Accounts"/>
+    <put-attribute name="body" value="/WEB-INF/jsp/accounts.jsp"/>
+    <put-attribute name="current" value="accounts"/>
+    <put-attribute cascade="true"
+      name="form" value="/WEB-INF/layouts/form/form_account_add.jsp"/>
+  </definition>
 
-	<definition name="accounts_edit" extends="accounts">
-		<put-attribute name="form"
-			value="/WEB-INF/layouts/form/form_account_edit.jsp" cascade="true" />
-	</definition>
+  <definition extends="accounts" name="accounts_edit">
+    <put-attribute cascade="true"
+      name="form" value="/WEB-INF/layouts/form/form_account_edit.jsp"/>
+  </definition>
 
-	<definition name="profile" extends="common">
-		<put-attribute name="title" value="My profile" />
-		<put-attribute name="body" value="/WEB-INF/jsp/profile.jsp" />
-		<put-attribute name="current" value="profile" />
-	</definition>
+  <definition extends="common" name="profile">
+    <put-attribute name="title" value="My profile"/>
+    <put-attribute name="body" value="/WEB-INF/jsp/profile.jsp"/>
+    <put-attribute name="current" value="profile"/>
+  </definition>
 
-	<definition name="404" template="/WEB-INF/jsp/404.jsp" />
-	<definition name="error" template="/WEB-INF/jsp/error.jsp" />
+  <definition name="404" template="/WEB-INF/jsp/404.jsp"/>
+  <definition name="error" template="/WEB-INF/jsp/error.jsp"/>
 </tiles-definitions>

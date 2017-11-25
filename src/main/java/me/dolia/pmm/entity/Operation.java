@@ -6,5 +6,5 @@ package me.dolia.pmm.entity;
  * @author Maksym Dolia
  */
 public enum Operation {
-    EXPENSE, TRANSFER, INCOME
+  EXPENSE, TRANSFER, INCOME
 }
