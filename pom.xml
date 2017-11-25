@@ -7,9 +7,9 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <!-- Shared version number properties -->
   <properties>
-    <java.version>1.7</java.version>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
     <org.springframework.version>4.2.3.RELEASE</org.springframework.version>
     <apache.tiles>3.0.5</apache.tiles>
     <spring.security.version>4.0.3.RELEASE</spring.security.version>
@@ -37,6 +37,19 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <version>${spring.security.version}</version>
+      <scope>test</scope>
+    </dependency>
+
     <!---->
 
     <dependency>
@@ -44,26 +57,28 @@
       <artifactId>hibernate-validator</artifactId>
       <version>5.2.2.Final</version>
     </dependency>
+
+    <!-- Spring Security -->
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-taglibs</artifactId>
       <version>${spring.security.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
       <version>${spring.security.version}</version>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
       <version>${spring.security.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>2.3.3</version>
-    </dependency>
+
+    <!-- JPA & DB -->
 
     <dependency>
       <groupId>org.springframework.data</groupId>
@@ -72,55 +87,16 @@
     </dependency>
 
     <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>2.3.3</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
       <version>4.3.11.Final</version>
-    </dependency>
-
-    <!-- Apache Tiles -->
-    <dependency>
-      <groupId>org.apache.tiles</groupId>
-      <artifactId>tiles-core</artifactId>
-      <version>${apache.tiles}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.tiles</groupId>
-      <artifactId>tiles-jsp</artifactId>
-      <version>${apache.tiles}</version>
-    </dependency>
-
-    <!-- Spring MVC for Servlet Environments (depends on spring-core, spring-beans,
-        spring-context, spring-web) Define this if you use Spring MVC with a Servlet
-        Container such as Apache Tomcat (org.springframework.web.servlet.*) -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-    </dependency>
-
-    <!-- Support for testing Spring applications with tools such as JUnit and
-        TestNG This artifact is generally always defined with a 'test' scope for
-        the integration testing framework and unit testing stubs -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.12</version>
-    </dependency>
-    <dependency>
-      <groupId>jstl</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
     </dependency>
 
     <dependency>
@@ -129,17 +105,34 @@
       <version>5.1.36</version>
     </dependency>
 
+    <!-- Apache Tiles -->
+
     <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-test</artifactId>
-      <version>4.0.3.RELEASE</version>
-      <scope>test</scope>
+      <groupId>org.apache.tiles</groupId>
+      <artifactId>tiles-jsp</artifactId>
+      <version>${apache.tiles}</version>
     </dependency>
+
+    <!-- Spring -->
+
     <dependency>
-      <groupId>javax.el</groupId>
-      <artifactId>el-api</artifactId>
-      <version>2.2</version>
-      <scope>test</scope>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+    </dependency>
+
+    <!-- Provided-->
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>jstl</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
     </dependency>
   </dependencies>
 
@@ -156,15 +149,13 @@
               </httpConnector> -->
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.3</version>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-        </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
