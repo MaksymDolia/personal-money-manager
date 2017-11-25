@@ -54,7 +54,7 @@ public class IndexController {
   }
 
   @RequestMapping(value = "/signin", method = RequestMethod.GET)
-  public String signin() {
+  public String signIn() {
     if (loggedInUser()) {
       return REDIRECT_TO_APP;
     }
