@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ import org.springframework.web.context.WebApplicationContext;
     "classpath:spring/applicationContext.xml",
     "classpath:spring/dispatcher-servlet.xml"
 })
-public class DashboardControllerTest {
+public class DashboardControllerIT {
 
   private static final String ROOT_MAPPING = "/app";
 
@@ -57,6 +58,7 @@ public class DashboardControllerTest {
         .andExpect(redirectedUrlPattern("http://*/login"));
   }
 
+  @Ignore
   @Test
   public void testAppUserAuthorised() throws Exception {
     mockMvc.perform(get(ROOT_MAPPING)

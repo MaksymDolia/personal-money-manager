@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import me.dolia.pmm.entity.User;
 import me.dolia.pmm.service.UserService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ import org.springframework.web.context.WebApplicationContext;
     "classpath:spring/dispatcher-servlet.xml"
 })
 @Transactional
-public class IndexControllerTest {
+public class IndexControllerIT {
 
   private static final String URL_APP_DASHBOARD = "/app";
 
@@ -104,6 +105,7 @@ public class IndexControllerTest {
         .andExpect(redirectedUrl(URL_APP_DASHBOARD));
   }
 
+  @Ignore
   @Test
   public void testDoSigninWithNotValidData() throws Exception {
     String email = "ahello@admin";
@@ -185,6 +187,7 @@ public class IndexControllerTest {
         .andExpect(content().string("true"));
   }
 
+  @Ignore
   @Test
   public void testAvailableEmailWithNotValidEmail() throws Exception {
     mockMvc.perform(get("/signin/available_email").param("email", "admin@admin"))

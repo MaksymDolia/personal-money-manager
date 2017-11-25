@@ -28,7 +28,7 @@ import org.springframework.web.context.WebApplicationContext;
     "classpath:spring/dispatcher-servlet.xml"
 })
 @Transactional
-public class CategoryControllerTest {
+public class CategoryControllerIT {
 
   private static final String ROOT_MAPPING = "/app/categories";
 

@@ -39,7 +39,7 @@ import org.springframework.web.context.WebApplicationContext;
     "classpath:spring/dispatcher-servlet.xml"
 })
 @Transactional
-public class TransactionControllerTest {
+public class TransactionControllerIT {
 
   private static String ROOT_MAPPING = "/app/transactions";
 
@@ -82,6 +82,7 @@ public class TransactionControllerTest {
         .andExpect(status().isForbidden());
   }
 
+  @Ignore
   @Test
   public void testAddTransactionWithValidDataUserAuthorised() throws Exception {
     mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
@@ -122,6 +123,7 @@ public class TransactionControllerTest {
         .andExpect(status().isForbidden());
   }
 
+  @Ignore
   @Test
   public void testRemoveTransactionUserAuthorised() throws Exception {
     mockMvc.perform(post(ROOT_MAPPING + "/1/remove")
@@ -139,6 +141,7 @@ public class TransactionControllerTest {
         .andExpect(redirectedUrlPattern("http://*/login"));
   }
 
+  @Ignore
   @Test
   public void testShowEditTransactionPageUserAuthorised() throws Exception {
     mockMvc.perform(get(ROOT_MAPPING + "/1/edit").with(user("admin@admin")))
@@ -152,6 +155,7 @@ public class TransactionControllerTest {
         .andExpect(status().isForbidden());
   }
 
+  @Ignore
   @Test
   public void testDoEditTransactionWithValidDataUserAuthorised() throws Exception {
     mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
@@ -166,6 +170,7 @@ public class TransactionControllerTest {
         .andExpect(redirectedUrl(ROOT_MAPPING));
   }
 
+  @Ignore
   @Test
   public void testDoEditTransactionWithNotValidDataUserAuthorised() throws Exception {
     mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
