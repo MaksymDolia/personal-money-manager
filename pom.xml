@@ -13,6 +13,7 @@
         <apache.tiles>3.0.5</apache.tiles>
         <spring.security.version>4.0.3.RELEASE</spring.security.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
