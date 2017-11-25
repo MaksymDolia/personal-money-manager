@@ -1,5 +1,7 @@
 package me.dolia.pmm.service;
 
+import static java.util.Objects.requireNonNull;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -19,6 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,9 +53,10 @@ public class UserService {
    *
    * @param user user to be stored
    */
+  @Transactional
   public void save(User user) {
     user.setEnabled(true);
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    PasswordEncoder encoder = new BCryptPasswordEncoder();
     user.setPassword(encoder.encode(user.getPassword()));
     List<Role> roles = new ArrayList<>();
     roles.add(roleRepository.findByName("ROLE_USER"));
@@ -68,6 +72,7 @@ public class UserService {
    * @return user
    */
   public User findOneByEmail(String email) {
+    requireNonNull(email, "email is null");
     return userRepository.findOneByEmail(email);
   }
 
