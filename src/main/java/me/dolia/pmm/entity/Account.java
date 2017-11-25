@@ -94,9 +94,6 @@ public class Account {
       return false;
     }
     Account other = (Account) obj;
-    if (id != other.id) {
-      return false;
-    }
-    return true;
+    return id == other.id;
   }
 }

@@ -84,14 +84,6 @@ public class Transaction {
     this.id = id;
   }
 
-  public Operation getType() {
-    return operation;
-  }
-
-  public void setType(Operation operation) {
-    this.operation = operation;
-  }
-
   public BigDecimal getAmount() {
     return amount;
   }

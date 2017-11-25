@@ -29,6 +29,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/app/categories")
 public class CategoryController {
 
+  private static final String REDIRECT_TO_CATEGORIES = "redirect:/app/categories";
+  private static final String CATEGORIES = "categories";
+
   @Autowired
   private CategoryService categoryService;
 
@@ -47,8 +50,8 @@ public class CategoryController {
   public String categories(Model model, Principal principal) {
     String email = principal.getName();
     List<Category> categories = categoryService.findAllByUserEmail(email);
-    model.addAttribute("categories", categories);
-    return "categories";
+    model.addAttribute(CATEGORIES, categories);
+    return CATEGORIES;
   }
 
   @RequestMapping(value = "/add_category", method = RequestMethod.POST)
@@ -60,7 +63,7 @@ public class CategoryController {
     }
     String email = principal.getName();
     categoryService.save(category, email);
-    return "redirect:/app/categories";
+    return REDIRECT_TO_CATEGORIES;
   }
 
   @RequestMapping(value = "/{id}/remove")
@@ -74,7 +77,7 @@ public class CategoryController {
       return "redirect:/app/categories/{id}/edit";
     }
     categoryService.delete(category);
-    return "redirect:/app/categories";
+    return REDIRECT_TO_CATEGORIES;
   }
 
   @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
@@ -82,7 +85,7 @@ public class CategoryController {
     Category category = categoryService.findOne(id);
     long quantityOfTransactions = transactionService.countTransactionsByCategoryId(id);
     List<Category> categories = categoryService.findAllByUserEmail(category.getUser().getEmail());
-    model.addAttribute("categories", categories);
+    model.addAttribute(CATEGORIES, categories);
     model.addAttribute("category", category);
     model.addAttribute("quantityOfTransactions", quantityOfTransactions);
     return "categories_edit";
@@ -92,7 +95,7 @@ public class CategoryController {
   public String editCategory(@Valid @ModelAttribute Category category, @PathVariable("id") int id) {
     Category existingCategory = categoryService.findOne(id);
     categoryService.editCategory(existingCategory, category);
-    return "redirect:/app/categories";
+    return REDIRECT_TO_CATEGORIES;
   }
 
   @RequestMapping(value = "/transfer", method = RequestMethod.POST)

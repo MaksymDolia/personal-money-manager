@@ -157,6 +157,7 @@ public class TransactionService {
    * @param transaction transaction to be stored
    * @param email user's email
    */
+  @Transactional
   public void save(Transaction transaction, String email) {
     User user = userRepository.findOneByEmail(email);
     transaction.setUser(user);
@@ -179,6 +180,7 @@ public class TransactionService {
    * @param changedTransaction new  transaction's data
    * @param originalTransaction transaction to be changed
    */
+  @Transactional
   public void editAndSave(Transaction changedTransaction, Transaction originalTransaction) {
     this.resetTransaction(originalTransaction);
     originalTransaction = new Transaction(changedTransaction);
@@ -187,7 +189,6 @@ public class TransactionService {
   }
 
   /* Performs all necessary operation to persist transaction */
-  @Transactional
   private void processTransaction(Transaction transaction) {
     Account account = accountRepository.findOne(transaction.getAccount().getId());
     BigDecimal amount = transaction.getAmount();

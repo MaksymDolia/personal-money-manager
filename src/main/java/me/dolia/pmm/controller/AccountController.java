@@ -41,6 +41,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/app/accounts")
 public class AccountController {
 
+  private static final String REDIRECT_TO_ACCOUNTS = "redirect:/app/accounts";
+  private static final String ACCOUNTS = "accounts";
+
   @Autowired
   private ApplicationContext context;
 
@@ -107,10 +110,10 @@ public class AccountController {
   public String accounts(Model model, Principal principal) {
     String email = principal.getName();
     List<Account> accounts = accountService.findAllByUserEmail(email);
-    model.addAttribute("accounts", accounts);
+    model.addAttribute(ACCOUNTS, accounts);
     double balance = accountService.getBalance(email);
     model.addAttribute("balance", balance);
-    return "accounts";
+    return ACCOUNTS;
   }
 
   /**
@@ -133,14 +136,14 @@ public class AccountController {
     if (result.hasErrors()) {
       attr.addFlashAttribute("account", account);
       attr.addFlashAttribute("org.springframework.validation.BindingResult.account", result);
-      return "redirect:/app/accounts";
+      return REDIRECT_TO_ACCOUNTS;
     }
     String email = principal.getName();
     accountService.save(account, email);
     if (referrer != null) {
       return "redirect:" + referrer;
     }
-    return "redirect:/app/accounts";
+    return REDIRECT_TO_ACCOUNTS;
   }
 
   /**
@@ -162,7 +165,7 @@ public class AccountController {
     model.addAttribute("transactions", transactions);
     model.addAttribute("showTransactionForm", form);
     List<Account> accounts = accountService.findAllByUserEmail(email);
-    model.addAttribute("accounts", accounts);
+    model.addAttribute(ACCOUNTS, accounts);
 
     List<Category> expenseCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.EXPENSE);
@@ -195,7 +198,7 @@ public class AccountController {
       return "redirect:/app/accounts/{id}/edit";
     }
     accountService.delete(account);
-    return "redirect:/app/accounts";
+    return REDIRECT_TO_ACCOUNTS;
   }
 
   /**
@@ -212,7 +215,7 @@ public class AccountController {
     String email = account.getUser().getEmail();
     List<Account> accounts = accountService.findAllByUserEmail(email);
     model.addAttribute("account", account);
-    model.addAttribute("accounts", accounts);
+    model.addAttribute(ACCOUNTS, accounts);
     double balance = accountService.getBalance(email);
     model.addAttribute("balance", balance);
     long quantityOfTransactions = transactionService.countTransactionsByAccount(account);
@@ -238,7 +241,7 @@ public class AccountController {
     }
     Account existingAccount = accountService.findOne(id);
     accountService.editAccount(existingAccount, account);
-    return "redirect:/app/accounts";
+    return REDIRECT_TO_ACCOUNTS;
   }
 
   /**

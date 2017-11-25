@@ -46,14 +46,6 @@ public class Category {
     this.name = name;
   }
 
-  public Operation getType() {
-    return operation;
-  }
-
-  public void setType(Operation operation) {
-    this.operation = operation;
-  }
-
   public Operation getOperation() {
     return operation;
   }
@@ -90,9 +82,6 @@ public class Category {
       return false;
     }
     Category other = (Category) obj;
-    if (id != other.id) {
-      return false;
-    }
-    return true;
+    return id == other.id;
   }
 }

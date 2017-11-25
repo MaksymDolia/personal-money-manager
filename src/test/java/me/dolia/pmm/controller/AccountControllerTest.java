@@ -21,7 +21,6 @@ import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -223,22 +222,6 @@ public class AccountControllerTest {
     public void testDoEditAccountUserNotAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/1/edit"))
             .andExpect(status().isForbidden());
-    }
-
-    @Ignore
-    @Test
-    public void testDoEditAccountWithNotValidDataUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
-            .with(user("admin@admin"))
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .param("name", "")
-            .param("amount", "100")
-            .param("currency", "UAH")
-        )
-            .andExpect(status().isOk())
-            .andExpect(view().name("accounts_edit"))
-            .andExpect(model().hasErrors())
-            .andExpect(model().attributeHasFieldErrors("name"));
     }
 
     @Test

@@ -95,7 +95,7 @@ public class AccountService {
   public void transferTransactions(int fromId, int toId) {
     Account fromAccount = findOne(fromId);
     Account toAccount = findOne(toId);
-    if (fromAccount != null || toAccount != null) {
+    if (fromAccount != null && toAccount != null) {
       transferTransactions(fromAccount, toAccount);
     }
 

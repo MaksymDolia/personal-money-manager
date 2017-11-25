@@ -27,6 +27,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class IndexController {
 
+  private static final String REDIRECT_TO_APP = "redirect:/app";
+
   @Autowired
   private UserService userService;
 
@@ -38,7 +40,7 @@ public class IndexController {
   @RequestMapping("/index")
   public String index() {
     if (loggedInUser()) {
-      return "redirect:/app";
+      return REDIRECT_TO_APP;
     }
     return "index";
   }
@@ -46,7 +48,7 @@ public class IndexController {
   @RequestMapping("/login")
   public String login() {
     if (loggedInUser()) {
-      return "redirect:/app";
+      return REDIRECT_TO_APP;
     }
     return "login";
   }
@@ -54,7 +56,7 @@ public class IndexController {
   @RequestMapping(value = "/signin", method = RequestMethod.GET)
   public String signin() {
     if (loggedInUser()) {
-      return "redirect:/app";
+      return REDIRECT_TO_APP;
     }
     return "signin";
   }

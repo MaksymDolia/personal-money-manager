@@ -99,7 +99,7 @@ public class InitDbService {
         Category category = new Category();
         category
             .setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
-        category.setType(i > 5 ? Operation.INCOME : Operation.EXPENSE);
+        category.setOperation(i > 5 ? Operation.INCOME : Operation.EXPENSE);
         category.setUser(user);
         categoryRepository.save(category);
       }
@@ -110,7 +110,7 @@ public class InitDbService {
       transaction1.setAmount(new BigDecimal(50));
       transaction1.setCurrency(UAH);
       transaction1.setCategory(categoryRepository.findOne(3));
-      transaction1.setType(Operation.EXPENSE);
+      transaction1.setOperation(Operation.EXPENSE);
       transaction1.setComment("McDonalds");
       transaction1.setUser(user);
       transactionRepository.save(transaction1);
@@ -123,7 +123,7 @@ public class InitDbService {
       transaction2.setAmount(new BigDecimal(45));
       transaction2.setCurrency(UAH);
       transaction2.setCategory(categoryRepository.findOne(7));
-      transaction2.setType(Operation.INCOME);
+      transaction2.setOperation(Operation.INCOME);
       transaction2.setComment("Festo");
       transaction2.setUser(user);
       transactionRepository.save(transaction2);

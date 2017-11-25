@@ -37,6 +37,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/app/transactions")
 public class TransactionController {
 
+  public static final String TRANSACTIONS_EDIT_VIEW_NAME = "transactions_edit";
+  private static final String REDIRECT_TO_TRANSACTIONS = "redirect:/app/transactions";
+  private static final String TRANSACTIONS = "transactions";
+
   @Autowired
   private AccountService accountService;
 
@@ -93,7 +97,7 @@ public class TransactionController {
       Principal principal) {
     String email = principal.getName();
     List<Transaction> transactions = transactionService.findAllByForm(email, form);
-    model.addAttribute("transactions", transactions);
+    model.addAttribute(TRANSACTIONS, transactions);
     model.addAttribute("showTransactionForm", form);
     List<Account> accounts = accountService.findAllByUserEmail(email);
     model.addAttribute("accounts", accounts);
@@ -104,7 +108,7 @@ public class TransactionController {
         .findAllByUserEmailAndOperation(email, Operation.INCOME);
     model.addAttribute("expenseCategories", expenseCategories);
     model.addAttribute("incomeCategories", incomeCategories);
-    return "transactions";
+    return TRANSACTIONS;
   }
 
   /**
@@ -122,14 +126,14 @@ public class TransactionController {
       Principal principal,
       BindingResult result) {
     if (result.hasErrors()) {
-      return "transactions_edit";
+      return TRANSACTIONS_EDIT_VIEW_NAME;
     }
     String email = principal.getName();
     transactionService.save(transaction, email);
     if (referrer != null) {
       return "redirect:" + referrer;
     }
-    return "redirect:/app/transactions";
+    return REDIRECT_TO_TRANSACTIONS;
   }
 
   /**
@@ -147,7 +151,7 @@ public class TransactionController {
     if (referrer != null) {
       return "redirect:" + referrer;
     }
-    return "redirect:/app/transactions";
+    return REDIRECT_TO_TRANSACTIONS;
   }
 
   /**
@@ -162,7 +166,7 @@ public class TransactionController {
     Transaction transaction = transactionService.findOne(id);
     String email = transaction.getUser().getEmail();
     List<Transaction> transactions = transactionService.findAllByUserEmail(email);
-    model.addAttribute("transactions", transactions);
+    model.addAttribute(TRANSACTIONS, transactions);
     model.addAttribute("transaction", transaction);
     List<Account> accounts = accountService.findAllByUserEmail(email);
     model.addAttribute("accounts", accounts);
@@ -172,7 +176,7 @@ public class TransactionController {
         .findAllByUserEmailAndOperation(email, Operation.INCOME);
     model.addAttribute("expenseCategories", expenseCategories);
     model.addAttribute("incomeCategories", incomeCategories);
-    return "transactions_edit";
+    return TRANSACTIONS_EDIT_VIEW_NAME;
   }
 
   /**
@@ -188,11 +192,10 @@ public class TransactionController {
       @Valid @ModelAttribute Transaction transaction,
       BindingResult result) {
     if (result.hasErrors()) {
-      return "transactions_edit";
+      return TRANSACTIONS_EDIT_VIEW_NAME;
     }
     Transaction existingTransaction = transactionService.findOne(id);
     transactionService.editAndSave(transaction, existingTransaction);
-    return "redirect:/app/transactions";
+    return REDIRECT_TO_TRANSACTIONS;
   }
-
 }

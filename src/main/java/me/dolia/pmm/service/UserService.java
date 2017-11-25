@@ -90,7 +90,7 @@ public class UserService {
     for (int i = 1; i < 6; i++) {
       Category category = new Category();
       category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
-      category.setType(Operation.EXPENSE);
+      category.setOperation(Operation.EXPENSE);
       category.setUser(user);
       categoryRepository.save(category);
     }
@@ -99,7 +99,7 @@ public class UserService {
     for (int i = 6; i < 8; i++) {
       Category category = new Category();
       category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
-      category.setType(Operation.INCOME);
+      category.setOperation(Operation.INCOME);
       category.setUser(user);
       categoryRepository.save(category);
     }
