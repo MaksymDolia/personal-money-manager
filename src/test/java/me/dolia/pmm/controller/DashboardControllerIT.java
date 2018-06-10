@@ -47,7 +47,7 @@ public class DashboardControllerIT {
   private MockMvc mockMvc;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     mockMvc = MockMvcBuilders.webAppContextSetup(wac).addFilter(filterChainProxy).build();
   }
 

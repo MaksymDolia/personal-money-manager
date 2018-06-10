@@ -31,7 +31,7 @@ public class UserServiceTest {
   private UserService userService;
 
   @Test
-  public void shouldGetUserByEmail() throws Exception {
+  public void shouldGetUserByEmail() {
     User user = createUser(EMAIL);
     when(userRepository.findOneByEmail(EMAIL)).thenReturn(user);
 
@@ -42,7 +42,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void shouldThrowExceptionOnFindOneBIfEmailIsNull() throws Exception {
+  public void shouldThrowExceptionOnFindOneBIfEmailIsNull() {
     thrown.expect(NullPointerException.class);
     thrown.expectMessage("email is null");
 
@@ -50,7 +50,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void shouldDeleteUser() throws Exception {
+  public void shouldDeleteUser() {
     userService.deleteByEmail(EMAIL);
 
     verify(userRepository, times(1)).deleteByEmail(EMAIL);

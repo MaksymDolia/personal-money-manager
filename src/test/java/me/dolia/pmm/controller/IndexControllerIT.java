@@ -48,6 +48,8 @@ public class IndexControllerIT {
 
   private static final String EMAIL_USER_EXIST = "first.test@email.com";
   private static final String EMAIL_USER_NOT_EXIST = "second.test@email.com";
+  private static final String SIGNIN_PATH = "/signin";
+  public static final String EMAIL_PARAM = "email";
 
   @Autowired
   private UserRepository userRepo;
@@ -58,7 +60,7 @@ public class IndexControllerIT {
   private MockMvc mockMvc;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     mockMvc = webAppContextSetup(wac).apply(springSecurity()).build();
 
     createAndSaveUser(EMAIL_USER_EXIST);
@@ -72,7 +74,7 @@ public class IndexControllerIT {
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void tearDown() {
     userRepo.deleteAll();
   }
 
@@ -108,7 +110,7 @@ public class IndexControllerIT {
 
   @Test
   public void shouldShowSigninPageForAnonymousUser() throws Exception {
-    mockMvc.perform(get("/signin"))
+    mockMvc.perform(get(SIGNIN_PATH))
         .andExpect(status().isOk())
         .andExpect(view().name("signin"));
   }
@@ -116,7 +118,7 @@ public class IndexControllerIT {
   @Test
   @WithMockUser
   public void shouldRedirectFromSignInPageToAppIfUserIsAuthenticated() throws Exception {
-    mockMvc.perform(get("/signin"))
+    mockMvc.perform(get(SIGNIN_PATH))
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(URL_APP_DASHBOARD));
   }
@@ -125,12 +127,12 @@ public class IndexControllerIT {
   @Test
   public void shouldNotRegisterUserWithNotValidData() throws Exception {
     String email = "";
-    String password = "";
+    String testPswd = "";
 
-    mockMvc.perform(post("/signin")
+    mockMvc.perform(post(SIGNIN_PATH)
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-        .param("email", email)
-        .param("password", password)
+        .param(EMAIL_PARAM, email)
+        .param("password", testPswd)
         .with(csrf())
     )
         .andExpect(status().isOk())
@@ -145,17 +147,17 @@ public class IndexControllerIT {
   @Test
   public void shouldRegisterUserWithNotValidData() throws Exception {
     String email = EMAIL_USER_NOT_EXIST;
-    String password = "goodPassword";
+    String testPswd = "goodPassword";
 
-    mockMvc.perform(post("/signin")
+    mockMvc.perform(post(SIGNIN_PATH)
         .with(csrf())
-        .param("email", email)
-        .param("password", password)
+        .param(EMAIL_PARAM, email)
+        .param("password", testPswd)
     )
         .andExpect(status().isFound())
         .andExpect(model().hasNoErrors())
         .andExpect(flash().attributeExists("success"))
-        .andExpect(redirectedUrl("/signin"));
+        .andExpect(redirectedUrl(SIGNIN_PATH));
 
     User storedUser = userRepo.findOneByEmail(email);
     assertNotNull(storedUser);
@@ -187,14 +189,14 @@ public class IndexControllerIT {
 
   @Test
   public void shouldReturnTrueIfEmailIsAvailable() throws Exception {
-    mockMvc.perform(get("/signin/available_email").param("email", EMAIL_USER_NOT_EXIST))
+    mockMvc.perform(get("/signin/available_email").param(EMAIL_PARAM, EMAIL_USER_NOT_EXIST))
         .andExpect(status().isOk())
         .andExpect(content().string(Boolean.TRUE.toString()));
   }
 
   @Test
   public void shouldReturnFalseIfEmailIsNotAvailable() throws Exception {
-    mockMvc.perform(get("/signin/available_email").param("email", EMAIL_USER_EXIST))
+    mockMvc.perform(get("/signin/available_email").param(EMAIL_PARAM, EMAIL_USER_EXIST))
         .andExpect(status().isOk())
         .andExpect(content().string(Boolean.FALSE.toString()));
   }

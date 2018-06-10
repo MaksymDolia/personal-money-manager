@@ -51,7 +51,11 @@ import org.springframework.web.context.WebApplicationContext;
 @Transactional
 public class AccountControllerIT {
 
-    private static String ROOT_MAPPING = "/app/accounts";
+    private static final String TEST_ADMIN_USERNAME = "admin@admin";
+    private static final String ACCOUNTS_VIEW_NAME = "accounts";
+    private static final String ROOT_MAPPING = "/app/accounts";
+    private static final String REDIRECT_TO_LOGIN_PAGE_URL = "http://*/login";
+    private static final String EDIT_ACCOUNT_1_PATH = "/1/edit";
 
     @Autowired
     private WebApplicationContext wac;
@@ -71,17 +75,17 @@ public class AccountControllerIT {
     private TransactionRepository transactionRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).addFilter(filterChainProxy).build();
     }
 
     @Ignore
     @Test
     public void testAccountsUserAuthorised() throws Exception {
-        mockMvc.perform(get(ROOT_MAPPING).with(user("admin@admin")))
+        mockMvc.perform(get(ROOT_MAPPING).with(user(TEST_ADMIN_USERNAME)))
             .andExpect(status().isOk())
-            .andExpect(view().name("accounts"))
-            .andExpect(model().attributeExists("accounts"))
+            .andExpect(view().name(ACCOUNTS_VIEW_NAME))
+            .andExpect(model().attributeExists(ACCOUNTS_VIEW_NAME))
             .andExpect(model().attributeExists("balance"));
     }
 
@@ -89,7 +93,7 @@ public class AccountControllerIT {
     public void testAccountsUserNotAuthorised() throws Exception {
         mockMvc.perform(get(ROOT_MAPPING))
             .andExpect(status().isFound())
-            .andExpect(redirectedUrlPattern("http://*/login"));
+            .andExpect(redirectedUrlPattern(REDIRECT_TO_LOGIN_PAGE_URL));
     }
 
     @Test
@@ -99,14 +103,14 @@ public class AccountControllerIT {
         String currency = "UAH";
 
         mockMvc.perform(post(ROOT_MAPPING + "/add_account")
-            .with(user("admin@admin")).with(csrf())
+            .with(user(TEST_ADMIN_USERNAME)).with(csrf())
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("name", name)
             .param("amount", amount)
             .param("currency", currency)
         )
             .andExpect(status().isFound())
-            .andExpect(redirectedUrl("/app/accounts"));
+            .andExpect(redirectedUrl(ROOT_MAPPING));
     }
 
     @Ignore
@@ -117,7 +121,7 @@ public class AccountControllerIT {
         String currency = "UAH";
 
         mockMvc.perform(post(ROOT_MAPPING + "/add_account")
-            .with(user("admin@admin"))
+            .with(user(TEST_ADMIN_USERNAME))
             .with(csrf())
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("name", name)
@@ -135,19 +139,19 @@ public class AccountControllerIT {
     public void testTransactionsUserNotAuthorised() throws Exception {
         mockMvc.perform(get(ROOT_MAPPING + "/1"))
             .andExpect(status().isFound())
-            .andExpect(redirectedUrlPattern("http://*/login"));
+            .andExpect(redirectedUrlPattern(REDIRECT_TO_LOGIN_PAGE_URL));
     }
 
     @Ignore
     @Test
     public void testTransactionsUserAuthorised() throws Exception {
-        mockMvc.perform(get(ROOT_MAPPING + "/1").with(user("admin@admin")))
+        mockMvc.perform(get(ROOT_MAPPING + "/1").with(user(TEST_ADMIN_USERNAME)))
             .andExpect(status().isOk())
             .andExpect(view().name("transactions"))
             .andExpect(model().attributeExists(
                 "transactions",
                 "showTransactionForm",
-                "accounts",
+                ACCOUNTS_VIEW_NAME,
                 "expenseCategories",
                 "incomeCategories"));
     }
@@ -156,7 +160,7 @@ public class AccountControllerIT {
     public void testDeleteAccountUserNotAuthorised() throws Exception {
         mockMvc.perform(get(ROOT_MAPPING + "/1/remove"))
             .andExpect(status().isFound())
-            .andExpect(redirectedUrlPattern("http://*/login"));
+            .andExpect(redirectedUrlPattern(REDIRECT_TO_LOGIN_PAGE_URL));
     }
 
     @Ignore
@@ -166,12 +170,12 @@ public class AccountControllerIT {
         account.setAmount(BigDecimal.TEN);
         account.setCurrency(Currency.getInstance("UAH"));
         account.setName("Test account");
-        account.setUser(userRepository.findOneByEmail("admin@admin"));
+        account.setUser(userRepository.findOneByEmail(TEST_ADMIN_USERNAME));
         account = accountRepository.save(account);
 
         mockMvc.perform(
             get(String.format(ROOT_MAPPING + "/%d/remove", account.getId()))
-                .with(user("admin@admin")))
+                .with(user(TEST_ADMIN_USERNAME)))
             .andExpect(status().isFound())
             .andExpect(redirectedUrl(ROOT_MAPPING));
     }
@@ -185,7 +189,7 @@ public class AccountControllerIT {
         account.setAmount(BigDecimal.TEN);
         account.setCurrency(Currency.getInstance("UAH"));
         account.setName("Test account");
-        account.setUser(userRepository.findOneByEmail("admin@admin"));
+        account.setUser(userRepository.findOneByEmail(TEST_ADMIN_USERNAME));
         account = accountRepository.save(account);
 
         /* add transaction to account */
@@ -198,7 +202,7 @@ public class AccountControllerIT {
 
         mockMvc.perform(
             get(String.format(ROOT_MAPPING + "/%d/remove", account.getId()))
-                .with(user("admin@admin")))
+                .with(user(TEST_ADMIN_USERNAME)))
             .andExpect(status().isFound())
             .andExpect(flash().attributeExists("message"))
             .andExpect(redirectedUrl(String.format(ROOT_MAPPING + "/%d/edit", account.getId())));
@@ -206,20 +210,20 @@ public class AccountControllerIT {
 
     @Test
     public void testEditAccountShowPageUserNotAuthorised() throws Exception {
-        mockMvc.perform(get(ROOT_MAPPING + "/1/edit"))
+        mockMvc.perform(get(ROOT_MAPPING + EDIT_ACCOUNT_1_PATH))
             .andExpect(status().isFound())
-            .andExpect(redirectedUrlPattern("http://*/login"));
+            .andExpect(redirectedUrlPattern(REDIRECT_TO_LOGIN_PAGE_URL));
     }
 
     @Ignore
     @Test
     public void testEditAccountShowPageUserAuthorised() throws Exception {
-        mockMvc.perform(get(ROOT_MAPPING + "/1/edit").with(user("admin@admin")))
+        mockMvc.perform(get(ROOT_MAPPING + EDIT_ACCOUNT_1_PATH).with(user(TEST_ADMIN_USERNAME)))
             .andExpect(status().isOk())
             .andExpect(view().name("accounts_edit"))
             .andExpect(model().attributeExists(
                 "account",
-                "accounts",
+                ACCOUNTS_VIEW_NAME,
                 "balance",
                 "quantityOfTransactions")
             );
@@ -227,15 +231,15 @@ public class AccountControllerIT {
 
     @Test
     public void testDoEditAccountUserNotAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/edit"))
+        mockMvc.perform(post(ROOT_MAPPING + EDIT_ACCOUNT_1_PATH))
             .andExpect(status().isForbidden());
     }
 
     @Ignore
     @Test
     public void testDoEditAccountWithValidDataUserAuthorised() throws Exception {
-        mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
-            .with(user("admin@admin"))
+        mockMvc.perform(post(ROOT_MAPPING + EDIT_ACCOUNT_1_PATH)
+            .with(user(TEST_ADMIN_USERNAME))
             .with(csrf())
             .param("name", "Hello")
         )
@@ -252,13 +256,13 @@ public class AccountControllerIT {
     @Test
     public void testTransferTransactionsUserAuthorised() throws Exception {
         mockMvc.perform(post(ROOT_MAPPING + "/transfer")
-            .with(user("admin@admin"))
+            .with(user(TEST_ADMIN_USERNAME))
             .with(csrf())
             .param("fromAccount", "1")
             .param("toAccount", "2")
         )
             .andExpect(status().isFound())
             .andExpect(model().attributeExists("fromId"))
-            .andExpect(redirectedUrl(ROOT_MAPPING + "/1/edit"));
+            .andExpect(redirectedUrl(ROOT_MAPPING + EDIT_ACCOUNT_1_PATH));
     }
 }

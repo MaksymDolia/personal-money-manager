@@ -41,7 +41,15 @@ import org.springframework.web.context.WebApplicationContext;
 @Transactional
 public class TransactionControllerIT {
 
-  private static String ROOT_MAPPING = "/app/transactions";
+  private static final String TEST_ADMIN_USERNAME = "admin@admin";
+  private static final String ROOT_MAPPING = "/app/transactions";
+  private static final String ADD_TRANSACTION_PATH = "/add_transaction";
+  private static final String OPERATION_PARAM = "operation";
+  private static final String ACCOUNT_PARAM = "account";
+  private static final String AMOUNT_PARAM = "amount";
+  private static final String CURRENCY_PARAM = "currency";
+  private static final String TRANSACTIONS_EDIT_VIEW_NAME = "transactions_edit";
+  public static final String EDIT_TRANSACTION_1_PATH = "/1/edit";
 
   @Autowired
   private WebApplicationContext wac;
@@ -52,7 +60,7 @@ public class TransactionControllerIT {
   private MockMvc mockMvc;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     mockMvc = MockMvcBuilders.webAppContextSetup(wac).addFilter(filterChainProxy).build();
   }
 
@@ -65,7 +73,7 @@ public class TransactionControllerIT {
 
   @Test
   public void testTransactionsUserAuthorised() throws Exception {
-    mockMvc.perform(get(ROOT_MAPPING).with(user("admin@admin")))
+    mockMvc.perform(get(ROOT_MAPPING).with(user(TEST_ADMIN_USERNAME)))
         .andExpect(status().isOk())
         .andExpect(view().name("transactions"))
         .andExpect(model().attributeExists(
@@ -78,20 +86,20 @@ public class TransactionControllerIT {
 
   @Test
   public void testAddTransactionUserNotAuthorised() throws Exception {
-    mockMvc.perform(post(ROOT_MAPPING + "/add_transaction"))
+    mockMvc.perform(post(ROOT_MAPPING + ADD_TRANSACTION_PATH))
         .andExpect(status().isForbidden());
   }
 
   @Ignore
   @Test
   public void testAddTransactionWithValidDataUserAuthorised() throws Exception {
-    mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
-        .with(user("admin@admin"))
+    mockMvc.perform(post(ROOT_MAPPING + ADD_TRANSACTION_PATH)
+        .with(user(TEST_ADMIN_USERNAME))
         .with(csrf())
-        .param("operation", "INCOME")
-        .param("account", "1")
-        .param("amount", "10")
-        .param("currency", "UAH")
+        .param(OPERATION_PARAM, "INCOME")
+        .param(ACCOUNT_PARAM, "1")
+        .param(AMOUNT_PARAM, "10")
+        .param(CURRENCY_PARAM, "UAH")
     )
         .andExpect(status().isFound())
         .andExpect(redirectedUrl(ROOT_MAPPING));
@@ -100,21 +108,21 @@ public class TransactionControllerIT {
   @Ignore("Need to check validation rules for Transaction entity.")
   @Test
   public void testAddTransactionWithNotValidDataUserAuthorised() throws Exception {
-    mockMvc.perform(post(ROOT_MAPPING + "/add_transaction")
-        .with(user("admin@admin"))
+    mockMvc.perform(post(ROOT_MAPPING + ADD_TRANSACTION_PATH)
+        .with(user(TEST_ADMIN_USERNAME))
         .with(csrf())
-        .param("operation", "")
-        .param("account", "1")
-        .param("amount", "100")
-        .param("currency", "UAH")
+        .param(OPERATION_PARAM, "")
+        .param(ACCOUNT_PARAM, "1")
+        .param(AMOUNT_PARAM, "100")
+        .param(CURRENCY_PARAM, "UAH")
         .param("category", "")
         .param("date", "2015-12-02")
     )
         .andExpect(status().isOk())
-        .andExpect(view().name("transactions_edit"))
+        .andExpect(view().name(TRANSACTIONS_EDIT_VIEW_NAME))
         .andExpect(model().hasErrors())
         .andExpect(model().errorCount(1))
-        .andExpect(model().attributeHasFieldErrors("currency"));
+        .andExpect(model().attributeHasFieldErrors(CURRENCY_PARAM));
   }
 
   @Test
@@ -127,7 +135,7 @@ public class TransactionControllerIT {
   @Test
   public void testRemoveTransactionUserAuthorised() throws Exception {
     mockMvc.perform(post(ROOT_MAPPING + "/1/remove")
-        .with(user("admin@admin"))
+        .with(user(TEST_ADMIN_USERNAME))
         .with(csrf())
     )
         .andExpect(status().isFound())
@@ -136,7 +144,7 @@ public class TransactionControllerIT {
 
   @Test
   public void testShowEditTransactionPageUserNotAuthorised() throws Exception {
-    mockMvc.perform(get(ROOT_MAPPING + "/1/edit"))
+    mockMvc.perform(get(ROOT_MAPPING + EDIT_TRANSACTION_1_PATH))
         .andExpect(status().isFound())
         .andExpect(redirectedUrlPattern("http://*/login"));
   }
@@ -144,26 +152,26 @@ public class TransactionControllerIT {
   @Ignore
   @Test
   public void testShowEditTransactionPageUserAuthorised() throws Exception {
-    mockMvc.perform(get(ROOT_MAPPING + "/1/edit").with(user("admin@admin")))
+    mockMvc.perform(get(ROOT_MAPPING + EDIT_TRANSACTION_1_PATH).with(user(TEST_ADMIN_USERNAME)))
         .andExpect(status().isOk())
-        .andExpect(view().name("transactions_edit"));
+        .andExpect(view().name(TRANSACTIONS_EDIT_VIEW_NAME));
   }
 
   @Test
   public void testDoEditTransactionUserNotAuthorised() throws Exception {
-    mockMvc.perform(post(ROOT_MAPPING + "/1/edit"))
+    mockMvc.perform(post(ROOT_MAPPING + EDIT_TRANSACTION_1_PATH))
         .andExpect(status().isForbidden());
   }
 
   @Ignore
   @Test
   public void testDoEditTransactionWithValidDataUserAuthorised() throws Exception {
-    mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
-        .with(user("admin@admin"))
+    mockMvc.perform(post(ROOT_MAPPING + EDIT_TRANSACTION_1_PATH)
+        .with(user(TEST_ADMIN_USERNAME))
         .with(csrf())
-        .param("amount", "546")
-        .param("operation", "INCOME")
-        .param("account", "1")
+        .param(AMOUNT_PARAM, "546")
+        .param(OPERATION_PARAM, "INCOME")
+        .param(ACCOUNT_PARAM, "1")
     )
         .andExpect(model().hasNoErrors())
         .andExpect(status().isFound())
@@ -173,13 +181,13 @@ public class TransactionControllerIT {
   @Ignore
   @Test
   public void testDoEditTransactionWithNotValidDataUserAuthorised() throws Exception {
-    mockMvc.perform(post(ROOT_MAPPING + "/1/edit")
-        .with(user("admin@admin"))
+    mockMvc.perform(post(ROOT_MAPPING + EDIT_TRANSACTION_1_PATH)
+        .with(user(TEST_ADMIN_USERNAME))
         .with(csrf())
-        .param("amount", "")
+        .param(AMOUNT_PARAM, "")
     )
         .andExpect(model().hasErrors())
         .andExpect(status().isOk())
-        .andExpect(view().name("transactions_edit"));
+        .andExpect(view().name(TRANSACTIONS_EDIT_VIEW_NAME));
   }
 }

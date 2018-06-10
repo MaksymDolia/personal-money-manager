@@ -96,8 +96,7 @@ function validateRegistrationForm() {
           }
         }
       });
-};
-
+}
 // function for validation for form-category-add
 function validateCategoryAddForm() {
   $(".form-category-add").validate(
