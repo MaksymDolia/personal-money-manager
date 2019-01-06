@@ -1,4 +1,20 @@
 language: java
 sudo: false # faster builds
+install: true
 
-script: "mvn clean verify -U"
+addons:
+  sonarcloud:
+    organization: "maksymdolia-github"
+    token:
+      secure: "63dc874ec5c64e6cd8474a50652af1150172058c"
+
+jdk:
+  - oraclejdk8
+
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
