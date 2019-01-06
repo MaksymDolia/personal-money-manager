@@ -1,6 +1,7 @@
 package me.dolia.pmm.support;
 
 import java.beans.PropertyEditorSupport;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.service.CategoryService;
 
@@ -9,13 +10,10 @@ import me.dolia.pmm.service.CategoryService;
  *
  * @author Maksym Dolia
  */
+@RequiredArgsConstructor
 public class CategoryEditor extends PropertyEditorSupport {
 
   private final CategoryService categoryService;
-
-  public CategoryEditor(CategoryService categoryService) {
-    this.categoryService = categoryService;
-  }
 
   @Override
   public void setAsText(String text) {

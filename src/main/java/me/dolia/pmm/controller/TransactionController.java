@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
@@ -15,7 +16,6 @@ import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
 import me.dolia.pmm.support.AccountEditor;
 import me.dolia.pmm.support.CategoryEditor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,20 +35,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping("/app/transactions")
+@RequiredArgsConstructor
 public class TransactionController {
 
-  public static final String TRANSACTIONS_EDIT_VIEW_NAME = "transactions_edit";
+  private static final String TRANSACTIONS_EDIT_VIEW_NAME = "transactions_edit";
   private static final String REDIRECT_TO_TRANSACTIONS = "redirect:/app/transactions";
   private static final String TRANSACTIONS = "transactions";
 
-  @Autowired
-  private AccountService accountService;
-
-  @Autowired
-  private TransactionService transactionService;
-
-  @Autowired
-  private CategoryService categoryService;
+  private final AccountService accountService;
+  private final TransactionService transactionService;
+  private final CategoryService categoryService;
 
   /**
    * Binds the model attribute with the corresponding java object.

@@ -1,6 +1,7 @@
 package me.dolia.pmm.support;
 
 import java.beans.PropertyEditorSupport;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.service.AccountService;
 
@@ -9,13 +10,10 @@ import me.dolia.pmm.service.AccountService;
  *
  * @author Maksym Dolia
  */
+@RequiredArgsConstructor
 public class AccountEditor extends PropertyEditorSupport {
 
   private final AccountService accountService;
-
-  public AccountEditor(AccountService accountService) {
-    this.accountService = accountService;
-  }
 
   @Override
   public void setAsText(String text) {

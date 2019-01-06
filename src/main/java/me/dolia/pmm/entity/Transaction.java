@@ -12,6 +12,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -20,6 +24,10 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author Maksym Dolia
  */
 @Entity
+@Data
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@EqualsAndHashCode(of = "id")
 public class Transaction {
 
   @Id
@@ -56,119 +64,5 @@ public class Transaction {
 
   public Transaction() {
     //for JPA
-  }
-
-  /**
-   * Creates a new instance, copy of given one.
-   *
-   * @param copyTransaction transaction copy from
-   */
-  public Transaction(Transaction copyTransaction) {
-    this.setAccount(copyTransaction.getAccount());
-    this.setAmount(copyTransaction.getAmount());
-    this.setCategory(copyTransaction.getCategory());
-    this.setComment(copyTransaction.getComment());
-    this.setCurrency(copyTransaction.getCurrency());
-    this.setDate(copyTransaction.getDate());
-    this.setOperation(copyTransaction.getOperation());
-    this.setTransferAccount(copyTransaction.getTransferAccount());
-    this.setTransferAmount(copyTransaction.getTransferAmount());
-    this.setTransferCurrency(copyTransaction.getTransferCurrency());
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public BigDecimal getAmount() {
-    return amount;
-  }
-
-  public void setAmount(BigDecimal ammountFrom) {
-    this.amount = ammountFrom;
-  }
-
-  public Currency getCurrency() {
-    return currency;
-  }
-
-  public void setCurrency(Currency currencyFrom) {
-    this.currency = currencyFrom;
-  }
-
-  public BigDecimal getTransferAmount() {
-    return transferAmount;
-  }
-
-  public void setTransferAmount(BigDecimal amountTo) {
-    this.transferAmount = amountTo;
-  }
-
-  public Currency getTransferCurrency() {
-    return transferCurrency;
-  }
-
-  public void setTransferCurrency(Currency currencyTo) {
-    this.transferCurrency = currencyTo;
-  }
-
-  public Date getDate() {
-    return date;
-  }
-
-  public void setDate(Date date) {
-    this.date = date;
-  }
-
-  public String getComment() {
-    return comment;
-  }
-
-  public void setComment(String comment) {
-    this.comment = comment;
-  }
-
-  public Operation getOperation() {
-    return operation;
-  }
-
-  public void setOperation(Operation operation) {
-    this.operation = operation;
-  }
-
-  public Category getCategory() {
-    return category;
-  }
-
-  public void setCategory(Category category) {
-    this.category = category;
-  }
-
-  public Account getAccount() {
-    return account;
-  }
-
-  public void setAccount(Account account) {
-    this.account = account;
-  }
-
-  public Account getTransferAccount() {
-    return transferAccount;
-  }
-
-  public void setTransferAccount(Account transferAccount) {
-    this.transferAccount = transferAccount;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
   }
 }

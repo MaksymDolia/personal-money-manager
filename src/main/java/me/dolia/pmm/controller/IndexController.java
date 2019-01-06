@@ -4,9 +4,9 @@ import java.security.Principal;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.User;
 import me.dolia.pmm.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +25,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author Maksym Dolia
  */
 @Controller
+@RequiredArgsConstructor
 public class IndexController {
 
   private static final String REDIRECT_TO_APP = "redirect:/app";
 
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
 
   @ModelAttribute("user")
   public User createUser() {

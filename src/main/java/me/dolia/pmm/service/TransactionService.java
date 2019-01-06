@@ -2,6 +2,7 @@ package me.dolia.pmm.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
@@ -11,7 +12,6 @@ import me.dolia.pmm.form.ShowTransactionForm;
 import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.method.P;
@@ -26,16 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Maksym Dolia
  */
 @Service
+@RequiredArgsConstructor
 public class TransactionService {
 
-  @Autowired
-  private TransactionRepository transactionRepository;
-
-  @Autowired
-  private AccountRepository accountRepository;
-
-  @Autowired
-  private UserRepository userRepository;
+  private final TransactionRepository transactionRepository;
+  private final AccountRepository accountRepository;
+  private final UserRepository userRepository;
 
   /**
    * Deletes given transaction.
@@ -183,7 +179,7 @@ public class TransactionService {
   @Transactional
   public void editAndSave(Transaction changedTransaction, Transaction originalTransaction) {
     this.resetTransaction(originalTransaction);
-    originalTransaction = new Transaction(changedTransaction);
+    originalTransaction = changedTransaction.toBuilder().build();
     save(originalTransaction);
     processTransaction(originalTransaction);
   }

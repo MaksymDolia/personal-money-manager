@@ -1,6 +1,7 @@
 package me.dolia.pmm.service;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
@@ -8,7 +9,6 @@ import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.CategoryRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,16 +20,12 @@ import org.springframework.stereotype.Service;
  * @author Maksym Dolia
  */
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-  @Autowired
-  private CategoryRepository categoryRepository;
-
-  @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private TransactionRepository transactionRepository;
+  private final CategoryRepository categoryRepository;
+  private final UserRepository userRepository;
+  private final TransactionRepository transactionRepository;
 
   /**
    * Looks and returns category by given id.

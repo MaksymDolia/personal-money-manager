@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
@@ -20,7 +21,6 @@ import me.dolia.pmm.repository.CategoryRepository;
 import me.dolia.pmm.repository.RoleRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,27 +32,17 @@ import org.springframework.stereotype.Service;
  * @author Maksym Dolia
  */
 @Service
+@RequiredArgsConstructor
 public class InitDbService {
 
   private static final Currency UAH = Currency.getInstance("UAH");
 
-  @Autowired
-  private ApplicationContext context;
-
-  @Autowired
-  private RoleRepository roleRepository;
-
-  @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private AccountRepository accountRepository;
-
-  @Autowired
-  private CategoryRepository categoryRepository;
-
-  @Autowired
-  private TransactionRepository transactionRepository;
+  private final ApplicationContext context;
+  private final RoleRepository roleRepository;
+  private final UserRepository userRepository;
+  private final AccountRepository accountRepository;
+  private final CategoryRepository categoryRepository;
+  private final TransactionRepository transactionRepository;
 
   /**
    * Stores to persistence layer initial data.
