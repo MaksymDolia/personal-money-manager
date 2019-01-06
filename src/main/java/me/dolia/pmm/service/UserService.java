@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
@@ -16,7 +17,6 @@ import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.CategoryRepository;
 import me.dolia.pmm.repository.RoleRepository;
 import me.dolia.pmm.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,22 +31,14 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Maksym Dolia
  */
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-  @Autowired
-  private ApplicationContext context;
-
-  @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private RoleRepository roleRepository;
-
-  @Autowired
-  private AccountRepository accountRepository;
-
-  @Autowired
-  private CategoryRepository categoryRepository;
+  private final ApplicationContext context;
+  private final UserRepository userRepository;
+  private final RoleRepository roleRepository;
+  private final AccountRepository accountRepository;
+  private final CategoryRepository categoryRepository;
 
   /**
    * Stores given user.

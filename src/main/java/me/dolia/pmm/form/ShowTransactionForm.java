@@ -3,12 +3,14 @@ package me.dolia.pmm.form;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import lombok.Data;
 
 /**
  * Data Transfer Object (DTO) to deal with {@code Transaction} entity data.
  *
  * @author Maksym Dolia
  */
+@Data
 public class ShowTransactionForm {
 
   private Date fromDate;
@@ -24,37 +26,4 @@ public class ShowTransactionForm {
     endCalendar.set(Calendar.DAY_OF_MONTH, endCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
     toDate = endCalendar.getTime();
   }
-
-  public Date getFromDate() {
-    return fromDate;
-  }
-
-  public void setFromDate(Date fromDate) {
-    this.fromDate = fromDate;
-  }
-
-  public Date getToDate() {
-    return toDate;
-  }
-
-  public void setToDate(Date toDate) {
-    this.toDate = toDate;
-  }
-
-  public SortTransaction getSortBy() {
-    return sortBy;
-  }
-
-  public void setSortBy(SortTransaction sortBy) {
-    this.sortBy = sortBy;
-  }
-
-  public String getComment() {
-    return comment;
-  }
-
-  public void setComment(String comment) {
-    this.comment = comment;
-  }
-
 }

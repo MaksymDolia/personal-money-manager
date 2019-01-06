@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
@@ -16,7 +17,6 @@ import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
 import me.dolia.pmm.support.AccountEditor;
 import me.dolia.pmm.support.CategoryEditor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -39,22 +39,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping("/app/accounts")
+@RequiredArgsConstructor
 public class AccountController {
 
   private static final String REDIRECT_TO_ACCOUNTS = "redirect:/app/accounts";
   private static final String ACCOUNTS = "accounts";
 
-  @Autowired
-  private ApplicationContext context;
-
-  @Autowired
-  private AccountService accountService;
-
-  @Autowired
-  private TransactionService transactionService;
-
-  @Autowired
-  private CategoryService categoryService;
+  private final ApplicationContext context;
+  private final AccountService accountService;
+  private final TransactionService transactionService;
+  private final CategoryService categoryService;
 
   /**
    * Binds the model attribute with the corresponding java object.

@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Entity class, represents user's role.
@@ -13,6 +15,8 @@ import javax.persistence.ManyToMany;
  * @author Maksym Dolia
  */
 @Entity
+@Data
+@EqualsAndHashCode(of = "id")
 public class Role {
 
   @Id
@@ -31,41 +35,5 @@ public class Role {
   public void setUsers(List<User> users) {
     this.users.clear();
     this.users.addAll(users);
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    Role role = (Role) o;
-
-    return !(id != null ? !id.equals(role.id) : role.id != null);
-
-  }
-
-  @Override
-  public int hashCode() {
-    return id != null ? id.hashCode() : 0;
   }
 }

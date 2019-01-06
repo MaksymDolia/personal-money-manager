@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -14,6 +16,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author Maksym Dolia
  */
 @Entity
+@Data
+@EqualsAndHashCode(of = "id")
 public class Category {
 
   @Id
@@ -29,59 +33,4 @@ public class Category {
 
   @ManyToOne
   private User user;
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Operation getOperation() {
-    return operation;
-  }
-
-  public void setOperation(Operation operation) {
-    this.operation = operation;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + id;
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    Category other = (Category) obj;
-    return id == other.id;
-  }
 }
