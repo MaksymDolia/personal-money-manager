@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import me.dolia.pmm.annotation.UniqueEmail;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -26,6 +27,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "app_user")
 @Data
 @EqualsAndHashCode(of = "id")
+@ToString(of = "id")
 public class User {
 
   @Id

@@ -1,8 +1,6 @@
 package me.dolia.pmm.controller;
 
 import java.security.Principal;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.User;
@@ -15,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -38,7 +35,7 @@ public class IndexController {
     return new User();
   }
 
-  @RequestMapping("/index")
+  @GetMapping("/index")
   public String index() {
     if (loggedInUser()) {
       return REDIRECT_TO_APP;
@@ -46,7 +43,7 @@ public class IndexController {
     return "index";
   }
 
-  @RequestMapping("/login")
+  @GetMapping("/login")
   public String login() {
     if (loggedInUser()) {
       return REDIRECT_TO_APP;
@@ -74,18 +71,16 @@ public class IndexController {
     return "redirect:/signin";
   }
 
-  @RequestMapping("/profile")
+  @GetMapping("/profile")
   public String profile() {
     return "profile";
   }
 
-  @RequestMapping("/profile/delete_profile")
-  public String deleteProfile(HttpServletRequest request, Principal principal,
-      RedirectAttributes attr)
-      throws ServletException {
+  @GetMapping("/profile/delete_profile")
+  public String deleteProfile(Principal principal, RedirectAttributes attr) {
     String email = principal.getName();
     userService.deleteByEmail(email);
-    request.logout();
+    SecurityContextHolder.clearContext();
     attr.addFlashAttribute("message", "delete_profile_success");
     return "redirect:/";
   }
@@ -96,22 +91,17 @@ public class IndexController {
    * @param email email to check
    * @return {@code true} if email is not yet used, {@code false} otherwise
    */
-  @RequestMapping("/signin/available_email")
+  @GetMapping("/signin/available_email")
   @ResponseBody
   public String availableEmail(@RequestParam String email) {
-    Boolean available = userService.findOneByEmail(email) == null;
-    return available.toString();
+    boolean available = userService.findOneByEmail(email) == null;
+    return Boolean.toString(available);
   }
 
 
-  @RequestMapping("/404")
+  @GetMapping("/404")
   public String pageNotFound() {
     return "404";
-  }
-
-  @RequestMapping("/error")
-  public String errorPage() {
-    return "error";
   }
 
   private boolean loggedInUser() {

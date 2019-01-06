@@ -8,7 +8,7 @@
                 <p>Registration is successful!</p>
             </div>
         </c:if>
-        <form:form commandName="user" cssClass="registration-form">
+        <form:form modelAttribute="user" cssClass="registration-form">
             <h2>Please sign in</h2>
             <div class="form-group">
                 <form:label path="email" for="email" class="sr-only">Email address</form:label>

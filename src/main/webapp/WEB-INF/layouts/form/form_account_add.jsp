@@ -2,7 +2,7 @@
          pageEncoding="UTF-8" %>
 <%@ include file="../taglib.jsp" %>
 <spring:url value="/app/accounts/add_account" var="form_account_add_action"/>
-<form:form commandName="account" method="POST"
+<form:form modelAttribute="account" method="POST"
            cssClass="form-account-add" action="${form_account_add_action}">
     <div class="form-group">
         <label class="contol-label" for="modal-name">Account Name</label>

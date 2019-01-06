@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -28,6 +29,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @EqualsAndHashCode(of = "id")
+@ToString(of = "id")
 public class Transaction {
 
   @Id

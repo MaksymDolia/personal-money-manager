@@ -27,7 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
- * Fullfills database with initial data.
+ * Fulfills database with initial data.
  *
  * @author Maksym Dolia
  */
@@ -99,7 +99,7 @@ public class InitDbService {
       transaction1.setAccount(walletAccount);
       transaction1.setAmount(new BigDecimal(50));
       transaction1.setCurrency(UAH);
-      transaction1.setCategory(categoryRepository.findOne(3));
+      transaction1.setCategory(categoryRepository.findById(9).get());
       transaction1.setOperation(Operation.EXPENSE);
       transaction1.setComment("McDonalds");
       transaction1.setUser(user);
@@ -112,7 +112,7 @@ public class InitDbService {
       transaction2.setAccount(bankAccount);
       transaction2.setAmount(new BigDecimal(45));
       transaction2.setCurrency(UAH);
-      transaction2.setCategory(categoryRepository.findOne(7));
+      transaction2.setCategory(categoryRepository.findById(10).get());
       transaction2.setOperation(Operation.INCOME);
       transaction2.setComment("Festo");
       transaction2.setUser(user);
