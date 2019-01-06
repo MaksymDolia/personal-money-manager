@@ -13,10 +13,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -50,7 +51,7 @@ public class CategoryController {
     return CATEGORIES;
   }
 
-  @RequestMapping(value = "/add_category", method = RequestMethod.POST)
+  @PostMapping(value = "/add_category")
   public String addCategory(Model model, @Valid @ModelAttribute Category category,
       BindingResult result,
       Principal principal) {
@@ -76,7 +77,7 @@ public class CategoryController {
     return REDIRECT_TO_CATEGORIES;
   }
 
-  @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+  @GetMapping(value = "/{id}/edit")
   public String editCategory(@PathVariable("id") int id, Model model) {
     Category category = categoryService.findOne(id);
     long quantityOfTransactions = transactionService.countTransactionsByCategoryId(id);
@@ -87,14 +88,14 @@ public class CategoryController {
     return "categories_edit";
   }
 
-  @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
+  @PostMapping(value = "/{id}/edit")
   public String editCategory(@Valid @ModelAttribute Category category, @PathVariable("id") int id) {
     Category existingCategory = categoryService.findOne(id);
     categoryService.editCategory(existingCategory, category);
     return REDIRECT_TO_CATEGORIES;
   }
 
-  @RequestMapping(value = "/transfer", method = RequestMethod.POST)
+  @PostMapping(value = "/transfer")
   public String transferTransactions(@RequestParam("toCategory") int toId,
       @RequestParam("fromCategory") int fromId,
       RedirectAttributes attr) {
