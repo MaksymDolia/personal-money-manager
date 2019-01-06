@@ -58,7 +58,7 @@ public class AccountService {
    */
   @PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")
   public Account findOne(int id) {
-    return accountRepository.findOne(id);
+    return accountRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Account with ID %d was not found", id)));
   }
 
   /**

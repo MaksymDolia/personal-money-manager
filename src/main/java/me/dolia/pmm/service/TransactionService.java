@@ -52,7 +52,8 @@ public class TransactionService {
    */
   @PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")
   public Transaction findOne(Long id) {
-    return transactionRepository.findOne(id);
+    return transactionRepository.findById(id).orElseThrow(
+        () -> new NotFoundException(String.format("Transaction with ID %d was not found.", id)));
   }
 
   /**
@@ -186,7 +187,7 @@ public class TransactionService {
 
   /* Performs all necessary operation to persist transaction */
   private void processTransaction(Transaction transaction) {
-    Account account = accountRepository.findOne(transaction.getAccount().getId());
+    Account account = accountRepository.findById(transaction.getAccount().getId()).get();
     BigDecimal amount = transaction.getAmount();
     Operation operation = transaction.getOperation();
 
@@ -201,7 +202,7 @@ public class TransactionService {
         break;
 
       case TRANSFER:
-        Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
+        Account accountTo = accountRepository.findById(transaction.getTransferAccount().getId()).get();
         if (accountTo.equals(account)) {
           break;
         }
@@ -220,7 +221,7 @@ public class TransactionService {
       Resets transaction. Similar to operation 'undo'.
    */
   private void resetTransaction(Transaction transaction) {
-    Account account = accountRepository.findOne(transaction.getAccount().getId());
+    Account account = accountRepository.findById(transaction.getAccount().getId()).get();
     BigDecimal amount = transaction.getAmount();
     Operation operation = transaction.getOperation();
     switch (operation) {
@@ -234,7 +235,7 @@ public class TransactionService {
         break;
 
       case TRANSFER:
-        Account accountTo = accountRepository.findOne(transaction.getTransferAccount().getId());
+        Account accountTo = accountRepository.findById(transaction.getTransferAccount().getId()).get();
         if (accountTo.equals(account)) {
           break;
         }

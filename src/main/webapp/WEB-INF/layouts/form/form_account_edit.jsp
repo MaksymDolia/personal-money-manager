@@ -2,7 +2,7 @@
          pageEncoding="UTF-8" %>
 <%@ include file="../taglib.jsp" %>
 <spring:url value="/app/accounts/${account.id}/edit" var="form_account_edit_action"/>
-<form:form commandName="account" method="POST"
+<form:form modelAttribute="account" method="POST"
            cssClass="form-account-edit"
            action="${form_account_edit_action}">
     <div class="form-group">

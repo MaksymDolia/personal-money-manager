@@ -16,7 +16,7 @@
 
 
         </c:if>
-        <form:form commandName="user">
+        <form:form modelAttribute="user">
             <h2>Please log in</h2>
             <div class="form-group">
                 <form:label path="email" for="email" class="sr-only">Email address</form:label>

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -18,6 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Entity
 @Data
 @EqualsAndHashCode(of = "id")
+@ToString(of = "id")
 public class Category {
 
   @Id

@@ -95,7 +95,7 @@ public class UserService {
       category.setUser(user);
       return category;
     }).collect(toList());
-    categoryRepository.save(expensesCategories);
+    categoryRepository.saveAll(expensesCategories);
 
     //Create categories for incomes
     Iterable<Category> incomeCategories = IntStream.range(6,8).mapToObj(i -> {
@@ -105,7 +105,7 @@ public class UserService {
       category.setUser(user);
       return category;
     }).collect(toList());
-    categoryRepository.save(incomeCategories);
+    categoryRepository.saveAll(incomeCategories);
   }
 
   /**

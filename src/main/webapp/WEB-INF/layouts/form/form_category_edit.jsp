@@ -2,7 +2,7 @@
          pageEncoding="UTF-8" %>
 <%@ include file="../taglib.jsp" %>
 <spring:url value="/app/categories/${category.id}/edit" var="form_category_edit_action"/>
-<form:form commandName="category" method="POST"
+<form:form modelAttribute="category" method="POST"
            cssClass="form-account-edit"
            action="${form_category_edit_action}">
     <fieldset>

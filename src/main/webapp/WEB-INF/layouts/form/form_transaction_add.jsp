@@ -3,7 +3,7 @@
 <%@ include file="../taglib.jsp" %>
 <spring:url value="/app/transactions/add_transaction" var="form_transaction_add_action"/>
 <div class="panel panel-default" id="transaction_box">
-    <form:form commandName="transaction" cssClass="form-horizontal" id="form-transaction"
+    <form:form modelAttribute="transaction" cssClass="form-horizontal" id="form-transaction"
                method="POST" action="${form_transaction_add_action}">
         <div class="panel-body">
 

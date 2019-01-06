@@ -35,7 +35,7 @@ public class CategoryService {
    */
   @PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")
   public Category findOne(Integer id) {
-    return categoryRepository.findOne(id);
+    return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Category with ID %d was not found.", id)));
   }
 
   /**

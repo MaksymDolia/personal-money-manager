@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="row">
-                    <form:form commandName="showTransactionForm" method="get"
+                    <form:form modelAttribute="showTransactionForm" method="get"
                                id="showTransactionForm" class="form-inline">
                         <div class="form-group">
                             <label for="fromDate">Transactions from </label>
