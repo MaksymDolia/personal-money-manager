@@ -18,6 +18,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +55,7 @@ public class DashboardController {
     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
   }
 
-  @RequestMapping()
+  @GetMapping
   public String app(Model model, Principal principal) {
     String email = principal.getName();
     List<Account> accounts = accountService.findAllByUserEmail(email);

@@ -174,7 +174,7 @@ public class AccountControllerIT {
         account = accountRepository.save(account);
 
         mockMvc.perform(
-            get(String.format(ROOT_MAPPING + "/%d/remove", account.getId()))
+            get(String.format("%s/%d/remove", ROOT_MAPPING, account.getId()))
                 .with(user(TEST_ADMIN_USERNAME)))
             .andExpect(status().isFound())
             .andExpect(redirectedUrl(ROOT_MAPPING));
@@ -201,11 +201,11 @@ public class AccountControllerIT {
         transactionRepository.save(transaction);
 
         mockMvc.perform(
-            get(String.format(ROOT_MAPPING + "/%d/remove", account.getId()))
+            get(String.format("%s/%d/remove", ROOT_MAPPING, account.getId()))
                 .with(user(TEST_ADMIN_USERNAME)))
             .andExpect(status().isFound())
             .andExpect(flash().attributeExists("message"))
-            .andExpect(redirectedUrl(String.format(ROOT_MAPPING + "/%d/edit", account.getId())));
+            .andExpect(redirectedUrl(String.format("%s/%d/edit", ROOT_MAPPING, account.getId())));
     }
 
     @Test

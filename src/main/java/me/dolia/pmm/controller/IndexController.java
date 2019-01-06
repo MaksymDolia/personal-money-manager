@@ -12,9 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -53,7 +54,7 @@ public class IndexController {
     return "login";
   }
 
-  @RequestMapping(value = "/signin", method = RequestMethod.GET)
+  @GetMapping(value = "/signin")
   public String signIn() {
     if (loggedInUser()) {
       return REDIRECT_TO_APP;
@@ -61,7 +62,7 @@ public class IndexController {
     return "signin";
   }
 
-  @RequestMapping(value = "/signin", method = RequestMethod.POST)
+  @PostMapping(value = "/signin")
   public String doSignin(@Valid @ModelAttribute("user") User user,
       BindingResult result,
       RedirectAttributes attr) {

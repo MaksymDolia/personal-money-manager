@@ -49,7 +49,7 @@ public class TransactionControllerIT {
   private static final String AMOUNT_PARAM = "amount";
   private static final String CURRENCY_PARAM = "currency";
   private static final String TRANSACTIONS_EDIT_VIEW_NAME = "transactions_edit";
-  public static final String EDIT_TRANSACTION_1_PATH = "/1/edit";
+  private static final String EDIT_TRANSACTION_1_PATH = "/1/edit";
 
   @Autowired
   private WebApplicationContext wac;

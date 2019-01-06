@@ -21,12 +21,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Controller to handle requests about transactions.
@@ -87,7 +88,7 @@ public class TransactionController {
    * @param principal authenticated user
    * @return view as string
    */
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   public String transactions(@ModelAttribute("showTransactionForm") ShowTransactionForm form,
       Model model,
       Principal principal) {
@@ -116,7 +117,7 @@ public class TransactionController {
    * @param result form's binding result
    * @return view as string, where user will be redirected
    */
-  @RequestMapping(value = "/add_transaction", method = RequestMethod.POST)
+  @PostMapping(value = "/add_transaction")
   public String addTransaction(@Valid @ModelAttribute("transaction") Transaction transaction,
       @RequestHeader(value = "referer", required = false) String referrer,
       Principal principal,
@@ -139,7 +140,7 @@ public class TransactionController {
    * @param referrer header referrer value
    * @return view as string, where user will be redirected
    */
-  @RequestMapping("/{id}/remove")
+  @PostMapping("/{id}/remove")
   public String removeTransaction(@PathVariable Long id,
       @RequestHeader(value = "referer", required = false) String referrer) {
     Transaction transaction = transactionService.findOne(id);
@@ -157,7 +158,7 @@ public class TransactionController {
    * @param model model (MVC pattern)
    * @return view as string
    */
-  @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+  @GetMapping(value = "/{id}/edit")
   public String editTransaction(@PathVariable long id, Model model) {
     Transaction transaction = transactionService.findOne(id);
     String email = transaction.getUser().getEmail();
@@ -183,7 +184,7 @@ public class TransactionController {
    * @param result form's binding result
    * @return view as string, where user will be redirected
    */
-  @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
+  @PostMapping(value = "/{id}/edit")
   public String editTransaction(@PathVariable long id,
       @Valid @ModelAttribute Transaction transaction,
       BindingResult result) {

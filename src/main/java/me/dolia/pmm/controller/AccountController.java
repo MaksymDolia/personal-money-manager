@@ -23,12 +23,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -120,7 +121,7 @@ public class AccountController {
    * @param attr redirect attributes
    * @return view as string, where user will be redirected
    */
-  @RequestMapping(value = "/add_account", method = RequestMethod.POST)
+  @PostMapping(value = "/add_account")
   public String addAccount(@Valid @ModelAttribute Account account,
       BindingResult result,
       Principal principal,
@@ -148,7 +149,7 @@ public class AccountController {
    * @param model mvc's model
    * @return view as string
    */
-  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  @GetMapping(value = "/{id}")
   public String transactions(@PathVariable("id") int accountId,
       @ModelAttribute("showTransactionForm") ShowTransactionForm form,
       Model model) {
@@ -202,7 +203,7 @@ public class AccountController {
    * @param model model
    * @return view as string
    */
-  @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+  @GetMapping(value = "/{id}/edit")
   public String editAccount(@PathVariable int id, Model model) {
 
     Account account = accountService.findOne(id);
@@ -225,7 +226,7 @@ public class AccountController {
    * @param result binding result from web form
    * @return view as string, where user will be redirected
    */
-  @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
+  @PostMapping(value = "/{id}/edit")
   public String editAccount(@Valid @ModelAttribute Account account,
       @PathVariable int id,
       BindingResult result) {
@@ -246,7 +247,7 @@ public class AccountController {
    * @param attr redirect attributes
    * @return view as string, where user will be redirected
    */
-  @RequestMapping(value = "/transfer", method = RequestMethod.POST)
+  @PostMapping(value = "/transfer")
   public String transferTransactions(@RequestParam("toAccount") int toId,
       @RequestParam("fromAccount") int fromId,
       RedirectAttributes attr) {
