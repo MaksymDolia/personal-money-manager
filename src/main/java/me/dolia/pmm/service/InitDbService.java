@@ -49,7 +49,7 @@ public class InitDbService {
    */
   @PostConstruct
   public void init() {
-    if (roleRepository.findByName("ROLE_ADMIN") == null) {
+    if (!roleRepository.findByName("ROLE_ADMIN").isPresent()) {
       Role roleUser = new Role();
       roleUser.setName("ROLE_USER");
       roleRepository.save(roleUser);
