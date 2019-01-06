@@ -1,12 +1,15 @@
 package me.dolia.pmm.service;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
@@ -51,7 +54,8 @@ public class UserService {
     PasswordEncoder encoder = new BCryptPasswordEncoder();
     user.setPassword(encoder.encode(user.getPassword()));
     List<Role> roles = new ArrayList<>();
-    roles.add(roleRepository.findByName("ROLE_USER"));
+    Optional<Role> userRole = roleRepository.findByName("ROLE_USER");
+    userRole.ifPresent(roles::add);
     user.setRoles(roles);
     userRepository.save(user);
     createDefaultAccountsAndCategoriesForNewUser(user);
@@ -84,22 +88,24 @@ public class UserService {
     accountRepository.save(walletAccount);
 
     //Create categories for expenses
-    for (int i = 1; i < 6; i++) {
+    Iterable<Category> expensesCategories = IntStream.range(1, 6).mapToObj(i -> {
       Category category = new Category();
       category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
       category.setOperation(Operation.EXPENSE);
       category.setUser(user);
-      categoryRepository.save(category);
-    }
+      return category;
+    }).collect(toList());
+    categoryRepository.save(expensesCategories);
 
     //Create categories for incomes
-    for (int i = 6; i < 8; i++) {
+    Iterable<Category> incomeCategories = IntStream.range(6,8).mapToObj(i -> {
       Category category = new Category();
       category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
       category.setOperation(Operation.INCOME);
       category.setUser(user);
-      categoryRepository.save(category);
-    }
+      return category;
+    }).collect(toList());
+    categoryRepository.save(incomeCategories);
   }
 
   /**
