@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/MaksymDolia/personal-money-manager.svg?branch=master)](https://travis-ci.com/MaksymDolia/personal-money-manager)
+
 # personal-money-manager
 Personal money manager app that helps control budget and expenses.
 
