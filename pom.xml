@@ -61,13 +61,6 @@
       <version>3.0.8</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-request-api -->
-    <dependency>
-      <groupId>org.apache.tiles</groupId>
-      <artifactId>tiles-request-api</artifactId>
-      <version>1.0.6</version>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
