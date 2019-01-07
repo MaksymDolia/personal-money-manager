@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
@@ -21,19 +20,20 @@ import me.dolia.pmm.repository.CategoryRepository;
 import me.dolia.pmm.repository.RoleRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Fulfills database with initial data.
  *
  * @author Maksym Dolia
  */
-@Service
+@Component
 @RequiredArgsConstructor
-public class InitDbService {
+public class InitialDataLoader implements CommandLineRunner {
 
   private static final Currency UAH = Currency.getInstance("UAH");
 
@@ -47,8 +47,8 @@ public class InitDbService {
   /**
    * Stores to persistence layer initial data.
    */
-  @PostConstruct
-  public void init() {
+  @Override
+  public void run(String... args) {
     if (!roleRepository.findByName("ROLE_ADMIN").isPresent()) {
       Role roleUser = new Role();
       roleUser.setName("ROLE_USER");
