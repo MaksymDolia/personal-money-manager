@@ -9,7 +9,6 @@ import me.dolia.pmm.entity.Transaction;
 import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
-import me.dolia.pmm.repository.UserRepository;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class AccountService {
 
   private final AccountRepository accountRepository;
-  private final UserRepository userRepository;
+  private final UserService userService;
   private final TransactionRepository transactionRepository;
 
   /**
@@ -44,7 +43,7 @@ public class AccountService {
    * @param email user's email
    */
   public void save(Account account, String email) {
-    User user = userRepository.findOneByEmail(email);
+    User user = userService.find(email);
     account.setUser(user);
     accountRepository.save(account);
   }

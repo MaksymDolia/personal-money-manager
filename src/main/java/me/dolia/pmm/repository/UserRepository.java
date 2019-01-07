@@ -1,5 +1,6 @@
 package me.dolia.pmm.repository;
 
+import java.util.Optional;
 import me.dolia.pmm.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
    * @param email user's email
    * @return user
    */
-  User findOneByEmail(String email);
+  Optional<User> findOneByEmail(String email);
 
   /**
    * Deletes user with given email.

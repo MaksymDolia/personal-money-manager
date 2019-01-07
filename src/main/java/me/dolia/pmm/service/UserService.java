@@ -1,6 +1,5 @@
 package me.dolia.pmm.service;
 
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 import java.math.BigDecimal;
@@ -67,9 +66,9 @@ public class UserService {
    * @param email user's email
    * @return user
    */
-  public User findOneByEmail(String email) {
-    requireNonNull(email, "email is null");
-    return userRepository.findOneByEmail(email);
+  public User find(String email) {
+    return userRepository.findOneByEmail(email).orElseThrow(
+        () -> new NotFoundException(String.format("User with email '%s' was not found", email)));
   }
 
   /**
@@ -98,7 +97,7 @@ public class UserService {
     categoryRepository.saveAll(expensesCategories);
 
     //Create categories for incomes
-    Iterable<Category> incomeCategories = IntStream.range(6,8).mapToObj(i -> {
+    Iterable<Category> incomeCategories = IntStream.range(6, 8).mapToObj(i -> {
       Category category = new Category();
       category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
       category.setOperation(Operation.INCOME);
@@ -115,7 +114,7 @@ public class UserService {
    */
   @Transactional
   @PreAuthorize("#email == authentication.name or hasRole('ADMIN')")
-  public void deleteByEmail(@P("email") String email) {
+  public void delete(@P("email") String email) {
     userRepository.deleteByEmail(email);
   }
 

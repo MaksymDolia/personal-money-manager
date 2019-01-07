@@ -79,7 +79,7 @@ public class IndexController {
   @GetMapping("/profile/delete_profile")
   public String deleteProfile(Principal principal, RedirectAttributes attr) {
     String email = principal.getName();
-    userService.deleteByEmail(email);
+    userService.delete(email);
     SecurityContextHolder.clearContext();
     attr.addFlashAttribute("message", "delete_profile_success");
     return "redirect:/";
@@ -94,7 +94,7 @@ public class IndexController {
   @GetMapping("/signin/available_email")
   @ResponseBody
   public String availableEmail(@RequestParam String email) {
-    boolean available = userService.findOneByEmail(email) == null;
+    boolean available = userService.find(email) == null;
     return Boolean.toString(available);
   }
 

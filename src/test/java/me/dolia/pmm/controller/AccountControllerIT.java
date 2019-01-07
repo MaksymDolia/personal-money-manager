@@ -141,7 +141,7 @@ public class AccountControllerIT {
   @Ignore
   @Test
   public void testTransactionsUserAuthorised() throws Exception {
-    User user = userRepository.findOneByEmail(TEST_ADMIN_USERNAME);
+    User user = userRepository.findOneByEmail(TEST_ADMIN_USERNAME).get();
     Transaction transaction = user.getTransactions().get(0);
     mockMvc.perform(get(ROOT_MAPPING + "/" + transaction.getId()).with(user(TEST_ADMIN_USERNAME)))
         .andExpect(status().isOk())
@@ -168,7 +168,7 @@ public class AccountControllerIT {
     account.setAmount(BigDecimal.TEN);
     account.setCurrency(Currency.getInstance("UAH"));
     account.setName("Test account");
-    account.setUser(userRepository.findOneByEmail(TEST_ADMIN_USERNAME));
+    account.setUser(userRepository.findOneByEmail(TEST_ADMIN_USERNAME).get());
     account = accountRepository.save(account);
 
     mockMvc.perform(
@@ -187,7 +187,7 @@ public class AccountControllerIT {
     account.setAmount(BigDecimal.TEN);
     account.setCurrency(Currency.getInstance("UAH"));
     account.setName("Test account");
-    account.setUser(userRepository.findOneByEmail(TEST_ADMIN_USERNAME));
+    account.setUser(userRepository.findOneByEmail(TEST_ADMIN_USERNAME).get());
     account = accountRepository.save(account);
 
     /* add transaction to account */
@@ -254,7 +254,7 @@ public class AccountControllerIT {
   @Ignore
   @Test
   public void testTransferTransactionsUserAuthorised() throws Exception {
-    User user = userRepository.findOneByEmail(TEST_ADMIN_USERNAME);
+    User user = userRepository.findOneByEmail(TEST_ADMIN_USERNAME).get();
     List<Account> accounts = user.getAccounts();
 
     mockMvc.perform(post(ROOT_MAPPING + "/transfer")

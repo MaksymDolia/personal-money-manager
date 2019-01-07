@@ -131,7 +131,7 @@ public class IndexControllerIT {
         .andExpect(model().hasErrors())
         .andExpect(model().attributeHasErrors("user"));
 
-    User storedUser = userRepo.findOneByEmail(email);
+    User storedUser = userRepo.findOneByEmail(email).get();
     assertNull(storedUser);
   }
 
@@ -150,7 +150,7 @@ public class IndexControllerIT {
         .andExpect(flash().attributeExists("success"))
         .andExpect(redirectedUrl(SIGNIN_PATH));
 
-    User storedUser = userRepo.findOneByEmail(email);
+    User storedUser = userRepo.findOneByEmail(email).get();
     assertNotNull(storedUser);
   }
 

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.UserRepository;
 import org.junit.Rule;
@@ -14,7 +15,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -31,27 +32,27 @@ public class UserServiceTest {
   private UserService userService;
 
   @Test
-  public void shouldGetUserByEmail() {
+  public void getUserByEmail() {
     User user = createUser(EMAIL);
-    when(userRepository.findOneByEmail(EMAIL)).thenReturn(user);
+    when(userRepository.findOneByEmail(EMAIL)).thenReturn(Optional.of(user));
 
-    User result = userService.findOneByEmail(EMAIL);
+    User result = userService.find(EMAIL);
 
     assertNotNull(result);
     assertEquals(user, result);
   }
 
   @Test
-  public void shouldThrowExceptionOnFindOneBIfEmailIsNull() {
-    thrown.expect(NullPointerException.class);
-    thrown.expectMessage("email is null");
+  public void throwExceptionOnFindOneByEmailIfUserDoesNotExist() {
+    thrown.expect(NotFoundException.class);
+    thrown.expectMessage("User with email 'null' was not found");
 
-    userService.findOneByEmail(null);
+    userService.find(null);
   }
 
   @Test
-  public void shouldDeleteUser() {
-    userService.deleteByEmail(EMAIL);
+  public void deleteUser() {
+    userService.delete(EMAIL);
 
     verify(userRepository, times(1)).deleteByEmail(EMAIL);
   }

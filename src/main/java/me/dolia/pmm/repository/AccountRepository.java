@@ -20,7 +20,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
    * @return total balance
    */
   @Query("select sum(amount) from Account a where a.user.email = :email")
-  Double getSumAmountByUserEmail(@Param("email") String email);
+  double getSumAmountByUserEmail(@Param("email") String email);
 
   /**
    * Populates all user's accounts.
