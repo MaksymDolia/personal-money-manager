@@ -71,11 +71,6 @@ public class IndexController {
     return "redirect:/signin";
   }
 
-  @GetMapping("/profile")
-  public String profile() {
-    return "profile";
-  }
-
   @GetMapping("/profile/delete_profile")
   public String deleteProfile(Principal principal, RedirectAttributes attr) {
     String email = principal.getName();
@@ -96,12 +91,6 @@ public class IndexController {
   public String availableEmail(@RequestParam String email) {
     boolean available = userService.findOneByEmail(email) == null;
     return Boolean.toString(available);
-  }
-
-
-  @GetMapping("/404")
-  public String pageNotFound() {
-    return "404";
   }
 
   private boolean loggedInUser() {
