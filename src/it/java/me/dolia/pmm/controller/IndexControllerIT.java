@@ -85,21 +85,6 @@ public class IndexControllerIT {
   }
 
   @Test
-  public void shouldShowLoginPageForAnonymousUser() throws Exception {
-    mockMvc.perform(get("/login"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("login"));
-  }
-
-  @Test
-  @WithMockUser
-  public void shouldRedirectFromLoginPageToAppIfUserIsAuthenticated() throws Exception {
-    mockMvc.perform(get("/login"))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl(URL_APP_DASHBOARD));
-  }
-
-  @Test
   public void shouldShowSigninPageForAnonymousUser() throws Exception {
     mockMvc.perform(get(SIGNIN_PATH))
         .andExpect(status().isOk())
