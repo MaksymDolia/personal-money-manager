@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import me.dolia.pmm.annotation.UniqueEmail;
+import me.dolia.pmm.validation.UniqueEmail;
 
 /**
  * Entity class, represents user of application.
