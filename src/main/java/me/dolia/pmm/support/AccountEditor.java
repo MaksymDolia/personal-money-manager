@@ -4,6 +4,7 @@ import java.beans.PropertyEditorSupport;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.service.AccountService;
+import org.springframework.util.StringUtils;
 
 /**
  * Property editor for account.
@@ -17,7 +18,7 @@ public class AccountEditor extends PropertyEditorSupport {
 
   @Override
   public void setAsText(String text) {
-    if (text == null || text.isEmpty()) {
+    if (StringUtils.isEmpty(text)) {
       setValue(null);
       return;
     }
