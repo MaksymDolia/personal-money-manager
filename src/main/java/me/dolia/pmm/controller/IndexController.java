@@ -35,7 +35,7 @@ public class IndexController {
     return new User();
   }
 
-  @GetMapping("/index")
+  @GetMapping("/")
   public String index() {
     if (loggedInUser()) {
       return REDIRECT_TO_APP;
