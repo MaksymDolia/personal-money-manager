@@ -55,6 +55,7 @@ public class Transaction {
 
   @Temporal(TemporalType.DATE)
   @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @Builder.Default
   private Date date = new Date();
   private String comment;
 
