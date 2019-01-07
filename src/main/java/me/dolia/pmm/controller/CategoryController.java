@@ -40,7 +40,7 @@ public class CategoryController {
 
   @ModelAttribute("category")
   public Category createCategory() {
-    return new Category();
+    return Category.builder().build();
   }
 
   @RequestMapping()
@@ -65,7 +65,7 @@ public class CategoryController {
 
   @RequestMapping(value = "/{id}/remove")
   public String removeCategory(@PathVariable("id") int id, RedirectAttributes attr, Locale locale) {
-    Category category = categoryService.findOne(id);
+    Category category = categoryService.getCategory(id);
     List<Transaction> transactions = transactionService.findAllByCategory(category);
     if (!transactions.isEmpty()) {
       attr.addAttribute("id", id);
@@ -79,7 +79,7 @@ public class CategoryController {
 
   @GetMapping(value = "/{id}/edit")
   public String editCategory(@PathVariable("id") int id, Model model) {
-    Category category = categoryService.findOne(id);
+    Category category = categoryService.getCategory(id);
     long quantityOfTransactions = transactionService.countTransactionsByCategoryId(id);
     List<Category> categories = categoryService.findAllByUserEmail(category.getUser().getEmail());
     model.addAttribute(CATEGORIES, categories);
@@ -90,7 +90,7 @@ public class CategoryController {
 
   @PostMapping(value = "/{id}/edit")
   public String editCategory(@Valid @ModelAttribute Category category, @PathVariable("id") int id) {
-    Category existingCategory = categoryService.findOne(id);
+    Category existingCategory = categoryService.getCategory(id);
     categoryService.editCategory(existingCategory, category);
     return REDIRECT_TO_CATEGORIES;
   }

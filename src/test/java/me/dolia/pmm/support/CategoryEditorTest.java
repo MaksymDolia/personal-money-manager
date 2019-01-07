@@ -22,9 +22,8 @@ public class CategoryEditorTest {
 
   @Test
   public void setCategoryAsText() {
-    Category category = new Category();
-    category.setId(1);
-    when(categoryService.findOne(category.getId())).thenReturn(category);
+    Category category = Category.builder().id(1).build();
+    when(categoryService.getCategory(category.getId())).thenReturn(category);
 
     editor.setAsText("1");
 

@@ -22,7 +22,7 @@ public class CategoryEditor extends PropertyEditorSupport {
       setValue(null);
       return;
     }
-    Category category = categoryService.findOne(Integer.valueOf(text));
+    Category category = categoryService.getCategory(Integer.valueOf(text));
     setValue(category);
   }
 

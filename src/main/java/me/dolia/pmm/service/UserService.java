@@ -88,23 +88,19 @@ public class UserService {
     accountRepository.save(walletAccount);
 
     //Create categories for expenses
-    Iterable<Category> expensesCategories = IntStream.range(1, 6).mapToObj(i -> {
-      Category category = new Category();
-      category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
-      category.setOperation(Operation.EXPENSE);
-      category.setUser(user);
-      return category;
-    }).collect(toList());
+    Iterable<Category> expensesCategories = IntStream.range(1, 6).mapToObj(i -> Category.builder()
+        .name(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH))
+        .operation(Operation.EXPENSE)
+        .user(user)
+        .build()).collect(toList());
     categoryRepository.saveAll(expensesCategories);
 
     //Create categories for incomes
-    Iterable<Category> incomeCategories = IntStream.range(6,8).mapToObj(i -> {
-      Category category = new Category();
-      category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
-      category.setOperation(Operation.INCOME);
-      category.setUser(user);
-      return category;
-    }).collect(toList());
+    Iterable<Category> incomeCategories = IntStream.range(6, 8).mapToObj(i -> Category.builder()
+        .name(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH))
+        .operation(Operation.INCOME)
+        .user(user)
+        .build()).collect(toList());
     categoryRepository.saveAll(incomeCategories);
   }
 

@@ -86,11 +86,11 @@ public class InitDbService {
       accountRepository.save(bankAccount);
 
       for (int i = 1; i < 8; i++) {
-        Category category = new Category();
-        category
-            .setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
-        category.setOperation(i > 5 ? Operation.INCOME : Operation.EXPENSE);
-        category.setUser(user);
+        Category category = Category.builder()
+            .name(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH))
+            .operation(i > 5 ? Operation.INCOME : Operation.EXPENSE)
+            .user(user)
+            .build();
         categoryRepository.save(category);
       }
 

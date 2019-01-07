@@ -8,7 +8,6 @@ import me.dolia.pmm.entity.Transaction;
 import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.CategoryRepository;
 import me.dolia.pmm.repository.TransactionRepository;
-import me.dolia.pmm.repository.UserRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
   private final CategoryRepository categoryRepository;
-  private final UserRepository userRepository;
+  private final UserService userService;
   private final TransactionRepository transactionRepository;
 
   /**
@@ -34,7 +33,7 @@ public class CategoryService {
    * @return category
    */
   @PostAuthorize("returnObject.user.email == authentication.name or hasRole('ADMIN')")
-  public Category findOne(Integer id) {
+  public Category getCategory(Integer id) {
     return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Category with ID %d was not found.", id)));
   }
 
@@ -56,7 +55,7 @@ public class CategoryService {
    * @param email user's email
    */
   public void save(Category category, String email) {
-    User user = userRepository.findOneByEmail(email);
+    User user = userService.findOneByEmail(email);
     category.setUser(user);
     categoryRepository.save(category);
   }
@@ -99,8 +98,8 @@ public class CategoryService {
    * @param toId id of category transaction is moving to
    */
   public void transferTransactions(int fromId, int toId) {
-    Category fromCategory = findOne(fromId);
-    Category toCategory = findOne(toId);
+    Category fromCategory = getCategory(fromId);
+    Category toCategory = getCategory(toId);
     if (fromCategory != null || toCategory != null) {
       transferTransactions(fromCategory, toCategory);
     }
