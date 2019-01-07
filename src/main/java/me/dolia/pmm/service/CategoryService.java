@@ -9,9 +9,9 @@ import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.CategoryRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
-import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 /**
