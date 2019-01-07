@@ -2,9 +2,11 @@ package me.dolia.pmm.security;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -103,5 +105,13 @@ public class LoginIT {
         .andExpect(status().isFound())
         .andExpect(redirectedUrl("/?message=logout_success"))
         .andExpect(unauthenticated());
+  }
+
+  @Test
+  @WithMockUser
+  public void testInvalidCSRF() throws Exception {
+    mockMvc.perform(post("/logout").with(csrf().useInvalidToken()))
+        .andExpect(status().isForbidden())
+        .andExpect(authenticated());
   }
 }

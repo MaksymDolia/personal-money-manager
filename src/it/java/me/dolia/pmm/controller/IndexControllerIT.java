@@ -26,7 +26,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -35,12 +34,10 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 public class IndexControllerIT {
 
-  private static final String URL_APP_DASHBOARD = "/app";
-
   private static final String EMAIL_USER_EXIST = "first.test@email.com";
   private static final String EMAIL_USER_NOT_EXIST = "second.test@email.com";
   private static final String SIGNIN_PATH = "/signin";
-  public static final String EMAIL_PARAM = "email";
+  private static final String EMAIL_PARAM = "email";
 
   @Autowired
   private UserRepository userRepo;
@@ -67,21 +64,6 @@ public class IndexControllerIT {
   @After
   public void tearDown() {
     userRepo.deleteAll();
-  }
-
-  @Test
-  public void shouldShowHomePageForAnonymousUser() throws Exception {
-    mockMvc.perform(get("/index"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("index"));
-  }
-
-  @Test
-  @WithMockUser
-  public void shouldRedirectFromHomePageToAppIfUserIsAuthenticated() throws Exception {
-    mockMvc.perform(get("/index"))
-        .andExpect(status().isFound())
-        .andExpect(redirectedUrl(URL_APP_DASHBOARD));
   }
 
   @Ignore
@@ -122,21 +104,6 @@ public class IndexControllerIT {
 
     User storedUser = userRepo.findOneByEmail(email);
     assertNotNull(storedUser);
-  }
-
-  @Test
-  public void shouldShowProfilePageIfUserIsAuthenticated() throws Exception {
-    mockMvc.perform(get("/profile")
-        .with(user(EMAIL_USER_EXIST))
-    )
-        .andExpect(status().isOk())
-        .andExpect(view().name("profile"));
-  }
-
-  @Test
-  public void shouldRedirectFromProfilePageIfUserIsAnonymous() throws Exception {
-    mockMvc.perform(get("/profile"))
-        .andExpect(status().isFound());
   }
 
   @Test
