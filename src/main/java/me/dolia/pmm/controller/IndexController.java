@@ -3,7 +3,7 @@ package me.dolia.pmm.controller;
 import java.security.Principal;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.dolia.pmm.entity.User;
+import me.dolia.pmm.controller.dto.UserDto;
 import me.dolia.pmm.service.UserService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,8 +31,8 @@ public class IndexController {
   private final UserService userService;
 
   @ModelAttribute("user")
-  public User createUser() {
-    return new User();
+  public UserDto createUser() {
+    return new UserDto();
   }
 
   @GetMapping("/")
@@ -60,13 +60,13 @@ public class IndexController {
   }
 
   @PostMapping(value = "/signin")
-  public String doSignin(@Valid @ModelAttribute("user") User user,
+  public String doSignin(@Valid @ModelAttribute("user") UserDto user,
       BindingResult result,
       RedirectAttributes attr) {
     if (result.hasErrors()) {
       return "signin";
     }
-    userService.save(user);
+    userService.save(user.getEmail(), user.getPassword());
     attr.addFlashAttribute("success", true);
     return "redirect:/signin";
   }

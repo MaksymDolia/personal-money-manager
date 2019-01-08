@@ -23,7 +23,6 @@ import me.dolia.pmm.repository.UserRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,17 +41,14 @@ public class UserService {
   private final RoleRepository roleRepository;
   private final AccountRepository accountRepository;
   private final CategoryRepository categoryRepository;
+  private final PasswordEncoder passwordEncoder;
 
-  /**
-   * Stores given user.
-   *
-   * @param user user to be stored
-   */
   @Transactional
-  public void save(User user) {
+  public void save(String email, String rawPassword) {
+    User user = new User();
+    user.setEmail(email);
     user.setEnabled(true);
-    PasswordEncoder encoder = new BCryptPasswordEncoder();
-    user.setPassword(encoder.encode(user.getPassword()));
+    user.setPassword(passwordEncoder.encode(rawPassword));
     List<Role> roles = new ArrayList<>();
     Optional<Role> userRole = roleRepository.findByName("ROLE_USER");
     userRole.ifPresent(roles::add);
