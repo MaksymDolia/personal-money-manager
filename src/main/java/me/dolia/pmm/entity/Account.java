@@ -26,7 +26,7 @@ public class Account {
 
   @Id
   @GeneratedValue
-  private int id;
+  private Integer id;
 
   @Size(max = 255)
   @NotBlank
