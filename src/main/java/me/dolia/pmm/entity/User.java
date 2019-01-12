@@ -2,9 +2,7 @@ package me.dolia.pmm.entity;
 
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -16,7 +14,6 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import me.dolia.pmm.validation.UniqueEmail;
 
 /**
  * Entity class, represents user of application.
@@ -26,18 +23,13 @@ import me.dolia.pmm.validation.UniqueEmail;
 @Entity
 @Table(name = "app_user")
 @Data
-@EqualsAndHashCode(of = "id")
-@ToString(of = "id")
+@EqualsAndHashCode(of = "email")
+@ToString(of = "email")
 public class User {
-
-  @Id
-  @GeneratedValue
-  private int id;
 
   @Email
   @Size(min = 1, max = 255)
-  @Column(unique = true)
-  @UniqueEmail
+  @Id
   private String email;
 
   @Size(min = 5, max = 255)

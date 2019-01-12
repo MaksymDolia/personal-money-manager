@@ -1,7 +1,6 @@
 package me.dolia.pmm.controller;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -83,8 +82,7 @@ public class IndexControllerIT {
         .andExpect(model().hasErrors())
         .andExpect(model().attributeHasErrors("user"));
 
-    User storedUser = userRepo.findOneByEmail(email);
-    assertNull(storedUser);
+    assertThat(userRepo.findById(email).isPresent()).isTrue();
   }
 
   @Test
@@ -102,8 +100,7 @@ public class IndexControllerIT {
         .andExpect(flash().attributeExists("success"))
         .andExpect(redirectedUrl(SIGNIN_PATH));
 
-    User storedUser = userRepo.findOneByEmail(email);
-    assertNotNull(storedUser);
+    assertThat(userRepo.findById(email).isPresent()).isTrue();
   }
 
   @Test

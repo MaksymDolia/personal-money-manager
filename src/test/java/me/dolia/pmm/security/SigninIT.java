@@ -56,15 +56,13 @@ public class SigninIT {
   @Test
   @WithMockUser
   public void existingUserCannotCreateNewUser() throws Exception {
-    userRepository.deleteByEmail(TEST_EMAIL);
-
     mockMvc.perform(post(SIGNIN_PAGE).with(csrf())
         .param("email", TEST_EMAIL)
         .param("password", "password"))
         .andExpect(status().isForbidden())
         .andExpect(authenticated());
 
-    assertThat(userRepository.findOneByEmail(TEST_EMAIL)).isNull();
+    assertThat(userRepository.findById(TEST_EMAIL).isPresent()).isFalse();
   }
 
   @Test

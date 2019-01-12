@@ -4,6 +4,7 @@ import java.security.Principal;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.controller.dto.UserDto;
+import me.dolia.pmm.service.NotFoundException;
 import me.dolia.pmm.service.UserService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -88,9 +89,13 @@ public class IndexController {
    */
   @GetMapping("/signin/available_email")
   @ResponseBody
-  public String availableEmail(@RequestParam String email) {
-    boolean available = userService.findOneByEmail(email) == null;
-    return Boolean.toString(available);
+  public boolean availableEmail(@RequestParam String email) {
+    try {
+      userService.findOneByEmail(email);
+      return false;
+    } catch (NotFoundException e) {
+      return Boolean.TRUE;
+    }
   }
 
   private boolean loggedInUser() {

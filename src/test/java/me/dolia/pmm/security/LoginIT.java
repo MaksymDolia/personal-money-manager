@@ -51,7 +51,9 @@ public class LoginIT {
 
   @After
   public void tearDown() {
-    userRepository.deleteByEmail(TEST_EMAIL);
+    if (userRepository.existsById(TEST_EMAIL)) {
+      userRepository.deleteById(TEST_EMAIL);
+    }
   }
 
   @Test
