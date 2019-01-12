@@ -11,7 +11,6 @@ import me.dolia.pmm.entity.User;
 import me.dolia.pmm.form.ShowTransactionForm;
 import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
-import me.dolia.pmm.repository.UserRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -31,7 +30,7 @@ public class TransactionService {
 
   private final TransactionRepository transactionRepository;
   private final AccountRepository accountRepository;
-  private final UserRepository userRepository;
+  private final UserService userService;
 
   /**
    * Deletes given transaction.
@@ -156,7 +155,7 @@ public class TransactionService {
    */
   @Transactional
   public void save(Transaction transaction, String email) {
-    User user = userRepository.findOneByEmail(email);
+    User user = userService.findOneByEmail(email);
     transaction.setUser(user);
     save(transaction);
     processTransaction(transaction);

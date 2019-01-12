@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.UserRepository;
 import org.junit.Rule;
@@ -33,7 +34,7 @@ public class UserServiceTest {
   @Test
   public void shouldGetUserByEmail() {
     User user = createUser(EMAIL);
-    when(userRepository.findOneByEmail(EMAIL)).thenReturn(user);
+    when(userRepository.findById(EMAIL)).thenReturn(Optional.of(user));
 
     User result = userService.findOneByEmail(EMAIL);
 
@@ -53,7 +54,7 @@ public class UserServiceTest {
   public void shouldDeleteUser() {
     userService.deleteByEmail(EMAIL);
 
-    verify(userRepository, times(1)).deleteByEmail(EMAIL);
+    verify(userRepository, times(1)).deleteById(EMAIL);
   }
 
   private User createUser(String email) {

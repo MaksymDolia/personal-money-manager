@@ -37,6 +37,6 @@ public class Account {
   private BigDecimal amount;
 
   @ManyToOne
-  @JoinColumn(name = "User_id", referencedColumnName = "id")
+  @JoinColumn(name = "User_email", referencedColumnName = "email")
   private User user;
 }

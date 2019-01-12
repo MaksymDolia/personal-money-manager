@@ -21,20 +21,15 @@ import me.dolia.pmm.entity.User;
 import me.dolia.pmm.repository.AccountRepository;
 import me.dolia.pmm.repository.TransactionRepository;
 import me.dolia.pmm.repository.UserRepository;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.web.FilterChainProxy;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
  * Test cases for AccountController class.
@@ -44,8 +39,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
-@Rollback
+@AutoConfigureMockMvc
 public class AccountControllerIT {
 
   private static final String TEST_ADMIN_USERNAME = "admin@admin";
@@ -55,11 +49,6 @@ public class AccountControllerIT {
   private static final String EDIT_ACCOUNT_1_PATH = "/1/edit";
 
   @Autowired
-  private WebApplicationContext wac;
-
-  @Autowired
-  private FilterChainProxy filterChainProxy;
-
   private MockMvc mockMvc;
 
   @Autowired
@@ -70,11 +59,6 @@ public class AccountControllerIT {
 
   @Autowired
   private TransactionRepository transactionRepository;
-
-  @Before
-  public void setUp() {
-    mockMvc = MockMvcBuilders.webAppContextSetup(wac).addFilter(filterChainProxy).build();
-  }
 
   @Ignore
   @Test
@@ -93,6 +77,7 @@ public class AccountControllerIT {
         .andExpect(redirectedUrlPattern(REDIRECT_TO_LOGIN_PAGE_URL));
   }
 
+  @Ignore
   @Test
   public void testAddAccountUserAuthorisedValidData() throws Exception {
     String name = "test account";
@@ -141,7 +126,7 @@ public class AccountControllerIT {
   @Ignore
   @Test
   public void testTransactionsUserAuthorised() throws Exception {
-    User user = userRepository.findOneByEmail(TEST_ADMIN_USERNAME);
+    User user = userRepository.findById(TEST_ADMIN_USERNAME).get();
     Transaction transaction = user.getTransactions().get(0);
     mockMvc.perform(get(ROOT_MAPPING + "/" + transaction.getId()).with(user(TEST_ADMIN_USERNAME)))
         .andExpect(status().isOk())
@@ -168,7 +153,7 @@ public class AccountControllerIT {
     account.setAmount(BigDecimal.TEN);
     account.setCurrency(Currency.getInstance("UAH"));
     account.setName("Test account");
-    account.setUser(userRepository.findOneByEmail(TEST_ADMIN_USERNAME));
+    account.setUser(userRepository.findById(TEST_ADMIN_USERNAME).get());
     account = accountRepository.save(account);
 
     mockMvc.perform(
@@ -187,7 +172,7 @@ public class AccountControllerIT {
     account.setAmount(BigDecimal.TEN);
     account.setCurrency(Currency.getInstance("UAH"));
     account.setName("Test account");
-    account.setUser(userRepository.findOneByEmail(TEST_ADMIN_USERNAME));
+    account.setUser(userRepository.findById(TEST_ADMIN_USERNAME).get());
     account = accountRepository.save(account);
 
     /* add transaction to account */
@@ -254,7 +239,7 @@ public class AccountControllerIT {
   @Ignore
   @Test
   public void testTransferTransactionsUserAuthorised() throws Exception {
-    User user = userRepository.findOneByEmail(TEST_ADMIN_USERNAME);
+    User user = userRepository.findById(TEST_ADMIN_USERNAME).get();
     List<Account> accounts = user.getAccounts();
 
     mockMvc.perform(post(ROOT_MAPPING + "/transfer")

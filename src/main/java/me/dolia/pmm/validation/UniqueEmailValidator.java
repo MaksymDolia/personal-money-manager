@@ -23,7 +23,6 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
 
   @Override
   public boolean isValid(String email, ConstraintValidatorContext context) {
-    return userRepository == null || userRepository.findOneByEmail(email) == null;
+    return !userRepository.findById(email).isPresent();
   }
-
 }

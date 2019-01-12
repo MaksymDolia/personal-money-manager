@@ -53,8 +53,8 @@ public class UserService {
     Optional<Role> userRole = roleRepository.findByName("ROLE_USER");
     userRole.ifPresent(roles::add);
     user.setRoles(roles);
-    userRepository.save(user);
-    createDefaultAccountsAndCategoriesForNewUser(user);
+    User savedUser = userRepository.save(user);
+    createDefaultAccountsAndCategoriesForNewUser(savedUser);
   }
 
   /**
@@ -65,7 +65,8 @@ public class UserService {
    */
   public User findOneByEmail(String email) {
     requireNonNull(email, "email is null");
-    return userRepository.findOneByEmail(email);
+    return userRepository.findById(email).orElseThrow(
+        () -> new NotFoundException(String.format("User with email '%s' does not exist", email)));
   }
 
   /**
@@ -94,7 +95,7 @@ public class UserService {
     categoryRepository.saveAll(expensesCategories);
 
     //Create categories for incomes
-    Iterable<Category> incomeCategories = IntStream.range(6,8).mapToObj(i -> {
+    Iterable<Category> incomeCategories = IntStream.range(6, 8).mapToObj(i -> {
       Category category = new Category();
       category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
       category.setOperation(Operation.INCOME);
@@ -112,7 +113,7 @@ public class UserService {
   @Transactional
   @PreAuthorize("#email == authentication.name or hasRole('ADMIN')")
   public void deleteByEmail(@P("email") String email) {
-    userRepository.deleteByEmail(email);
+    userRepository.deleteById(email);
   }
 
 }
