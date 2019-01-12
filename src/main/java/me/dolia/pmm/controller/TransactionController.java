@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.dolia.pmm.controller.dto.AccountDto;
+import me.dolia.pmm.controller.dto.CategoryDto;
+import me.dolia.pmm.controller.dto.TransactionDto;
 import me.dolia.pmm.entity.Account;
 import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
@@ -53,8 +56,8 @@ public class TransactionController {
    * @return new instance of {@code Transaction} class
    */
   @ModelAttribute("transaction")
-  public Transaction createTransaction() {
-    return new Transaction();
+  public TransactionDto createTransaction() {
+    return new TransactionDto();
   }
 
   /**
@@ -74,8 +77,8 @@ public class TransactionController {
    */
   @InitBinder
   protected void initBinder(ServletRequestDataBinder binder) {
-    binder.registerCustomEditor(Account.class, new AccountEditor(accountService));
-    binder.registerCustomEditor(Category.class, new CategoryEditor(categoryService));
+    binder.registerCustomEditor(AccountDto.class, new AccountEditor(accountService));
+    binder.registerCustomEditor(CategoryDto.class, new CategoryEditor(categoryService));
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
   }
@@ -111,14 +114,14 @@ public class TransactionController {
   /**
    * Saves new transaction.
    *
-   * @param transaction data from web form
+   * @param dto data from web form
    * @param referrer header referrer value
    * @param principal authenticated user
    * @param result form's binding result
    * @return view as string, where user will be redirected
    */
   @PostMapping(value = "/add_transaction")
-  public String addTransaction(@Valid @ModelAttribute("transaction") Transaction transaction,
+  public String addTransaction(@Valid @ModelAttribute("transaction") TransactionDto dto,
       @RequestHeader(value = "referer", required = false) String referrer,
       Principal principal,
       BindingResult result) {
@@ -126,7 +129,7 @@ public class TransactionController {
       return TRANSACTIONS_EDIT_VIEW_NAME;
     }
     String email = principal.getName();
-    transactionService.save(transaction, email);
+    transactionService.save(dto.toTransaction(), email);
     if (referrer != null) {
       return "redirect:" + referrer;
     }
@@ -180,19 +183,19 @@ public class TransactionController {
    * Update transaction with given data.
    *
    * @param id transaction's id
-   * @param transaction data from web form
+   * @param dto data from web form
    * @param result form's binding result
    * @return view as string, where user will be redirected
    */
   @PostMapping(value = "/{id}/edit")
   public String editTransaction(@PathVariable long id,
-      @Valid @ModelAttribute Transaction transaction,
+      @Valid @ModelAttribute TransactionDto dto,
       BindingResult result) {
     if (result.hasErrors()) {
       return TRANSACTIONS_EDIT_VIEW_NAME;
     }
     Transaction existingTransaction = transactionService.findOne(id);
-    transactionService.editAndSave(transaction, existingTransaction);
+    transactionService.editAndSave(dto.toTransaction(), existingTransaction);
     return REDIRECT_TO_TRANSACTIONS;
   }
 }

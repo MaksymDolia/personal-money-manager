@@ -9,14 +9,12 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.controller.dto.CategoryDto;
 import me.dolia.pmm.entity.Category;
-import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,7 +51,7 @@ public class CategoryController {
     String email = principal.getName();
     List<CategoryDto> categories = categoryService.findAllByUserEmail(email)
         .stream()
-        .map(this::toDto)
+        .map(CategoryDto::fromCategory)
         .collect(toList());
     model.addAttribute(CATEGORIES, categories);
     return CATEGORIES;
@@ -67,7 +65,7 @@ public class CategoryController {
       return categories(model, principal);
     }
     String email = principal.getName();
-    Category category = toCategory(dto);
+    Category category = dto.toCategory();
     categoryService.save(category, email);
     return REDIRECT_TO_CATEGORIES;
   }
@@ -92,10 +90,10 @@ public class CategoryController {
     long quantityOfTransactions = transactionService.countTransactionsByCategoryId(id);
     List<CategoryDto> categories = categoryService.findAllByUserEmail(category.getUser().getEmail())
         .stream()
-        .map(this::toDto)
+        .map(CategoryDto::fromCategory)
         .collect(toList());
     model.addAttribute(CATEGORIES, categories);
-    model.addAttribute("category", toDto(category));
+    model.addAttribute("category", CategoryDto.fromCategory(category));
     model.addAttribute("quantityOfTransactions", quantityOfTransactions);
     return "categories_edit";
   }
@@ -104,7 +102,7 @@ public class CategoryController {
   public String editCategory(@Valid @ModelAttribute("category") CategoryDto dto,
       @PathVariable("id") int id) {
     Category existingCategory = categoryService.findOne(id);
-    Category category = toCategory(dto);
+    Category category = dto.toCategory();
     categoryService.editCategory(existingCategory, category);
     return REDIRECT_TO_CATEGORIES;
   }
@@ -116,27 +114,5 @@ public class CategoryController {
     categoryService.transferTransactions(fromId, toId);
     attr.addAttribute("fromId", fromId);
     return "redirect:/app/categories/{fromId}/edit";
-  }
-
-  private Category toCategory(CategoryDto dto) {
-    Category category = new Category();
-    category.setId(dto.getId());
-    category.setName(dto.getName());
-    String operation = dto.getOperation();
-    if(!StringUtils.isEmpty(operation)) {
-      category.setOperation(Operation.valueOf(operation));
-    }
-    return category;
-  }
-
-  private CategoryDto toDto(Category category) {
-    CategoryDto dto = new CategoryDto();
-    dto.setId(category.getId());
-    dto.setName(category.getName());
-    Operation operation = category.getOperation();
-    if (operation != null) {
-      dto.setOperation(operation.name());
-    }
-    return dto;
   }
 }

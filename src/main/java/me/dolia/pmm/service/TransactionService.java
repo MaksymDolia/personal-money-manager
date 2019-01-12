@@ -179,7 +179,7 @@ public class TransactionService {
   @Transactional
   public void editAndSave(Transaction changedTransaction, Transaction originalTransaction) {
     this.resetTransaction(originalTransaction);
-    originalTransaction = changedTransaction.toBuilder().build();
+    originalTransaction = new Transaction(changedTransaction);
     save(originalTransaction);
     processTransaction(originalTransaction);
   }

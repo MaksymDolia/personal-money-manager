@@ -1,5 +1,7 @@
 package me.dolia.pmm.controller;
 
+import static java.util.stream.Collectors.toList;
+
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,8 +9,10 @@ import java.util.List;
 import java.util.Locale;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.dolia.pmm.controller.dto.AccountDto;
+import me.dolia.pmm.controller.dto.CategoryDto;
+import me.dolia.pmm.controller.dto.TransactionDto;
 import me.dolia.pmm.entity.Account;
-import me.dolia.pmm.entity.Category;
 import me.dolia.pmm.entity.Operation;
 import me.dolia.pmm.entity.Transaction;
 import me.dolia.pmm.form.ShowTransactionForm;
@@ -57,8 +61,8 @@ public class AccountController {
    * @return new instance of {@code Account} class
    */
   @ModelAttribute("account")
-  public Account createAccount() {
-    return new Account();
+  public AccountDto createAccount() {
+    return new AccountDto();
   }
 
   /**
@@ -67,8 +71,8 @@ public class AccountController {
    * @return new instance of {@code Transaction} class
    */
   @ModelAttribute("transaction")
-  public Transaction createTransaction() {
-    return new Transaction();
+  public TransactionDto createTransaction() {
+    return new TransactionDto();
   }
 
   /**
@@ -88,8 +92,8 @@ public class AccountController {
    */
   @InitBinder
   protected void initBinder(ServletRequestDataBinder binder) {
-    binder.registerCustomEditor(Account.class, new AccountEditor(accountService));
-    binder.registerCustomEditor(Category.class, new CategoryEditor(categoryService));
+    binder.registerCustomEditor(AccountDto.class, new AccountEditor(accountService));
+    binder.registerCustomEditor(CategoryDto.class, new CategoryEditor(categoryService));
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
   }
@@ -104,7 +108,10 @@ public class AccountController {
   @RequestMapping
   public String accounts(Model model, Principal principal) {
     String email = principal.getName();
-    List<Account> accounts = accountService.findAllByUserEmail(email);
+    List<AccountDto> accounts = accountService.findAllByUserEmail(email)
+        .stream()
+        .map(AccountDto::fromAccount)
+        .collect(toList());
     model.addAttribute(ACCOUNTS, accounts);
     double balance = accountService.getBalance(email);
     model.addAttribute("balance", balance);
@@ -114,7 +121,7 @@ public class AccountController {
   /**
    * Adds new account according to users input.
    *
-   * @param account given account data
+   * @param dto given account data
    * @param result form's binding result
    * @param principal authenticated user
    * @param referrer value of header's field 'refferer'
@@ -122,19 +129,19 @@ public class AccountController {
    * @return view as string, where user will be redirected
    */
   @PostMapping(value = "/add_account")
-  public String addAccount(@Valid @ModelAttribute Account account,
+  public String addAccount(@Valid @ModelAttribute AccountDto dto,
       BindingResult result,
       Principal principal,
       @RequestHeader(value = "referer", required = false) String referrer,
       RedirectAttributes attr) {
 
     if (result.hasErrors()) {
-      attr.addFlashAttribute("account", account);
+      attr.addFlashAttribute("account", dto);
       attr.addFlashAttribute("org.springframework.validation.BindingResult.account", result);
       return REDIRECT_TO_ACCOUNTS;
     }
     String email = principal.getName();
-    accountService.save(account, email);
+    accountService.save(dto.toAccount(), email);
     if (referrer != null) {
       return "redirect:" + referrer;
     }
@@ -156,16 +163,28 @@ public class AccountController {
 
     Account account = accountService.findOne(accountId);
     String email = account.getUser().getEmail();
-    List<Transaction> transactions = transactionService.findAllByAccountAndForm(account, form);
+    List<TransactionDto> transactions = transactionService.findAllByAccountAndForm(account, form)
+        .stream()
+        .map(TransactionDto::fromTransaction)
+        .collect(toList());
     model.addAttribute("transactions", transactions);
     model.addAttribute("showTransactionForm", form);
-    List<Account> accounts = accountService.findAllByUserEmail(email);
+    List<AccountDto> accounts = accountService.findAllByUserEmail(email)
+        .stream()
+        .map(AccountDto::fromAccount)
+        .collect(toList());
     model.addAttribute(ACCOUNTS, accounts);
 
-    List<Category> expenseCategories = categoryService
-        .findAllByUserEmailAndOperation(email, Operation.EXPENSE);
-    List<Category> incomeCategories = categoryService
-        .findAllByUserEmailAndOperation(email, Operation.INCOME);
+    List<CategoryDto> expenseCategories = categoryService
+        .findAllByUserEmailAndOperation(email, Operation.EXPENSE)
+        .stream()
+        .map(CategoryDto::fromCategory)
+        .collect(toList());
+    List<CategoryDto> incomeCategories = categoryService
+        .findAllByUserEmailAndOperation(email, Operation.INCOME)
+        .stream()
+        .map(CategoryDto::fromCategory)
+        .collect(toList());
     model.addAttribute("expenseCategories", expenseCategories);
     model.addAttribute("incomeCategories", incomeCategories);
     return "transactions";
@@ -207,9 +226,13 @@ public class AccountController {
   public String editAccount(@PathVariable int id, Model model) {
 
     Account account = accountService.findOne(id);
+    AccountDto accountDto = AccountDto.fromAccount(account);
     String email = account.getUser().getEmail();
-    List<Account> accounts = accountService.findAllByUserEmail(email);
-    model.addAttribute("account", account);
+    List<AccountDto> accounts = accountService.findAllByUserEmail(email)
+        .stream()
+        .map(AccountDto::fromAccount)
+        .collect(toList());
+    model.addAttribute("account", accountDto);
     model.addAttribute(ACCOUNTS, accounts);
     double balance = accountService.getBalance(email);
     model.addAttribute("balance", balance);
@@ -221,13 +244,13 @@ public class AccountController {
   /**
    * Performs saving edited account data.
    *
-   * @param account account's model attributes
+   * @param dto account's model attributes
    * @param id account's id
    * @param result binding result from web form
    * @return view as string, where user will be redirected
    */
   @PostMapping(value = "/{id}/edit")
-  public String editAccount(@Valid @ModelAttribute Account account,
+  public String editAccount(@Valid @ModelAttribute AccountDto dto,
       @PathVariable int id,
       BindingResult result) {
 
@@ -235,7 +258,7 @@ public class AccountController {
       return "accounts_edit";
     }
     Account existingAccount = accountService.findOne(id);
-    accountService.editAccount(existingAccount, account);
+    accountService.editAccount(existingAccount, dto.toAccount());
     return REDIRECT_TO_ACCOUNTS;
   }
 
