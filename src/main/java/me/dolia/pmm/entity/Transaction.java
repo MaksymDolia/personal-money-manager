@@ -10,12 +10,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,19 +23,16 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Data
-@AllArgsConstructor
-@Builder(toBuilder = true)
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(of = "id")
 public class Transaction {
 
   @Id
   @GeneratedValue
-  private long id;
+  private Long id;
 
-  @NotNull
   private Operation operation;
-  @Digits(fraction = 2, integer = 9)
   private BigDecimal amount;
   private Currency currency;
 
@@ -46,7 +40,6 @@ public class Transaction {
   private Account account;
 
   // TRANSFER FIELDS
-  @Digits(fraction = 2, integer = 9)
   private BigDecimal transferAmount;
   private Currency transferCurrency;
 
@@ -55,7 +48,6 @@ public class Transaction {
 
   @Temporal(TemporalType.DATE)
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @Builder.Default
   private Date date = new Date();
   private String comment;
 
@@ -65,7 +57,18 @@ public class Transaction {
   @ManyToOne
   private User user;
 
-  public Transaction() {
-    //for JPA
+  public Transaction(Transaction t) {
+    this.id = t.id;
+    this.operation = t.operation;
+    this.amount = t.amount;
+    this.currency = t.currency;
+    this.account = t.account;
+    this.transferAmount = t.transferAmount;
+    this.transferCurrency = t.transferCurrency;
+    this.transferAccount = t.transferAccount;
+    this.date = t.date;
+    this.comment = t.comment;
+    this.category = t.category;
+    this.user = t.user;
   }
 }
