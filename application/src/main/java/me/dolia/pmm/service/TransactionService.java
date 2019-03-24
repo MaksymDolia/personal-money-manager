@@ -1,6 +1,7 @@
 package me.dolia.pmm.service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.form.ShowTransactionForm;
@@ -18,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * Service to deal with user's transactions.
@@ -96,12 +98,15 @@ public class TransactionService {
     String sortBy = form.getSortBy().toString().toLowerCase();
     Sort sort = new Sort(Direction.DESC, sortBy);
 
-    if (form.getComment() != null && !form.getComment().isEmpty()) {
+    String comment = form.getComment();
+    Date dateFrom = form.getFromDate();
+    Date dateTo = form.getToDate();
+    if (!StringUtils.isEmpty(comment)) {
       return transactionRepository.findByUserEmailAndDateBetweenAndCommentLikeIgnoreCase(email,
-          form.getFromDate(), form.getToDate(), form.getComment(), sort);
+          dateFrom, dateTo, comment, sort);
     }
     return transactionRepository
-        .findByUserEmailAndDateBetween(email, form.getFromDate(), form.getToDate(), sort);
+        .findByUserEmailAndDateBetween(email, dateFrom, dateTo, sort);
   }
 
   /**
@@ -117,14 +122,16 @@ public class TransactionService {
     String sortBy = form.getSortBy().toString().toLowerCase();
     Sort sort = new Sort(Direction.DESC, sortBy);
 
-    if (form.getComment() != null && !form.getComment().isEmpty()) {
+    String comment = form.getComment();
+    Date dateFrom = form.getFromDate();
+    Date dateTo = form.getToDate();
+    if (!StringUtils.isEmpty(comment)) {
       return transactionRepository
           .findByAccountOrTransferAccountAndDateBetweenAndCommentLikeIgnoreCase(account,
-              account, form.getFromDate(), form.getToDate(), form.getComment(), sort);
+              account, dateFrom, dateTo, comment, sort);
     }
     return transactionRepository
-        .findByAccountOrTransferAccountAndDateBetween(account, account, form.getFromDate(),
-            form.getToDate(), sort);
+        .findByAccountOrTransferAccountAndDateBetween(account, account, dateFrom, dateTo, sort);
   }
 
   /**
