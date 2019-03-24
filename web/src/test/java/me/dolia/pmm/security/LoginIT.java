@@ -12,10 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.Collections;
-import me.dolia.pmm.entity.Role;
-import me.dolia.pmm.entity.User;
-import me.dolia.pmm.repository.RoleRepository;
-import me.dolia.pmm.repository.UserRepository;
+import me.dolia.pmm.persistence.entity.Role;
+import me.dolia.pmm.persistence.entity.User;
+import me.dolia.pmm.persistence.repository.RoleRepository;
+import me.dolia.pmm.persistence.repository.UserRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,4 +1,4 @@
-package me.dolia.pmm.entity;
+package me.dolia.pmm.persistence.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

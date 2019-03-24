@@ -4,8 +4,8 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-import me.dolia.pmm.entity.User;
-import me.dolia.pmm.repository.UserRepository;
+import me.dolia.pmm.persistence.entity.User;
+import me.dolia.pmm.persistence.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

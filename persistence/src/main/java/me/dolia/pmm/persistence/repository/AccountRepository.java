@@ -1,7 +1,7 @@
-package me.dolia.pmm.repository;
+package me.dolia.pmm.persistence.repository;
 
 import java.util.List;
-import me.dolia.pmm.entity.Account;
+import me.dolia.pmm.persistence.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,8 +19,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
    * @param email user's email
    * @return total balance
    */
-  @Query("select sum(amount) from Account a where a.user.email = :email")
-  Double getSumAmountByUserEmail(@Param("email") String email);
+  @Query("select coalesce(sum(amount), 0) from Account a where a.user.email = :email")
+  double getSumAmountByUserEmail(@Param("email") String email);
 
   /**
    * Populates all user's accounts.

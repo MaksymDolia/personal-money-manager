@@ -2,12 +2,12 @@ package me.dolia.pmm.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import me.dolia.pmm.entity.Category;
-import me.dolia.pmm.entity.Operation;
-import me.dolia.pmm.entity.Transaction;
-import me.dolia.pmm.entity.User;
-import me.dolia.pmm.repository.CategoryRepository;
-import me.dolia.pmm.repository.TransactionRepository;
+import me.dolia.pmm.persistence.entity.Category;
+import me.dolia.pmm.persistence.entity.Operation;
+import me.dolia.pmm.persistence.entity.Transaction;
+import me.dolia.pmm.persistence.entity.User;
+import me.dolia.pmm.persistence.repository.CategoryRepository;
+import me.dolia.pmm.persistence.repository.TransactionRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;

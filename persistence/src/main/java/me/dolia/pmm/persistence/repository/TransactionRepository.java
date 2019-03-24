@@ -1,10 +1,10 @@
-package me.dolia.pmm.repository;
+package me.dolia.pmm.persistence.repository;
 
 import java.util.Date;
 import java.util.List;
-import me.dolia.pmm.entity.Account;
-import me.dolia.pmm.entity.Category;
-import me.dolia.pmm.entity.Transaction;
+import me.dolia.pmm.persistence.entity.Account;
+import me.dolia.pmm.persistence.entity.Category;
+import me.dolia.pmm.persistence.entity.Transaction;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
