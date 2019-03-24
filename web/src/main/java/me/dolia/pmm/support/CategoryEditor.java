@@ -2,7 +2,7 @@ package me.dolia.pmm.support;
 
 import java.beans.PropertyEditorSupport;
 import lombok.RequiredArgsConstructor;
-import me.dolia.pmm.entity.Category;
+import me.dolia.pmm.persistence.entity.Category;
 import me.dolia.pmm.service.CategoryService;
 import org.springframework.util.StringUtils;
 

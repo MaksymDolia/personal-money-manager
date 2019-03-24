@@ -1,8 +1,8 @@
-package me.dolia.pmm.repository;
+package me.dolia.pmm.persistence.repository;
 
 import java.util.List;
-import me.dolia.pmm.entity.Category;
-import me.dolia.pmm.entity.Operation;
+import me.dolia.pmm.persistence.entity.Category;
+import me.dolia.pmm.persistence.entity.Operation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

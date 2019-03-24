@@ -1,4 +1,4 @@
-package me.dolia.pmm.entity;
+package me.dolia.pmm.persistence.entity;
 
 import java.util.ArrayList;
 import java.util.List;

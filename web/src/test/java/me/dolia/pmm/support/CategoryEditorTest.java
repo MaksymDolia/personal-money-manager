@@ -3,7 +3,7 @@ package me.dolia.pmm.support;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import me.dolia.pmm.entity.Category;
+import me.dolia.pmm.persistence.entity.Category;
 import me.dolia.pmm.service.CategoryService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

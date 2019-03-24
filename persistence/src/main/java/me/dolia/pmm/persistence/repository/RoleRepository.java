@@ -1,7 +1,7 @@
-package me.dolia.pmm.repository;
+package me.dolia.pmm.persistence.repository;
 
 import java.util.Optional;
-import me.dolia.pmm.entity.Role;
+import me.dolia.pmm.persistence.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

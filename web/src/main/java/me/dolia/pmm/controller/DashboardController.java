@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.controller.dto.AccountDto;
 import me.dolia.pmm.controller.dto.CategoryDto;
 import me.dolia.pmm.controller.dto.TransactionDto;
-import me.dolia.pmm.entity.Operation;
+import me.dolia.pmm.persistence.entity.Operation;
 import me.dolia.pmm.service.AccountService;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;

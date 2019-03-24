@@ -2,7 +2,7 @@ package me.dolia.pmm.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import me.dolia.pmm.repository.UserRepository;
+import me.dolia.pmm.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

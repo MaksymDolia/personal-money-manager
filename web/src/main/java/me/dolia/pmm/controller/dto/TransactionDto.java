@@ -6,8 +6,8 @@ import java.util.Date;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import me.dolia.pmm.entity.Operation;
-import me.dolia.pmm.entity.Transaction;
+import me.dolia.pmm.persistence.entity.Operation;
+import me.dolia.pmm.persistence.entity.Transaction;
 
 @Data
 public class TransactionDto {

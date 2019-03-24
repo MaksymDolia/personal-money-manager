@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
-import me.dolia.pmm.entity.Account;
+import me.dolia.pmm.persistence.entity.Account;
 
 @Data
 public class AccountDto {
