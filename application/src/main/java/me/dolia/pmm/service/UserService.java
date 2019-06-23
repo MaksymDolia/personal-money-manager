@@ -4,17 +4,15 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.persistence.entity.Account;
 import me.dolia.pmm.persistence.entity.Category;
 import me.dolia.pmm.persistence.entity.Operation;
-import me.dolia.pmm.persistence.entity.Role;
 import me.dolia.pmm.persistence.entity.User;
 import me.dolia.pmm.persistence.repository.AccountRepository;
 import me.dolia.pmm.persistence.repository.CategoryRepository;
@@ -45,15 +43,13 @@ public class UserService {
 
   @Transactional
   public void save(String email, String rawPassword) {
-    User user = new User();
+    var user = new User();
     user.setEmail(email);
     user.setEnabled(true);
     user.setPassword(passwordEncoder.encode(rawPassword));
-    List<Role> roles = new ArrayList<>();
-    Optional<Role> userRole = roleRepository.findByName("ROLE_USER");
-    userRole.ifPresent(roles::add);
-    user.setRoles(roles);
-    User savedUser = userRepository.save(user);
+    var userRole = roleRepository.findByName("ROLE_USER");
+    user.setRoles(userRole.map(List::of).orElseGet(Collections::emptyList));
+    var savedUser = userRepository.save(user);
     createDefaultAccountsAndCategoriesForNewUser(savedUser);
   }
 
@@ -77,7 +73,7 @@ public class UserService {
   private void createDefaultAccountsAndCategoriesForNewUser(User user) {
 
     //Create account for wallet
-    Account walletAccount = new Account();
+    var walletAccount = new Account();
     walletAccount.setName(context.getMessage("Name.default.account", null, Locale.ENGLISH));
     walletAccount.setUser(user);
     walletAccount.setAmount(new BigDecimal(0));
@@ -85,7 +81,7 @@ public class UserService {
     accountRepository.save(walletAccount);
 
     //Create categories for expenses
-    Iterable<Category> expensesCategories = IntStream.range(1, 6).mapToObj(i -> {
+    var expensesCategories = IntStream.range(1, 6).mapToObj(i -> {
       Category category = new Category();
       category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
       category.setOperation(Operation.EXPENSE);
@@ -95,7 +91,7 @@ public class UserService {
     categoryRepository.saveAll(expensesCategories);
 
     //Create categories for incomes
-    Iterable<Category> incomeCategories = IntStream.range(6, 8).mapToObj(i -> {
+    var incomeCategories = IntStream.range(6, 8).mapToObj(i -> {
       Category category = new Category();
       category.setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
       category.setOperation(Operation.INCOME);

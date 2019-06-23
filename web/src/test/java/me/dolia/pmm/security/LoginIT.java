@@ -76,11 +76,11 @@ public class LoginIT {
   @Test
   @Transactional
   public void successfullyLogInUser() throws Exception {
-    User user = new User();
+    var user = new User();
     user.setEmail(TEST_EMAIL);
     user.setPassword(passwordEncoder.encode("password"));
     user.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER").orElseGet(() -> {
-      Role role = new Role();
+      var role = new Role();
       role.setName("ROLE_USER");
       return roleRepository.saveAndFlush(role);
     })));

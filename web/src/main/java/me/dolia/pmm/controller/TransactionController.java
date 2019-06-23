@@ -3,17 +3,13 @@ package me.dolia.pmm.controller;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.controller.dto.AccountDto;
 import me.dolia.pmm.controller.dto.CategoryDto;
 import me.dolia.pmm.controller.dto.TransactionDto;
 import me.dolia.pmm.form.ShowTransactionForm;
-import me.dolia.pmm.persistence.entity.Account;
-import me.dolia.pmm.persistence.entity.Category;
 import me.dolia.pmm.persistence.entity.Operation;
-import me.dolia.pmm.persistence.entity.Transaction;
 import me.dolia.pmm.service.AccountService;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
@@ -95,16 +91,16 @@ public class TransactionController {
   public String transactions(@ModelAttribute("showTransactionForm") ShowTransactionForm form,
       Model model,
       Principal principal) {
-    String email = principal.getName();
-    List<Transaction> transactions = transactionService.findAllByForm(email, form);
+    var email = principal.getName();
+    var transactions = transactionService.findAllByForm(email, form);
     model.addAttribute(TRANSACTIONS, transactions);
     model.addAttribute("showTransactionForm", form);
-    List<Account> accounts = accountService.findAllByUserEmail(email);
+    var accounts = accountService.findAllByUserEmail(email);
     model.addAttribute("accounts", accounts);
 
-    List<Category> expenseCategories = categoryService
+    var expenseCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.EXPENSE);
-    List<Category> incomeCategories = categoryService
+    var incomeCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.INCOME);
     model.addAttribute("expenseCategories", expenseCategories);
     model.addAttribute("incomeCategories", incomeCategories);
@@ -128,7 +124,7 @@ public class TransactionController {
     if (result.hasErrors()) {
       return TRANSACTIONS_EDIT_VIEW_NAME;
     }
-    String email = principal.getName();
+    var email = principal.getName();
     transactionService.save(dto.toTransaction(), email);
     if (referrer != null) {
       return "redirect:" + referrer;
@@ -146,7 +142,7 @@ public class TransactionController {
   @PostMapping("/{id}/remove")
   public String removeTransaction(@PathVariable Long id,
       @RequestHeader(value = "referer", required = false) String referrer) {
-    Transaction transaction = transactionService.findOne(id);
+    var transaction = transactionService.findOne(id);
     transactionService.delete(transaction);
     if (referrer != null) {
       return "redirect:" + referrer;
@@ -163,16 +159,16 @@ public class TransactionController {
    */
   @GetMapping(value = "/{id}/edit")
   public String editTransaction(@PathVariable long id, Model model) {
-    Transaction transaction = transactionService.findOne(id);
-    String email = transaction.getUser().getEmail();
-    List<Transaction> transactions = transactionService.findAllByUserEmail(email);
+    var transaction = transactionService.findOne(id);
+    var email = transaction.getUser().getEmail();
+    var transactions = transactionService.findAllByUserEmail(email);
     model.addAttribute(TRANSACTIONS, transactions);
     model.addAttribute("transaction", transaction);
-    List<Account> accounts = accountService.findAllByUserEmail(email);
+    var accounts = accountService.findAllByUserEmail(email);
     model.addAttribute("accounts", accounts);
-    List<Category> expenseCategories = categoryService
+    var expenseCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.EXPENSE);
-    List<Category> incomeCategories = categoryService
+    var incomeCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.INCOME);
     model.addAttribute("expenseCategories", expenseCategories);
     model.addAttribute("incomeCategories", incomeCategories);
@@ -194,7 +190,7 @@ public class TransactionController {
     if (result.hasErrors()) {
       return TRANSACTIONS_EDIT_VIEW_NAME;
     }
-    Transaction existingTransaction = transactionService.findOne(id);
+    var existingTransaction = transactionService.findOne(id);
     transactionService.editAndSave(dto.toTransaction(), existingTransaction);
     return REDIRECT_TO_TRANSACTIONS;
   }

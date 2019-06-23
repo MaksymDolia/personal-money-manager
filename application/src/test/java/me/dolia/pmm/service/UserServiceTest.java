@@ -33,10 +33,10 @@ public class UserServiceTest {
 
   @Test
   public void shouldGetUserByEmail() {
-    User user = createUser(EMAIL);
+    var user = createUser(EMAIL);
     when(userRepository.findById(EMAIL)).thenReturn(Optional.of(user));
 
-    User result = userService.findOneByEmail(EMAIL);
+    var result = userService.findOneByEmail(EMAIL);
 
     assertNotNull(result);
     assertEquals(user, result);
@@ -58,7 +58,7 @@ public class UserServiceTest {
   }
 
   private User createUser(String email) {
-    User user = new User();
+    var user = new User();
     user.setEmail(email);
     user.setPassword("somePassword");
     return user;

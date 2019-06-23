@@ -22,7 +22,7 @@ public class CategoryEditorTest {
 
   @Test
   public void setCategoryAsText() {
-    Category category = new Category();
+    var category = new Category();
     category.setId(1);
     when(categoryService.findOne(category.getId())).thenReturn(category);
 

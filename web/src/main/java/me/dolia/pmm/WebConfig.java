@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Bean
   public TilesConfigurer tilesConfigurer() {
-    TilesConfigurer tilesConfigurer = new TilesConfigurer();
+    var tilesConfigurer = new TilesConfigurer();
     tilesConfigurer.setDefinitions("/WEB-INF/defs/app.xml");
     tilesConfigurer.setCheckRefresh(true);
     return tilesConfigurer;
@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Override
   public void configureViewResolvers(ViewResolverRegistry registry) {
-    TilesViewResolver viewResolver = new TilesViewResolver();
+    var viewResolver = new TilesViewResolver();
     registry.viewResolver(viewResolver);
   }
 

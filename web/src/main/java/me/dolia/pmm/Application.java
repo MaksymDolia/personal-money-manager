@@ -15,7 +15,7 @@ public class Application {
 
   @Bean
   public MessageSource messageSource() {
-    ReloadableResourceBundleMessageSource messageSource
+    var messageSource
         = new ReloadableResourceBundleMessageSource();
 
     messageSource.setBasename("classpath:messages");

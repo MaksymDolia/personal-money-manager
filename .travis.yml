@@ -9,7 +9,7 @@ addons:
       secure: "63dc874ec5c64e6cd8474a50652af1150172058c"
 
 jdk:
-  - oraclejdk8
+  - openjdk11
 
 script:
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar

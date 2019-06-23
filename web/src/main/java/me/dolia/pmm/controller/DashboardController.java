@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toList;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.controller.dto.AccountDto;
 import me.dolia.pmm.controller.dto.CategoryDto;
@@ -59,30 +58,30 @@ public class DashboardController {
 
   @GetMapping
   public String app(Model model, Principal principal) {
-    String email = principal.getName();
-    List<AccountDto> accounts = accountService.findAllByUserEmail(email)
+    var email = principal.getName();
+    var accounts = accountService.findAllByUserEmail(email)
         .stream()
         .map(AccountDto::fromAccount)
         .collect(toList());
     model.addAttribute("accounts", accounts);
-    List<CategoryDto> categories = categoryService.findAllByUserEmail(email)
+    var categories = categoryService.findAllByUserEmail(email)
         .stream()
         .map(CategoryDto::fromCategory)
         .collect(toList());
     model.addAttribute("categories", categories);
-    List<TransactionDto> transactions = transactionService.findAllByUserEmail(email)
+    var transactions = transactionService.findAllByUserEmail(email)
         .stream()
         .map(TransactionDto::fromTransaction)
         .collect(toList());
     model.addAttribute("transactions", transactions);
-    Double balance = accountService.getBalance(email);
+    var balance = accountService.getBalance(email);
     model.addAttribute("balance", balance);
-    List<CategoryDto> expenseCategories = categoryService
+    var expenseCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.EXPENSE)
         .stream()
         .map(CategoryDto::fromCategory)
         .collect(toList());
-    List<CategoryDto> incomeCategories = categoryService
+    var incomeCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.INCOME)
         .stream()
         .map(CategoryDto::fromCategory)

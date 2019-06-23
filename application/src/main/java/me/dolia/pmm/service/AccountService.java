@@ -1,12 +1,9 @@
 package me.dolia.pmm.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.persistence.entity.Account;
-import me.dolia.pmm.persistence.entity.Operation;
 import me.dolia.pmm.persistence.entity.Transaction;
-import me.dolia.pmm.persistence.entity.User;
 import me.dolia.pmm.persistence.repository.AccountRepository;
 import me.dolia.pmm.persistence.repository.TransactionRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -43,7 +40,7 @@ public class AccountService {
    * @param email user's email
    */
   public void save(Account account, String email) {
-    User user = userService.findOneByEmail(email);
+    var user = userService.findOneByEmail(email);
     account.setUser(user);
     accountRepository.save(account);
   }
@@ -89,8 +86,8 @@ public class AccountService {
    * @param toId id of account transaction will be moved to
    */
   public void transferTransactions(int fromId, int toId) {
-    Account fromAccount = findOne(fromId);
-    Account toAccount = findOne(toId);
+    var fromAccount = findOne(fromId);
+    var toAccount = findOne(toId);
     if (fromAccount != null && toAccount != null) {
       transferTransactions(fromAccount, toAccount);
     }
@@ -124,13 +121,13 @@ public class AccountService {
   @PreAuthorize("#fromAccount.user.email == authentication.name or #toAccount.user.email == authentication.name or hasRole('ADMIN')")
   private void transferTransactions(@P("fromAccount") Account fromAccount,
       @P("toAccount") Account toAccount) {
-    List<Transaction> transactions = transactionRepository
+    var transactions = transactionRepository
         .findAllByAccountOrTransferAccount(fromAccount,
             fromAccount);
     if (transactions != null && !transactions.isEmpty()) {
       for (Transaction transaction : transactions) {
-        Operation operation = transaction.getOperation();
-        BigDecimal amount = transaction.getAmount();
+        var operation = transaction.getOperation();
+        var amount = transaction.getAmount();
 
         switch (operation) {
           case EXPENSE:

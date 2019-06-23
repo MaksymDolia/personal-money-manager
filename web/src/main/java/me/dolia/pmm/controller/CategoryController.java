@@ -3,13 +3,10 @@ package me.dolia.pmm.controller;
 import static java.util.stream.Collectors.toList;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Locale;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.controller.dto.CategoryDto;
-import me.dolia.pmm.persistence.entity.Category;
-import me.dolia.pmm.persistence.entity.Transaction;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
 import org.springframework.context.ApplicationContext;
@@ -48,8 +45,8 @@ public class CategoryController {
 
   @RequestMapping()
   public String categories(Model model, Principal principal) {
-    String email = principal.getName();
-    List<CategoryDto> categories = categoryService.findAllByUserEmail(email)
+    var email = principal.getName();
+    var categories = categoryService.findAllByUserEmail(email)
         .stream()
         .map(CategoryDto::fromCategory)
         .collect(toList());
@@ -64,16 +61,16 @@ public class CategoryController {
     if (result.hasErrors()) {
       return categories(model, principal);
     }
-    String email = principal.getName();
-    Category category = dto.toCategory();
+    var email = principal.getName();
+    var category = dto.toCategory();
     categoryService.save(category, email);
     return REDIRECT_TO_CATEGORIES;
   }
 
   @RequestMapping(value = "/{id}/remove")
   public String removeCategory(@PathVariable("id") int id, RedirectAttributes attr, Locale locale) {
-    Category category = categoryService.findOne(id);
-    List<Transaction> transactions = transactionService.findAllByCategory(category);
+    var category = categoryService.findOne(id);
+    var transactions = transactionService.findAllByCategory(category);
     if (!transactions.isEmpty()) {
       attr.addAttribute("id", id);
       attr.addFlashAttribute("message",
@@ -86,9 +83,9 @@ public class CategoryController {
 
   @GetMapping(value = "/{id}/edit")
   public String editCategory(@PathVariable("id") int id, Model model) {
-    Category category = categoryService.findOne(id);
-    long quantityOfTransactions = transactionService.countTransactionsByCategoryId(id);
-    List<CategoryDto> categories = categoryService.findAllByUserEmail(category.getUser().getEmail())
+    var category = categoryService.findOne(id);
+    var quantityOfTransactions = transactionService.countTransactionsByCategoryId(id);
+    var categories = categoryService.findAllByUserEmail(category.getUser().getEmail())
         .stream()
         .map(CategoryDto::fromCategory)
         .collect(toList());
@@ -101,8 +98,8 @@ public class CategoryController {
   @PostMapping(value = "/{id}/edit")
   public String editCategory(@Valid @ModelAttribute("category") CategoryDto dto,
       @PathVariable("id") int id) {
-    Category existingCategory = categoryService.findOne(id);
-    Category category = dto.toCategory();
+    var existingCategory = categoryService.findOne(id);
+    var category = dto.toCategory();
     categoryService.editCategory(existingCategory, category);
     return REDIRECT_TO_CATEGORIES;
   }

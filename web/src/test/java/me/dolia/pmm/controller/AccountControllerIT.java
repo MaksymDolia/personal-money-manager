@@ -13,11 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 import java.util.Currency;
-import java.util.List;
 import me.dolia.pmm.persistence.entity.Account;
 import me.dolia.pmm.persistence.entity.Operation;
 import me.dolia.pmm.persistence.entity.Transaction;
-import me.dolia.pmm.persistence.entity.User;
 import me.dolia.pmm.persistence.repository.AccountRepository;
 import me.dolia.pmm.persistence.repository.TransactionRepository;
 import me.dolia.pmm.persistence.repository.UserRepository;
@@ -80,9 +78,9 @@ public class AccountControllerIT {
   @Ignore
   @Test
   public void testAddAccountUserAuthorisedValidData() throws Exception {
-    String name = "test account";
-    String amount = "10";
-    String currency = "UAH";
+    var name = "test account";
+    var amount = "10";
+    var currency = "UAH";
 
     mockMvc.perform(post(ROOT_MAPPING + "/add_account")
         .with(user(TEST_ADMIN_USERNAME)).with(csrf())
@@ -97,9 +95,9 @@ public class AccountControllerIT {
 
   @Test
   public void testAddAccountUserAuthorisedNotValidData() throws Exception {
-    String name = "";
-    String amount = "12.123";
-    String currency = "UAH";
+    var name = "";
+    var amount = "12.123";
+    var currency = "UAH";
 
     mockMvc.perform(post(ROOT_MAPPING + "/add_account")
         .with(user(TEST_ADMIN_USERNAME))
@@ -126,8 +124,8 @@ public class AccountControllerIT {
   @Ignore
   @Test
   public void testTransactionsUserAuthorised() throws Exception {
-    User user = userRepository.findById(TEST_ADMIN_USERNAME).get();
-    Transaction transaction = user.getTransactions().get(0);
+    var user = userRepository.findById(TEST_ADMIN_USERNAME).get();
+    var transaction = user.getTransactions().get(0);
     mockMvc.perform(get(ROOT_MAPPING + "/" + transaction.getId()).with(user(TEST_ADMIN_USERNAME)))
         .andExpect(status().isOk())
         .andExpect(view().name("transactions"))
@@ -149,7 +147,7 @@ public class AccountControllerIT {
   @Ignore
   @Test
   public void testDeleteEmptyAccountUserAuthorised() throws Exception {
-    Account account = new Account();
+    var account = new Account();
     account.setAmount(BigDecimal.TEN);
     account.setCurrency(Currency.getInstance("UAH"));
     account.setName("Test account");
@@ -168,7 +166,7 @@ public class AccountControllerIT {
   public void testDeleteNotEmptyAccountUserAuthorised() throws Exception {
 
     /* setting up new test account */
-    Account account = new Account();
+    var account = new Account();
     account.setAmount(BigDecimal.TEN);
     account.setCurrency(Currency.getInstance("UAH"));
     account.setName("Test account");
@@ -176,7 +174,7 @@ public class AccountControllerIT {
     account = accountRepository.save(account);
 
     /* add transaction to account */
-    Transaction transaction = new Transaction();
+    var transaction = new Transaction();
     transaction.setAccount(account);
     transaction.setAmount(BigDecimal.TEN);
     transaction.setCurrency(Currency.getInstance("UAH"));
@@ -239,8 +237,8 @@ public class AccountControllerIT {
   @Ignore
   @Test
   public void testTransferTransactionsUserAuthorised() throws Exception {
-    User user = userRepository.findById(TEST_ADMIN_USERNAME).get();
-    List<Account> accounts = user.getAccounts();
+    var user = userRepository.findById(TEST_ADMIN_USERNAME).get();
+    var accounts = user.getAccounts();
 
     mockMvc.perform(post(ROOT_MAPPING + "/transfer")
         .with(user(TEST_ADMIN_USERNAME))

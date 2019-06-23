@@ -2,7 +2,6 @@ package me.dolia.pmm.support;
 
 import java.beans.PropertyEditorSupport;
 import lombok.RequiredArgsConstructor;
-import me.dolia.pmm.persistence.entity.Category;
 import me.dolia.pmm.service.CategoryService;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +21,7 @@ public class CategoryEditor extends PropertyEditorSupport {
       setValue(null);
       return;
     }
-    Category category = categoryService.findOne(Integer.valueOf(text));
+    var category = categoryService.findOne(Integer.valueOf(text));
     setValue(category);
   }
 
