@@ -35,7 +35,7 @@ public class TransactionDto {
   private CategoryDto category;
 
   public Transaction toTransaction() {
-    Transaction t = new Transaction();
+    var t = new Transaction();
     t.setId(id);
     t.setOperation(Operation.valueOf(operation));
     t.setAmount(amount);
@@ -50,7 +50,7 @@ public class TransactionDto {
   }
 
   public static TransactionDto fromTransaction(Transaction transaction) {
-    TransactionDto dto = new TransactionDto();
+    var dto = new TransactionDto();
     dto.setId(transaction.getId());
     dto.setOperation(transaction.getOperation().name());
     dto.setAmount(transaction.getAmount());

@@ -1,7 +1,6 @@
 package me.dolia.pmm.service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
@@ -23,7 +22,6 @@ import me.dolia.pmm.persistence.repository.TransactionRepository;
 import me.dolia.pmm.persistence.repository.UserRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,36 +47,34 @@ public class InitDbService {
    */
   @PostConstruct
   public void init() {
-    if (!roleRepository.findByName("ROLE_ADMIN").isPresent()) {
-      Role roleUser = new Role();
+    if (roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
+      var roleUser = new Role();
       roleUser.setName("ROLE_USER");
       roleRepository.save(roleUser);
 
-      Role roleAdmin = new Role();
+      var roleAdmin = new Role();
       roleAdmin.setName("ROLE_ADMIN");
       roleRepository.save(roleAdmin);
 
-      User user = new User();
+      var user = new User();
       user.setEnabled(true);
       user.setEmail("admin@admin");
 
-      PasswordEncoder encoder = new BCryptPasswordEncoder();
+      var encoder = new BCryptPasswordEncoder();
       user.setPassword(encoder.encode("admin"));
-      List<Role> roles = new ArrayList<>();
-      roles.add(roleAdmin);
-      roles.add(roleUser);
+      List<Role> roles = List.of(roleAdmin, roleUser);
       user.setRoles(roles);
       userRepository.save(user);
 
       // Create account for wallet
-      Account walletAccount = new Account();
+      var walletAccount = new Account();
       walletAccount.setName(context.getMessage("Name.default.account", null, Locale.ENGLISH));
       walletAccount.setUser(user);
-      walletAccount.setAmount(new BigDecimal(0));
+      walletAccount.setAmount(BigDecimal.ZERO);
       walletAccount.setCurrency(UAH);
       accountRepository.save(walletAccount);
 
-      Account bankAccount = new Account();
+      var bankAccount = new Account();
       bankAccount.setName("Bank");
       bankAccount.setUser(user);
       bankAccount.setAmount(new BigDecimal(500));
@@ -86,7 +82,7 @@ public class InitDbService {
       accountRepository.save(bankAccount);
 
       for (int i = 1; i < 8; i++) {
-        Category category = new Category();
+        var category = new Category();
         category
             .setName(context.getMessage("Name" + i + ".default.category", null, Locale.ENGLISH));
         category.setOperation(i > 5 ? Operation.INCOME : Operation.EXPENSE);
@@ -94,7 +90,7 @@ public class InitDbService {
         categoryRepository.save(category);
       }
 
-      Transaction transaction1 = new Transaction();
+      var transaction1 = new Transaction();
       transaction1.setDate(new Date());
       transaction1.setAccount(walletAccount);
       transaction1.setAmount(new BigDecimal(50));
@@ -105,8 +101,8 @@ public class InitDbService {
       transaction1.setUser(user);
       transactionRepository.save(transaction1);
 
-      Transaction transaction2 = new Transaction();
-      Calendar calendar = new GregorianCalendar();
+      var transaction2 = new Transaction();
+      var calendar = new GregorianCalendar();
       calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
       transaction2.setDate(calendar.getTime());
       transaction2.setAccount(bankAccount);

@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toList;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +12,7 @@ import me.dolia.pmm.controller.dto.AccountDto;
 import me.dolia.pmm.controller.dto.CategoryDto;
 import me.dolia.pmm.controller.dto.TransactionDto;
 import me.dolia.pmm.form.ShowTransactionForm;
-import me.dolia.pmm.persistence.entity.Account;
 import me.dolia.pmm.persistence.entity.Operation;
-import me.dolia.pmm.persistence.entity.Transaction;
 import me.dolia.pmm.service.AccountService;
 import me.dolia.pmm.service.CategoryService;
 import me.dolia.pmm.service.TransactionService;
@@ -107,13 +104,13 @@ public class AccountController {
    */
   @RequestMapping
   public String accounts(Model model, Principal principal) {
-    String email = principal.getName();
-    List<AccountDto> accounts = accountService.findAllByUserEmail(email)
+    var email = principal.getName();
+    var accounts = accountService.findAllByUserEmail(email)
         .stream()
         .map(AccountDto::fromAccount)
         .collect(toList());
     model.addAttribute(ACCOUNTS, accounts);
-    double balance = accountService.getBalance(email);
+    var balance = accountService.getBalance(email);
     model.addAttribute("balance", balance);
     return ACCOUNTS;
   }
@@ -140,7 +137,7 @@ public class AccountController {
       attr.addFlashAttribute("org.springframework.validation.BindingResult.account", result);
       return REDIRECT_TO_ACCOUNTS;
     }
-    String email = principal.getName();
+    var email = principal.getName();
     accountService.save(dto.toAccount(), email);
     if (referrer != null) {
       return "redirect:" + referrer;
@@ -161,26 +158,26 @@ public class AccountController {
       @ModelAttribute("showTransactionForm") ShowTransactionForm form,
       Model model) {
 
-    Account account = accountService.findOne(accountId);
-    String email = account.getUser().getEmail();
-    List<TransactionDto> transactions = transactionService.findAllByAccountAndForm(account, form)
+    var account = accountService.findOne(accountId);
+    var email = account.getUser().getEmail();
+    var transactions = transactionService.findAllByAccountAndForm(account, form)
         .stream()
         .map(TransactionDto::fromTransaction)
         .collect(toList());
     model.addAttribute("transactions", transactions);
     model.addAttribute("showTransactionForm", form);
-    List<AccountDto> accounts = accountService.findAllByUserEmail(email)
+    var accounts = accountService.findAllByUserEmail(email)
         .stream()
         .map(AccountDto::fromAccount)
         .collect(toList());
     model.addAttribute(ACCOUNTS, accounts);
 
-    List<CategoryDto> expenseCategories = categoryService
+    var expenseCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.EXPENSE)
         .stream()
         .map(CategoryDto::fromCategory)
         .collect(toList());
-    List<CategoryDto> incomeCategories = categoryService
+    var incomeCategories = categoryService
         .findAllByUserEmailAndOperation(email, Operation.INCOME)
         .stream()
         .map(CategoryDto::fromCategory)
@@ -203,8 +200,8 @@ public class AccountController {
       RedirectAttributes attr,
       Locale locale) {
 
-    Account account = accountService.findOne(id);
-    List<Transaction> transactions = transactionService.findAllByAccount(account);
+    var account = accountService.findOne(id);
+    var transactions = transactionService.findAllByAccount(account);
     if (!transactions.isEmpty()) {
       attr.addAttribute("id", id);
       attr.addFlashAttribute("message",
@@ -225,18 +222,18 @@ public class AccountController {
   @GetMapping(value = "/{id}/edit")
   public String editAccount(@PathVariable int id, Model model) {
 
-    Account account = accountService.findOne(id);
-    AccountDto accountDto = AccountDto.fromAccount(account);
-    String email = account.getUser().getEmail();
-    List<AccountDto> accounts = accountService.findAllByUserEmail(email)
+    var account = accountService.findOne(id);
+    var accountDto = AccountDto.fromAccount(account);
+    var email = account.getUser().getEmail();
+    var accounts = accountService.findAllByUserEmail(email)
         .stream()
         .map(AccountDto::fromAccount)
         .collect(toList());
     model.addAttribute("account", accountDto);
     model.addAttribute(ACCOUNTS, accounts);
-    double balance = accountService.getBalance(email);
+    var balance = accountService.getBalance(email);
     model.addAttribute("balance", balance);
-    long quantityOfTransactions = transactionService.countTransactionsByAccount(account);
+    var quantityOfTransactions = transactionService.countTransactionsByAccount(account);
     model.addAttribute("quantityOfTransactions", quantityOfTransactions);
     return "accounts_edit";
   }
@@ -257,7 +254,7 @@ public class AccountController {
     if (result.hasErrors()) {
       return "accounts_edit";
     }
-    Account existingAccount = accountService.findOne(id);
+    var existingAccount = accountService.findOne(id);
     accountService.editAccount(existingAccount, dto.toAccount());
     return REDIRECT_TO_ACCOUNTS;
   }

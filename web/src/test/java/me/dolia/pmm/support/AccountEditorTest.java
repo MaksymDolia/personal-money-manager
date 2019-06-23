@@ -22,7 +22,7 @@ public class AccountEditorTest {
 
   @Test
   public void setAccountAsText() {
-    Account account = new Account();
+    var account = new Account();
     account.setId(1);
     when(accountService.findOne(account.getId())).thenReturn(account);
 

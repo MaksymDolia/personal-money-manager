@@ -1,15 +1,11 @@
 package me.dolia.pmm.service;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.form.ShowTransactionForm;
 import me.dolia.pmm.persistence.entity.Account;
 import me.dolia.pmm.persistence.entity.Category;
-import me.dolia.pmm.persistence.entity.Operation;
 import me.dolia.pmm.persistence.entity.Transaction;
-import me.dolia.pmm.persistence.entity.User;
 import me.dolia.pmm.persistence.repository.AccountRepository;
 import me.dolia.pmm.persistence.repository.TransactionRepository;
 import org.springframework.data.domain.Sort;
@@ -95,12 +91,12 @@ public class TransactionService {
    * @return list of transactions
    */
   public List<Transaction> findAllByForm(String email, ShowTransactionForm form) {
-    String sortBy = form.getSortBy().toString().toLowerCase();
-    Sort sort = new Sort(Direction.DESC, sortBy);
+    var sortBy = form.getSortBy().toString().toLowerCase();
+    var sort = new Sort(Direction.DESC, sortBy);
 
-    String comment = form.getComment();
-    Date dateFrom = form.getFromDate();
-    Date dateTo = form.getToDate();
+    var comment = form.getComment();
+    var dateFrom = form.getFromDate();
+    var dateTo = form.getToDate();
     if (!StringUtils.isEmpty(comment)) {
       return transactionRepository.findByUserEmailAndDateBetweenAndCommentLikeIgnoreCase(email,
           dateFrom, dateTo, comment, sort);
@@ -119,12 +115,12 @@ public class TransactionService {
   @PreAuthorize("#account.user.email == authentication.name or hasRole('ADMIN')")
   public List<Transaction> findAllByAccountAndForm(@P("account") Account account,
       ShowTransactionForm form) {
-    String sortBy = form.getSortBy().toString().toLowerCase();
-    Sort sort = new Sort(Direction.DESC, sortBy);
+    var sortBy = form.getSortBy().toString().toLowerCase();
+    var sort = new Sort(Direction.DESC, sortBy);
 
-    String comment = form.getComment();
-    Date dateFrom = form.getFromDate();
-    Date dateTo = form.getToDate();
+    var comment = form.getComment();
+    var dateFrom = form.getFromDate();
+    var dateTo = form.getToDate();
     if (!StringUtils.isEmpty(comment)) {
       return transactionRepository
           .findByAccountOrTransferAccountAndDateBetweenAndCommentLikeIgnoreCase(account,
@@ -162,7 +158,7 @@ public class TransactionService {
    */
   @Transactional
   public void save(Transaction transaction, String email) {
-    User user = userService.findOneByEmail(email);
+    var user = userService.findOneByEmail(email);
     transaction.setUser(user);
     save(transaction);
     processTransaction(transaction);
@@ -193,9 +189,9 @@ public class TransactionService {
 
   /* Performs all necessary operation to persist transaction */
   private void processTransaction(Transaction transaction) {
-    Account account = accountRepository.findById(transaction.getAccount().getId()).get();
-    BigDecimal amount = transaction.getAmount();
-    Operation operation = transaction.getOperation();
+    var account = accountRepository.findById(transaction.getAccount().getId()).get();
+    var amount = transaction.getAmount();
+    var operation = transaction.getOperation();
 
     switch (operation) {
 
@@ -227,9 +223,9 @@ public class TransactionService {
       Resets transaction. Similar to operation 'undo'.
    */
   private void resetTransaction(Transaction transaction) {
-    Account account = accountRepository.findById(transaction.getAccount().getId()).get();
-    BigDecimal amount = transaction.getAmount();
-    Operation operation = transaction.getOperation();
+    var account = accountRepository.findById(transaction.getAccount().getId()).get();
+    var amount = transaction.getAmount();
+    var operation = transaction.getOperation();
     switch (operation) {
 
       case EXPENSE:

@@ -2,7 +2,6 @@ package me.dolia.pmm.support;
 
 import java.beans.PropertyEditorSupport;
 import lombok.RequiredArgsConstructor;
-import me.dolia.pmm.persistence.entity.Account;
 import me.dolia.pmm.service.AccountService;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +21,7 @@ public class AccountEditor extends PropertyEditorSupport {
       setValue(null);
       return;
     }
-    Account account = accountService.findOne(Integer.parseInt(text));
+    var account = accountService.findOne(Integer.parseInt(text));
     setValue(account);
   }
 

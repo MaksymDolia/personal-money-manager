@@ -3,7 +3,6 @@ package me.dolia.pmm.persistence.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
-import java.util.List;
 import me.dolia.pmm.persistence.entity.Account;
 import me.dolia.pmm.persistence.entity.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,10 +31,10 @@ class AccountRepositoryIT {
 
   @Test
   void calculateSumOfUsersAccount() {
-    User firstUser = createTestUser("first@user.com");
+    var firstUser = createTestUser("first@user.com");
     createTestAccount(BigDecimal.TEN, firstUser);
     createTestAccount(BigDecimal.valueOf(23.15), firstUser);
-    User secondUser = createTestUser("second@user.com");
+    var secondUser = createTestUser("second@user.com");
     createTestAccount(BigDecimal.ONE, secondUser);
 
     assertThat(accountRepository.getSumAmountByUserEmail(firstUser.getEmail())).isEqualTo(33.15);
@@ -48,43 +47,43 @@ class AccountRepositoryIT {
 
   @Test
   void calculatedSumIsZeroWhenUserHasSingleEmptyAccount() {
-    User user = createTestUser("first@user.com");
+    var user = createTestUser("first@user.com");
     createTestAccount(BigDecimal.ZERO, user);
 
-    Double result = accountRepository.getSumAmountByUserEmail(user.getEmail());
+    var result = accountRepository.getSumAmountByUserEmail(user.getEmail());
 
     assertThat(result).isEqualTo(0);
   }
 
   @Test
   void findAllUsersAccounts() {
-    User firstUser = createTestUser("first@user.com");
-    Account acc1 = createTestAccount(BigDecimal.TEN, firstUser);
-    Account acc2 = createTestAccount(BigDecimal.valueOf(23.15), firstUser);
-    User secondUser = createTestUser("second@user.com");
+    var firstUser = createTestUser("first@user.com");
+    var acc1 = createTestAccount(BigDecimal.TEN, firstUser);
+    var acc2 = createTestAccount(BigDecimal.valueOf(23.15), firstUser);
+    var secondUser = createTestUser("second@user.com");
     createTestAccount(BigDecimal.ONE, secondUser);
 
-    List<Account> firstUserAccounts = accountRepository.findAllByUserEmail(firstUser.getEmail());
+    var firstUserAccounts = accountRepository.findAllByUserEmail(firstUser.getEmail());
 
     assertThat(firstUserAccounts).hasSize(2).contains(acc1, acc2);
   }
 
   @Test
   void findAllByUserEmailReturnsEmptyList() {
-    List<Account> accounts = accountRepository.findAllByUserEmail("test");
+    var accounts = accountRepository.findAllByUserEmail("test");
 
     assertThat(accounts).isEmpty();
   }
 
   private User createTestUser(String email) {
-    User user = new User();
+    var user = new User();
     user.setEmail(email);
     user.setPassword("letmein");
     return userRepository.save(user);
   }
 
   private Account createTestAccount(BigDecimal amount, User owner) {
-    Account account = new Account();
+    var account = new Account();
     account.setName("Account " + amount);
     account.setAmount(amount);
     account.setUser(owner);

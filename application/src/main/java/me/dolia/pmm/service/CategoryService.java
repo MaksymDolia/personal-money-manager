@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import me.dolia.pmm.persistence.entity.Category;
 import me.dolia.pmm.persistence.entity.Operation;
 import me.dolia.pmm.persistence.entity.Transaction;
-import me.dolia.pmm.persistence.entity.User;
 import me.dolia.pmm.persistence.repository.CategoryRepository;
 import me.dolia.pmm.persistence.repository.TransactionRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -56,7 +55,7 @@ public class CategoryService {
    * @param email user's email
    */
   public void save(Category category, String email) {
-    User user = userService.findOneByEmail(email);
+    var user = userService.findOneByEmail(email);
     category.setUser(user);
     categoryRepository.save(category);
   }
@@ -99,8 +98,8 @@ public class CategoryService {
    * @param toId id of category transaction is moving to
    */
   public void transferTransactions(int fromId, int toId) {
-    Category fromCategory = findOne(fromId);
-    Category toCategory = findOne(toId);
+    var fromCategory = findOne(fromId);
+    var toCategory = findOne(toId);
     if (fromCategory != null || toCategory != null) {
       transferTransactions(fromCategory, toCategory);
     }

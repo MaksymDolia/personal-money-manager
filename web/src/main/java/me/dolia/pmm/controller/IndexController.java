@@ -74,7 +74,7 @@ public class IndexController {
 
   @GetMapping("/profile/delete_profile")
   public String deleteProfile(Principal principal, RedirectAttributes attr) {
-    String email = principal.getName();
+    var email = principal.getName();
     userService.deleteByEmail(email);
     SecurityContextHolder.clearContext();
     attr.addFlashAttribute("message", "delete_profile_success");

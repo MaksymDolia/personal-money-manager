@@ -49,7 +49,7 @@ public class IndexControllerIT {
   }
 
   private void createAndSaveUser(String email) {
-    User user = new User();
+    var user = new User();
     user.setEmail(email);
     user.setPassword(UUID.randomUUID().toString());
     userRepo.save(user);
@@ -63,8 +63,8 @@ public class IndexControllerIT {
   @Ignore
   @Test
   public void shouldNotRegisterUserWithNotValidData() throws Exception {
-    String email = "";
-    String testPswd = "";
+    var email = "";
+    var testPswd = "";
 
     mockMvc.perform(post(SIGNIN_PATH)
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -82,8 +82,8 @@ public class IndexControllerIT {
 
   @Test
   public void shouldRegisterUserWithNotValidData() throws Exception {
-    String email = EMAIL_USER_NOT_EXIST;
-    String testPswd = "goodPassword";
+    var email = EMAIL_USER_NOT_EXIST;
+    var testPswd = "goodPassword";
 
     mockMvc.perform(post(SIGNIN_PATH)
         .with(csrf())

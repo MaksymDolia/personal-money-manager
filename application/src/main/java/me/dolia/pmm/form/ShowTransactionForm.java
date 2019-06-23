@@ -19,10 +19,10 @@ public class ShowTransactionForm {
   private String comment;
 
   public ShowTransactionForm() {
-    Calendar startCalendar = new GregorianCalendar();
+    var startCalendar = new GregorianCalendar();
     startCalendar.set(Calendar.DAY_OF_MONTH, 1);
     fromDate = startCalendar.getTime();
-    Calendar endCalendar = new GregorianCalendar();
+    var endCalendar = new GregorianCalendar();
     endCalendar.set(Calendar.DAY_OF_MONTH, endCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
     toDate = endCalendar.getTime();
   }

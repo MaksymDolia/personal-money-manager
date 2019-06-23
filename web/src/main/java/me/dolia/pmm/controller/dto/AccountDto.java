@@ -21,7 +21,7 @@ public class AccountDto {
   private BigDecimal amount;
 
   public Account toAccount() {
-    Account account = new Account();
+    var account = new Account();
     account.setId(id);
     account.setName(name);
     account.setCurrency(currency);
@@ -30,7 +30,7 @@ public class AccountDto {
   }
 
   public static AccountDto fromAccount(Account account) {
-    AccountDto dto = new AccountDto();
+    var dto = new AccountDto();
     dto.setId(account.getId());
     dto.setName(account.getName());
     dto.setCurrency(account.getCurrency());
